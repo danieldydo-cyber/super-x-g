@@ -18,7 +18,7 @@ document.head.appendChild(css);
 var GROUPS=[['🎧 DJ & Decki','2 decki WeDJ, PRO8, DXF, klasyki',['pioneer','remix','pro8','dxf','pioneerold','dj','gdj','gpro','proc']],
  ['🌌 Wizualizacje','MilkDrop X, X7S, v51',['milk','x7s','v51','kalic']],['📻 Radio & Muzyka','Kali radio, beaty, studio',['kali','radiogen','hiphop','studio']],
  ['🤖 Boty & AI','Bot Builder, 7 mózgów, agenci, czat',['bb','brains','agents','bots','super','mrd','dpage','sbg','g','builder','dagents']],
- ['🛠 Narzędzia','Auto-Fix 7777, aplikacje',['fix','superapp','app']],['⬇ Aplikacja & Wsparcie','APK, płatności (tylko informacje)',['dl','pay']]];
+ ['🛠 Narzędzia','Auto-Fix 7777, aplikacje',['fix','superapp','app']],['⬇ Aplikacja & Wsparcie','APK, iPhone, płatności (tylko informacje)',['dl','apk','ios','ddl','pay']],['🗂 Wszystko v38–v70','oryginały v38, DXF, D, dodatkowe strony',['v38pro8','v38kali','v38pro','dxfkali','dxfkr','dxfpro','kalir','dradio','dsong','gpro2','ubots']]];
 function group(){var L=$('launch');if(!L||!L.querySelector('.tile'))return setTimeout(group,50);if(L.querySelector('.cxg'))return;var used={};
  GROUPS.forEach(function(g){var c=document.createElement('div');c.className='cxg';c.innerHTML='<h3>'+g[0]+'</h3><small>'+g[1]+'</small><div class="chips"></div>';var ch=c.querySelector('.chips');
   g[2].forEach(function(id){var t=L.querySelector('.tile[data-t="'+id+'"]');if(t&&!used[id]){used[id]=1;ch.appendChild(t)}});if(ch.children.length)L.appendChild(c)});
@@ -115,7 +115,7 @@ setInterval(function(){if(!R.on&&!MV)return;var a=A();if(!a||a.ctx.state!='runni
 /* ---------- MilkDrop X behind tiles (lazy libs, low res, idle start) ---------- */
 var MV=null,MKeys=[],MP={},mlast=0,mStarting=false;
 function load(src){return new Promise(function(ok,no){var s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
-function sizeMilk(){var c=window.D7Res?D7Res.fit(innerWidth,innerHeight):[innerWidth,innerHeight],w=Math.min(c[0],D7Res&&D7Res.key()=='auto'?960:c[0]),h=Math.round(w*innerHeight/Math.max(1,innerWidth));mk.width=w;mk.height=h;if(MV)try{MV.setRendererSize(w,h)}catch(e){}}
+function sizeMilk(){var c=window.D7Res?D7Res.fit(innerWidth,innerHeight):[innerWidth,innerHeight],w=c[0],h=Math.round(w*innerHeight/Math.max(1,innerWidth));mk.width=w;mk.height=h;if(MV)try{MV.setRendererSize(w,h)}catch(e){}}
 function nextPreset(match){if(!MV||!MKeys.length)return;var pool=MKeys;if(match){var re=new RegExp(match,'i'),m=MKeys.filter(function(k){return re.test(k)});if(m.length)pool=m}var k=pool[Math.floor(Math.random()*pool.length)];try{MV.loadPreset(MP[k],2.5)}catch(e){}window.D7MilkPreset=k}
 function startMilk(resize){if(MV){if(resize)sizeMilk();return}if(mStarting)return;mStarting=true;var a=A();if(!a)return;
  (window.butterchurn?Promise.resolve():load('libs/butterchurn.min.js').then(function(){return load('libs/butterchurnPresets.min.js')})).then(function(){return new Promise(function(r){(window.requestIdleCallback||setTimeout)(r,{timeout:2000})})}).then(function wait(){ /* never compile MilkDrop while a window is open (keeps every window smooth) */ if(document.body.classList.contains('ovon'))return new Promise(function(r){setTimeout(r,1500)}).then(wait);
@@ -137,7 +137,7 @@ setInterval(aiMood,90000);
 /* ---------- online sync + status ---------- */
 var isApk=/^(file|content):|appassets/.test(location.href)||!!window.D7APK,BASE=isApk?((window.D7_APK_CONFIG&&D7_APK_CONFIG.liveUrl)||'').replace(/\/$/,''):'',SY={online:null,server:null,t:0,facts:null,bots:null};
 function net(){var d=bar.querySelector('.dot'),t=$('cxNetT');if(!d)return;if(navigator.onLine===false){d.className='dot off';t.textContent='offline · tryb lokalny';return}
- var ctl=new AbortController(),tm=setTimeout(function(){ctl.abort()},6000);fetch(BASE+'/api/status',{signal:ctl.signal,cache:'no-store'}).then(function(r){return r.json()}).then(function(j){clearTimeout(tm);SY={online:true,server:true,t:Date.now(),facts:j.facts,bots:j.bots,mem:j.messages};d.className='dot ok';t.textContent='online · serwer ✔ · '+(j.bots||0)+' botów · pamięć '+(j.facts||0)+' faktów';lss('d7sync',JSON.stringify(SY))},
+ var ctl=new AbortController(),tm=setTimeout(function(){ctl.abort()},6000);fetch(BASE+'/api/status',{signal:ctl.signal,cache:'no-store'}).then(function(r){return r.json()}).then(function(j){clearTimeout(tm);if(j&&j.static)throw 0;SY={online:true,server:true,t:Date.now(),facts:j.facts,bots:j.bots,mem:j.messages};d.className='dot ok';t.textContent='online · serwer ✔ · '+(j.bots||0)+' botów · pamięć '+(j.facts||0)+' faktów';lss('d7sync',JSON.stringify(SY))},
   function(){clearTimeout(tm);SY.server=false;SY.online=navigator.onLine!==false;d.className='dot '+(SY.online?'':'off');t.textContent=SY.online?'online · serwer niedostępny (Pollinations/offline)':'offline'})}
 window.D7Sync={status:function(){return SY},now:net};addEventListener('online',net);addEventListener('offline',net);
 /* ---------- full automation online ---------- */
@@ -180,7 +180,7 @@ var LOGO='<svg id="vzLogo" viewBox="0 0 200 160" aria-label="S Dragon logo"><def
  '<path d="M30 130 C 20 140, 8 138, 4 128 C 14 132, 22 128, 30 130" fill="url(#dgG)"/><path d="M146 66 L 150 50 L 156 64 M 136 66 L 136 52 L 144 64" stroke="#ffd23f" stroke-width="3" fill="none" stroke-linecap="round"/>'+
  '<circle class="eye" cx="146" cy="74" r="3.2" fill="#ffd23f"/><path class="fire" d="M162 80 C 176 74, 186 82, 196 76 C 188 86, 178 88, 162 84 Z" fill="#ff8a00" opacity=".9"/>'+
  '<path d="M60 112 l6 -8 l2 9 l7 -7 l1 9 l7 -6" stroke="#2de2ff" stroke-width="2" fill="none" stroke-linecap="round"/><text x="0" y="0" font-size="0"></text></svg>';
-function mountHero(){var h=vz.querySelector('h1');if(!h)return;var w=document.createElement('div');w.id='vzHero';h.parentNode.insertBefore(w,h);w.innerHTML=LOGO;h.innerHTML='S ver G 🐲 <span class="s2">S Dragon</span>';w.appendChild(h);
+function mountHero(){var h=vz.querySelector('h1');if(!h)return;var w=document.createElement('div');w.id='vzHero';h.parentNode.insertBefore(w,h);w.innerHTML=LOGO;h.innerHTML='7D <span class="s2">S ver G 🐲</span>';w.appendChild(h);
  var sg=document.createElement('div');sg.id='sgNext';sg.innerHTML='<b>🧠 SuperGrok:</b> <small>myślę…</small>';var mn=$('vzMenu');mn.parentNode.insertBefore(sg,mn);suggest();setInterval(suggest,120000)}
 /* SuperGrok next-action suggestions: 7-brain chain (grok brain) → validated action ids; offline heuristic fallback */
 var ACT={radio:['📻 Włącz Kali radio',function(){$('vzSt').value='0';$('cxSt').value='0';radio(true)}],techno:['⚡ Stacja techno',function(){var i=STN.findIndex(function(s){return s[2]=='techno'});$('cxSt').value=i;radio(true)}],hiphop:['🎤 Stacja hip-hop',function(){var i=STN.findIndex(function(s){return s[2]=='hiphop'});$('cxSt').value=i;radio(true)}],

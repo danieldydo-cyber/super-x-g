@@ -118,7 +118,7 @@ function autoBpm(){if(!ac||RN<ac.sampleRate*6){$('bpms').textContent='auto: potr
 $('auto').onclick=autoBpm;
 /* ---------- visualizer ---------- */
 function draw(){var c=$('cv'),x=c.getContext('2d'),fd=new Uint8Array(an.frequencyBinCount),td=new Uint8Array(an.fftSize);
- (function f(){requestAnimationFrame(f);var w=c.width=c.clientWidth,h=c.height=140;an.getByteFrequencyData(fd);an.getByteTimeDomainData(td);x.fillStyle='#000';x.fillRect(0,0,w,h);
+ (function f(){requestAnimationFrame(f);var w=c.width=c.clientWidth,h=c.height=(document.documentElement.classList.contains('d7pure')?c.clientHeight||140:140);an.getByteFrequencyData(fd);an.getByteTimeDomainData(td);x.fillStyle='#000';x.fillRect(0,0,w,h);
   var n=160,bw=w/n;for(var i=0;i<n;i++){var v=fd[Math.floor(Math.pow(i/n,1.6)*fd.length*.7)]/255;x.fillStyle='hsl('+(160+i)%360+',90%,'+(25+v*45)+'%)';x.fillRect(i*bw,h-v*h,bw-1,v*h)}
   x.strokeStyle='#fff';x.lineWidth=1.5;x.beginPath();for(var i=0;i<td.length;i+=4){var X=i/td.length*w,Y=td[i]/255*h;i?x.lineTo(X,Y):x.moveTo(X,Y)}x.stroke()})()}
 /* ---------- keyboard ---------- */

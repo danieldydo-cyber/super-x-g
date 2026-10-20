@@ -9,5 +9,5 @@
  function unlock(){var L=(window.__d7ACS||[]).slice();try{var a=window.HIPHOPX&&HIPHOPX.audio();if(a)L.push(a.ctx)}catch(e){}L.forEach(function(c){try{c.resume();var b=c.createBuffer(1,1,22050),src=c.createBufferSource();src.buffer=b;src.connect(c.destination);src.start(0)}catch(e){}});window.D7AudioUnlocked=true;D.removeEventListener('touchend',unlock,true);D.removeEventListener('click',unlock,true)}
  D.addEventListener('touchend',unlock,true);D.addEventListener('click',unlock,true);
  var web=/^https?:/.test(location.protocol)&&!window.D7APK&&!/appassets/.test(location.host);
- if(web&&window.parent===window&&'serviceWorker' in navigator&&!window.__D7_TEST__)addEventListener('load',function(){navigator.serviceWorker.register('sxg-sw.js',{scope:'./'}).catch(function(){})});
+ /* one SW per scope: on GitHub Pages sw.js IS the PWA worker (legacy pages also register sw.js → no competing scripts) */if(web&&/github\.io$/.test(location.hostname)&&window.parent===window&&'serviceWorker' in navigator&&!window.__D7_TEST__)addEventListener('load',function(){navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(function(){})});
  window.D7iOS={ios:ios,standalone:sa,unlock:unlock};})();

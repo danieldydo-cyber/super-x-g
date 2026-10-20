@@ -1,5 +1,5 @@
 <!doctype html><html lang="pl"><head><script src="js/d7-token.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Super G 🐲 · D7 DJ</title><link rel="manifest" href="superapp.webmanifest"><meta name="theme-color" content="#ff2a00"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/icon-180.png">
+<title>7D · Super G 🐲</title><link rel="manifest" href="/superapp.webmanifest"><meta name="theme-color" content="#ff2a00"><link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/icon-180.png">
 <style>
 :root{--bg:#070405;--p:#140a0cdd;--f:#ff4d00;--r:#ff1744;--y:#ffc400;--n:#00f0ff;--g:#39ff88;--t:#f1e3df}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -10%,#3a0606,var(--bg) 60%);color:var(--t);font:15px/1.45 'Segoe UI',system-ui,sans-serif;min-height:100vh}
@@ -121,6 +121,6 @@ function startViz(){var V=$('viz'),vx=V.getContext('2d'),last=0;function fr(t){r
  if(V.width!=innerWidth)V.width=innerWidth;if(V.height!=innerHeight)V.height=innerHeight;var ph=(t/(60000/bpm))%1,k=Math.pow(1-ph,4);if(an){an.getByteFrequencyData(data);k=data.slice(0,6).reduce((a,b)=>a+b,0)/1530}
  vx.fillStyle='#07040522';vx.fillRect(0,0,V.width,V.height);var cx=V.width/2,cy=V.height*.35;
  for(var i=0;i<36;i++){var a=i/36*Math.PI*2+t/5000,r=100+k*170+(an?data[i%data.length]/2:Math.sin(t/300+i)*18);vx.strokeStyle=i%2?'#ff4d0044':'#ffc40033';vx.lineWidth=2+k*4;vx.beginPath();vx.moveTo(cx+Math.cos(a)*70,cy+Math.sin(a)*70);vx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);vx.stroke()}}requestAnimationFrame(fr)}
-if('serviceWorker' in navigator)Promise.resolve().catch(()=>{});var dp;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('inst').style.display=''});$('inst').onclick=()=>dp&&dp.prompt();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('/superapp-sw.js').catch(()=>{});var dp;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('inst').style.display=''});$('inst').onclick=()=>dp&&dp.prompt();
 </script><script src="js/d7-pay.js?v=55"></script>
 </body></html>

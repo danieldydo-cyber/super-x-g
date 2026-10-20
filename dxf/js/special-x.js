@@ -1349,7 +1349,7 @@
     /*SXTILE: defer heavy WebGL init until after first paint + idle*/
     (function(){ var go=function(){ try { initViz(); } catch (err) { console.warn('[SX] pre-viz', err); } requestAnimationFrame(frame); };
       var ri=window.requestIdleCallback||function(f){return setTimeout(f,1)}, done=0, kick=function(){ if(done++)return; ri(go,{timeout:300}); };
-      if (window.parent !== window) { /* in launcher overlay: start WebGL MilkDrop on first interaction / AUTO, render loop (2D) runs meanwhile */ requestAnimationFrame(frame); go = (function(g0){ return function(){ try { initViz(); } catch (err) { console.warn('[SX] pre-viz', err); } }; })(go); ['pointerdown','keydown'].forEach(function(ev){ document.addEventListener(ev, kick, { once: true, capture: true }); }); window.addEventListener('message', function(e){ if (e.data && e.data.type === 'd7:auto') kick(); }); }
+      if (window.parent !== window) { /* in launcher overlay: start WebGL MilkDrop on first interaction / AUTO, render loop (2D) runs meanwhile */ requestAnimationFrame(frame); go = (function(g0){ return function(){ try { initViz(); } catch (err) { console.warn('[SX] pre-viz', err); } }; })(go); ['pointerdown','keydown'].forEach(function(ev){ document.addEventListener(ev, kick, { once: true, capture: true }); }); window.addEventListener('message', function(e){ if (e.data && (e.data.type === 'd7:auto' || e.data.type === 'd7:vizstart')) kick(); }); }
       else requestAnimationFrame(function(){ setTimeout(kick,400); }); })();
     var st0 = Bot && Bot.Memory.state;
     if (st0) restoreState(st0);
