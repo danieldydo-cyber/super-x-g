@@ -31,14 +31,30 @@ bar.innerHTML='<span id="cxNet"><span class="dot"></span><span id="cxNetT">spraw
  '<label>💬 AI czat <select id="cxChat"><option value="none">zwykły</option><option value="neon">neon</option><option value="type">maszyna do pisania</option><option value="voice">głos</option><option value="rhyme">AI: rymy + emoji</option><option value="pro">AI: DJ-pro</option></select></label>'+
  '<label>🌌 AI wizualizacje <select id="cxViz"><option value="ai">AI nastrój (7 mózgów)</option><option value="beat">beat-sync</option><option value="off">wył.</option></select></label>'+
  '<button id="cxFs">⛶ Pełny ekran</button><button id="cxAuto">🤖 Auto online</button>';
-var STN=[['Kali · Radio 357','https://stream.radio357.pl/'],['SomaFM Fluid (hip-hop)','https://ice1.somafm.com/fluid-128-mp3'],['SomaFM Beat Blender','https://ice1.somafm.com/beatblender-128-mp3'],['SomaFM Groove Salad','https://ice1.somafm.com/groovesalad-128-mp3'],['RMF MAXXX','https://rs101-krk.rmfstream.pl/RMFMAXXX48']];
+var STN=[
+ ['📻 KALI LIVE RADIO 24/7 (YouTube)','yt:jMRlCH3B6mY','kali',128],['📻 Kali · Hip-Hop 120 (lokalnie, analiza)','samples/kali-hiphop-120.wav','kali',120],
+ ['🎛 Generator · Techno 128 (na urządzeniu)','gen:techno','gen',128],['🎛 Generator · Hip-Hop 90 (na urządzeniu)','gen:hiphop','gen',90],['🎛 Generator · AI mix (7 mózgów)','gen:ai','gen',0],
+ ['SomaFM DEF CON','https://ice1.somafm.com/defcon-128-mp3','techno'],['SomaFM Beat Blender','https://ice1.somafm.com/beatblender-128-mp3','techno'],['SomaFM The Trip','https://ice1.somafm.com/thetrip-128-mp3','techno'],
+ ['SomaFM Dub Step Beyond','https://ice1.somafm.com/dubstep-128-mp3','techno'],['SomaFM Space Station','https://ice1.somafm.com/spacestation-128-mp3','techno'],['SomaFM cliqhop IDM','https://ice1.somafm.com/cliqhop-128-mp3','techno'],
+ ['Bassdrive DnB','https://ice.bassdrive.net/stream','techno'],['laut.fm Techno','https://stream.laut.fm/techno','techno'],['laut.fm Minimal','https://stream.laut.fm/minimal','techno'],['laut.fm Trance','https://stream.laut.fm/trance','techno'],
+ ['Radio Record Techno','https://radiorecord.hostingradio.ru/techno96.aacp','techno'],['Radio Record Tech House','https://radiorecord.hostingradio.ru/techouse96.aacp','techno'],['Radio Record Deep','https://radiorecord.hostingradio.ru/deep96.aacp','techno'],
+ ['Radio Record Minimal','https://radiorecord.hostingradio.ru/mini96.aacp','techno'],['Radio Record Hardstyle','https://radiorecord.hostingradio.ru/teo96.aacp','techno'],['TechnoBase.FM','https://listen.technobase.fm/tunein-mp3','techno'],
+ ['HouseTime.FM','https://listen.housetime.fm/tunein-mp3','techno'],['Intergalactic FM','https://radio.intergalactic.fm/1','techno'],['RMF MAXXX','https://rs101-krk.rmfstream.pl/RMFMAXXX48','techno'],
+ ['SomaFM Fluid (instrumental hip-hop)','https://ice1.somafm.com/fluid-128-mp3','hiphop'],['laut.fm Hip Hop','https://stream.laut.fm/hiphop','hiphop'],['laut.fm Rap','https://stream.laut.fm/rap','hiphop'],['laut.fm Lofi','https://stream.laut.fm/lofi','hiphop'],
+ ['Radio Record Black (hip-hop/R&B)','https://radiorecord.hostingradio.ru/yo96.aacp','hiphop'],['Radio Record Gangsta','https://radiorecord.hostingradio.ru/gop96.aacp','hiphop'],['Radio Record Trap','https://radiorecord.hostingradio.ru/trap96.aacp','hiphop'],
+ ['FluxFM Chillhop','https://streams.fluxfm.de/Chillhop/mp3-320/streams.fluxfm.de/','hiphop'],['FluxFM Hip Hop','https://streams.fluxfm.de/hiphop/mp3-320/streams.fluxfm.de/','hiphop'],['BlackBeats.FM','https://stream.blackbeats.fm/stream.mp3','hiphop'],
+ ['Hot 108 Jamz','https://live.powerhitz.com/hot108','hiphop'],['1Power Hip Hop','https://live.powerhitz.com/1power','hiphop'],['Radio 357','https://stream.radio357.pl/','inne']];
+var GEN={kali:'📻 Kali',gen:'🎛 Generatory muzyki',techno:'⚡ Techno / elektronika',hiphop:'🎤 Hip-hop / rap',inne:'🌍 Inne'};window.D7Stations=STN;
+
+function fillSt(sel){sel.innerHTML='';Object.keys(GEN).forEach(function(g){var og=document.createElement('optgroup');og.label=GEN[g];STN.forEach(function(x,i){if(x[2]!=g)return;var o=document.createElement('option');o.value=i;o.textContent=x[0];og.appendChild(o)});sel.appendChild(og)})}
+window.D7FillSt=fillSt;
 function mountBar(){var h=document.querySelector('body>header');if(!h)return setTimeout(mountBar,50);var h1=h.querySelector('h1');h.insertBefore(bar,h1?h1.nextSibling:h.firstChild);
- STN.forEach(function(s,i){var o=document.createElement('option');o.value=i;o.textContent=s[0];$('cxSt').appendChild(o)});$('cxSt').value=lsg('d7radioSt','0');
+ fillSt($('cxSt'));$('cxSt').value=lsg('d7radioSt','0');
  $('cxRes').value=lsg('d7res','auto');$('cxRes').onchange=function(){window.D7Res&&D7Res.set(this.value);startMilk(true)};
  $('cxChat').value=lsg('d7chatfx','none');$('cxChat').onchange=function(){lss('d7chatfx',this.value);chatFx()};chatFx();
  $('cxViz').value=lsg('d7vizfx','ai');$('cxViz').onchange=function(){lss('d7vizfx',this.value)};
  $('cxFs').onclick=function(){window.D7FS&&D7FS.toggle(document.documentElement)};
- $('cxRadio').onclick=function(){radio(!R.on)};$('cxSt').onchange=function(){lss('d7radioSt',this.value);if(R.on){radio(false);radio(true)}};
+ $('cxRadio').onclick=function(){radio(!R.on)};$('cxSt').onchange=function(){lss('d7radioSt',this.value);radio(true)};
  $('cxAuto').onclick=function(){autoOnline(!AUTO)}}
 /* ---------- cosmic background (2D stars + nebula, ≤30 fps, paused when a window is open or tab hidden) ---------- */
 var cv=document.createElement('canvas');cv.id='cosmos';var mk=document.createElement('canvas');mk.id='cosmoMilk';
@@ -53,12 +69,47 @@ requestAnimationFrame(sky);
 /* ---------- audio bus: Kali radio in the launcher → beat analyser → MilkDrop X + d7:beat to the open window ---------- */
 var R={on:false,el:null},beatLvl=0,avg=0,lastBeat=0,fb=null,lastPost=0;
 function A(){return window.HIPHOPX&&HIPHOPX.audio()}
-function radio(on){var a=A();if(!a)return;R.on=on;$('cxRadio').classList.toggle('on',on);if(!on){if(R.el){R.el.pause();R.el.src=''}return}
- a.ctx.resume&&a.ctx.resume();var s=STN[+$('cxSt').value||0];if(!R.el){R.el=new Audio();R.el.crossOrigin='anonymous';try{a.ctx.createMediaElementSource(R.el).connect(a.node)}catch(e){}}
- R.el.onerror=function(){var st=$('cxSt');if(R.on&&!R.hop&&R.el.error&&R.el.error.code==4){R.hop=1;st.value=(+st.value+1)%STN.length;R.el.src=STN[+st.value][1];R.el.play().catch(function(){});return}if(R.el.crossOrigin&&!R.retry){R.retry=1;/* stream without CORS: play directly (no beat sync) */var e2=new Audio(s[1]);R.el.src='';R.el=e2;e2.play().catch(function(){});$('cxRadio').textContent='📻 '+s[0].split('·').pop().trim()+' (bez sync)'}};R.retry=0;R.hop=0;R.el.src=s[1];R.el.play().then(function(){$('cxRadio').textContent='📻 '+s[0].split('·').pop().trim()},function(e){$('cxRadio').textContent='📻 błąd: '+e.name;R.on=false;$('cxRadio').classList.remove('on')});startMilk()}
-window.D7Radio={on:function(){radio(true)},off:function(){radio(false)},state:function(){return{on:R.on,st:+$('cxSt').value,level:beatLvl}}};
+var YT=null,ytReady=false,GENS=null,clockT=0,carrier=null;
+/* ---------- PRO master BPM clock: one tempo for decks, loops, generator and viz (auto-detect, tap, set) ---------- */
+var CLK=window.D7Clock={bpm:+lsg('d7bpm','124')||124,t0:performance.now(),src:'manual',taps:[],
+ set:function(b,src){b=Math.max(60,Math.min(190,+b||124));if(Math.abs(b-this.bpm)<.05&&src==this.src)return;this.bpm=Math.round(b*10)/10;this.src=src||'manual';lss('d7bpm',String(this.bpm));try{window.dispatchEvent(new CustomEvent('d7clock',{detail:{bpm:this.bpm,src:this.src}}))}catch(e){}var f=document.querySelector('#hxbody>iframe');if(f)try{f.contentWindow.postMessage({type:'d7:clock',bpm:this.bpm},'*')}catch(e){}},
+ tap:function(){var t=performance.now();this.taps=this.taps.filter(function(x){return t-x<3000});this.taps.push(t);if(this.taps.length>3){this.set(60000*(this.taps.length-1)/(t-this.taps[0]),'tap');this.t0=t}return this.bpm},
+ resync:function(){this.t0=performance.now()},beatMs:function(){return 60000/this.bpm},phase:function(){return((performance.now()-this.t0)/this.beatMs())%1},
+ /* auto BPM from the live analyser: onset intervals → median → fold into 70–180 */
+ _on:[],onset:function(t){var o=this._on;o.push(t);if(o.length>24)o.shift();if(o.length<8||this.src=='tap'||this.src=='manual-lock')return;var d=[];for(var i=1;i<o.length;i++){var x=o[i]-o[i-1];if(x>250&&x<1100)d.push(x)}if(d.length<6)return;d.sort(function(a,b){return a-b});var m=d[d.length>>1],b=60000/m;while(b<80)b*=2;while(b>170)b/=2;if(Math.abs(b-this.bpm)>1.5)this.set(b,'auto')}};
+function stopAll(){if(R.el){try{R.el.pause();R.el.removeAttribute('src');R.el.load()}catch(e){}}if(YT&&YT.pauseVideo)try{YT.pauseVideo()}catch(e){}if(GENS)GENS.stop();clearInterval(clockT);clockT=0;document.body.classList.remove('cxyt')}
+function label(t){var b=$('cxRadio');if(b)b.textContent=t;var v=$('vzNow');if(v)v.textContent=t}
+/* beat clock for non-analysable sources (YouTube Kali LIVE): pulses at the master BPM into a silent carrier → MilkDrop + d7:beat (never to speakers) */
+function clock(bpm){var a=A();clearInterval(clockT);CLK.set(bpm,'kali');if(!carrier){var o=a.ctx.createOscillator(),g=a.ctx.createGain();o.frequency.value=55;g.gain.value=0;o.connect(g);o.start();carrier=g;if(MV)try{MV.connectAudio(g)}catch(e){}}
+ (function pulse(){clockT=setTimeout(pulse,CLK.beatMs());var t=a.ctx.currentTime;carrier.gain.cancelScheduledValues(t);carrier.gain.setValueAtTime(.9,t);carrier.gain.setTargetAtTime(.04,t+.05,.1);beatLvl=.8;lastBeat=Date.now();var f=document.querySelector('#hxbody>iframe');if(f)try{f.contentWindow.postMessage({type:'d7:beat',level:.8,beat:true},'*')}catch(x){}})()}
+function ytPlay(id){var box=$('vzYT');if(!box){box=document.createElement('div');box.id='vzYT';box.innerHTML='<div id="vzYTp"></div>';document.body.appendChild(box)}
+ function mk(){YT=new window.YT.Player('vzYTp',{width:'240',height:'135',videoId:id,playerVars:{autoplay:1,playsinline:1,controls:1},events:{onReady:function(e){ytReady=true;e.target.playVideo()},onError:function(){label('📻 Kali LIVE niedostępne → lokalny Kali Hip-Hop');$('cxSt').value=1;radio(true)}}})}
+ if(YT&&ytReady){YT.loadVideoById(id);YT.playVideo();return}
+ if(window.YT&&window.YT.Player)return mk();window.onYouTubeIframeAPIReady=mk;var sc=document.createElement('script');sc.src='https://www.youtube.com/iframe_api';sc.onerror=function(){label('📻 YouTube zablokowany → lokalny Kali');$('cxSt').value=1;radio(true)};document.head.appendChild(sc)}
+function radio(on){var a=A();if(!a)return;stopAll();R.on=on;$('cxRadio').classList.toggle('on',on);if(!on){label('📻 Radio');return}
+ a.ctx.resume&&a.ctx.resume();var i=+$('cxSt').value||0,s=STN[i]||STN[0];lss('d7radioSt',String(i));var vs=$('vzSt');if(vs)vs.value=i;startMilk();
+ if(/^yt:/.test(s[1])){document.body.classList.add('cxyt');ytPlay(s[1].slice(3));clock(s[3]||128);label((/^\W/.test(s[0])?'':'📻 ')+s[0]+' · viz: zegar '+CLK.bpm+' BPM');return}
+ if(/^gen:/.test(s[1])){GENS=GENS||makeGen(a);GENS.start(s[1].slice(4));return}
+ if(s[3])CLK.set(s[3],'station');
+ if(!R.el){R.el=new Audio();R.el.crossOrigin='anonymous';R.el.preload='none';try{a.ctx.createMediaElementSource(R.el).connect(a.node)}catch(e){}}
+ R.hop=0;R.el.onerror=function(){if(!R.on||R.hop++>2)return;var st=$('cxSt'),n=(+st.value+1)%STN.length;while(/^(yt|gen):/.test(STN[n][1]))n=(n+1)%STN.length;st.value=n;label((/^\W/.test(s[0])?'':'📻 ')+s[0]+' nie gra → '+STN[n][0]);R.el.src=STN[n][1];R.el.play().catch(function(){})};
+ R.el.src=s[1];R.el.play().then(function(){label((/^\W/.test(s[0])?'':'📻 ')+s[0])},function(e){if(e.name=='NotAllowedError'){label('▶ dotknij START');R.on=false;$('cxRadio').classList.remove('on')}})}
+/* ---------- on-device music generator (techno / hip-hop / AI) — follows the master clock → analyser → MilkDrop ---------- */
+function makeGen(a){var ctx=a.ctx,out=ctx.createGain();out.gain.value=.7;out.connect(a.node);var timer=0,step=0,next=0,mode='techno',pat=null,root=45;
+ var NB=(function(){var b=ctx.createBuffer(1,ctx.sampleRate*.5,ctx.sampleRate),d=b.getChannelData(0);for(var i=0;i<d.length;i++)d[i]=Math.random()*2-1;return b})();
+ function kick(t,v){var o=ctx.createOscillator(),g=ctx.createGain();o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(42,t+.12);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+.45);o.connect(g);g.connect(out);o.start(t);o.stop(t+.5)}
+ function noise(t,dur,f,v,type){var s=ctx.createBufferSource(),fl=ctx.createBiquadFilter(),g=ctx.createGain();s.buffer=NB;fl.type=type||'highpass';fl.frequency.value=f;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);s.connect(fl);fl.connect(g);g.connect(out);s.start(t);s.stop(t+dur+.02)}
+ function bass(t,n,dur,v,wave){var o=ctx.createOscillator(),f=ctx.createBiquadFilter(),g=ctx.createGain();o.type=wave||'sawtooth';o.frequency.value=440*Math.pow(2,(n-69)/12);f.type='lowpass';f.frequency.setValueAtTime(900,t);f.frequency.exponentialRampToValueAtTime(160,t+dur);f.Q.value=6;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(f);f.connect(g);g.connect(out);o.start(t);o.stop(t+dur+.02)}
+ function pick(){if(mode=='hiphop'){pat={k:[1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0],s:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1],h:[1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,1],b:[1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0],sw:.12};root=36+[0,3,5,7][Math.floor(Math.random()*4)]}
+  else{pat={k:[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],s:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],h:[0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,1],b:[0,0,1,1,0,0,1,0,0,1,1,0,0,0,1,0],sw:0};root=33+[0,2,5,7][Math.floor(Math.random()*4)]}}
+ function tick(){var sp=60/CLK.bpm/4;while(next<ctx.currentTime+.12){var i=step%16,t=next+(i%2?pat.sw*sp:0);if(pat.k[i])kick(t,mode=='hiphop'?.95:1);if(pat.s[i])noise(t,mode=='hiphop'?.18:.12,mode=='hiphop'?1500:2500,.5,'bandpass');if(pat.h[i])noise(t,.04,7000,.18);
+   if(pat.b[i])mode=='hiphop'?bass(t,root,.5,.6,'sine'):bass(t,root+(i==10?12:0),.18,.35);if(step%64==63&&Math.random()<.5)pick();next+=sp;step++}}
+ return{out:out,start:function(m){mode=m=='ai'?(Math.random()<.5?'techno':'hiphop'):m;CLK.set(mode=='hiphop'?90:128,'generator');pick();
+   if(m=='ai'&&window.SBDJ)SBDJ.brain('music','Generator muzyki: zaproponuj styl (techno albo hiphop) i BPM dla seta teraz. Odpowiedz JSON {"style":"techno|hiphop","bpm":liczba}').then(function(t){try{var j=JSON.parse(String(t).match(/\{[\s\S]*\}/)[0]);if(/techno|hiphop/.test(j.style)){mode=j.style;pick();CLK.set(j.bpm,'ai');label('🎛 Generator AI: '+mode+' '+CLK.bpm+' BPM (mózg Muzyka)')}}catch(e){}});
+   next=ctx.currentTime+.05;step=0;clearInterval(timer);timer=setInterval(tick,25);label('🎛 Generator '+mode+' · '+CLK.bpm+' BPM (zegar)')},stop:function(){clearInterval(timer);timer=0},state:function(){return{mode:mode,bpm:CLK.bpm,on:!!timer}}}}
+window.D7Radio={gen:function(){return GENS&&GENS.state()},genObj:function(){return GENS},stations:STN,set:function(i){$('cxSt').value=i;radio(true)},on:function(){radio(true)},off:function(){radio(false)},state:function(){return{on:R.on,st:+$('cxSt').value,level:beatLvl}}};
 setInterval(function(){if(!R.on&&!MV)return;var a=A();if(!a||a.ctx.state!='running')return;var n=a.node;if(!fb||fb.length!=n.frequencyBinCount)fb=new Uint8Array(n.frequencyBinCount);n.getByteFrequencyData(fb);
- var e=0;for(var i=1;i<8;i++)e+=fb[i];e/=7*255;avg=avg*.92+e*.08;var now=Date.now(),beat=e>avg*1.06&&e-(R.pe||0)>.02&&e>.15&&now-lastBeat>280;R.pe=e;if(beat)lastBeat=now;beatLvl=Math.max(e,beatLvl*.85);
+ var e=0;for(var i=1;i<8;i++)e+=fb[i];e/=7*255;avg=avg*.92+e*.08;var now=Date.now(),beat=e>avg*1.06&&e-(R.pe||0)>.02&&e>.15&&now-lastBeat>280;R.pe=e;if(beat){lastBeat=now;if(!clockT&&!(GENS&&GENS.state().on))CLK.onset(now)}beatLvl=Math.max(e,beatLvl*.85);
  if(now-lastPost>60||beat){lastPost=now;var f=document.querySelector('#hxbody>iframe');if(f)try{f.contentWindow.postMessage({type:'d7:beat',level:+e.toFixed(3),beat:beat},'*')}catch(x){}}
  if(beat&&MV&&lsg('d7vizfx','ai')!='off'&&Math.random()<.04)nextPreset()},50);
 /* ---------- MilkDrop X behind tiles (lazy libs, low res, idle start) ---------- */
@@ -69,7 +120,7 @@ function nextPreset(match){if(!MV||!MKeys.length)return;var pool=MKeys;if(match)
 function startMilk(resize){if(MV){if(resize)sizeMilk();return}if(mStarting)return;mStarting=true;var a=A();if(!a)return;
  (window.butterchurn?Promise.resolve():load('libs/butterchurn.min.js').then(function(){return load('libs/butterchurnPresets.min.js')})).then(function(){return new Promise(function(r){(window.requestIdleCallback||setTimeout)(r,{timeout:2000})})}).then(function wait(){ /* never compile MilkDrop while a window is open (keeps every window smooth) */ if(document.body.classList.contains('ovon'))return new Promise(function(r){setTimeout(r,1500)}).then(wait);
   }).then(function(){
-  var bc=window.butterchurn.default||window.butterchurn;sizeMilk();MV=bc.createVisualizer(a.ctx,mk,{width:mk.width,height:mk.height,pixelRatio:1,textureRatio:1});MV.connectAudio(a.node);
+  var bc=window.butterchurn.default||window.butterchurn;sizeMilk();MV=bc.createVisualizer(a.ctx,mk,{width:mk.width,height:mk.height,pixelRatio:1,textureRatio:1});MV.connectAudio(a.node);if(carrier)try{MV.connectAudio(carrier)}catch(e){}
   var pp=window.butterchurnPresets;pp=pp&&(pp.getPresets?pp:pp.default);MP=pp.getPresets();MKeys=Object.keys(MP);nextPreset('geiss|flexi|martin');mk.classList.add('on');
   (function loop(t){requestAnimationFrame(loop);if(document.hidden||document.body.classList.contains('ovon')||t-mlast<33)return;mlast=t;try{MV.render()}catch(e){}})(0);
   setInterval(function(){if(!document.body.classList.contains('ovon')&&lsg('d7vizfx','ai')!='off')nextPreset()},25000)}).catch(function(e){mStarting=false;console.warn('[cosmos] milk',e)})}
@@ -93,7 +144,30 @@ window.D7Sync={status:function(){return SY},now:net};addEventListener('online',n
 var AUTO=false,autoT=0;function autoOnline(on){AUTO=on;$('cxAuto').classList.toggle('on',on);$('cxAuto').textContent=on?'🤖 Auto online: WŁ':'🤖 Auto online';clearInterval(autoT);if(!on)return;
  radio(true);startMilk();net();aiMood();autoT=setInterval(function(){net();aiMood()},60000)}
 window.D7Cosmos={group:group,startMilk:startMilk,auto:autoOnline,milk:function(){return{on:!!MV,preset:window.D7MilkPreset,w:mk.width,h:mk.height,mood:window.D7MilkMood}}};
-mountBar();group();setTimeout(net,1200);setInterval(net,60000);
+/* ---------- v68 start stage: fullscreen MilkDrop + Kali radio, one big START AUTO, simple page menu on top ---------- */
+var st=document.createElement('style');st.textContent='#vz{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:18px;text-align:center;background:radial-gradient(#0000 40%,#000a);transition:opacity .4s}'+
+'body.vzoff #vz{opacity:0;pointer-events:none}body:not(.vzoff) #cosmoMilk.on{opacity:1;mix-blend-mode:normal}body:not(.vzoff)>header,body:not(.vzoff)>section,body:not(.vzoff) #launch,body:not(.vzoff) #sgRec{visibility:hidden}body.ovon #vz{display:none}'+
+'#vz h1{margin:0;font:800 clamp(26px,5vw,56px) system-ui;background:linear-gradient(90deg,#ffd23f,#ff2d95,#8a5cff,#2de2ff);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 18px #ff2d9588)}'+
+'#vzGo{font:800 clamp(22px,4vw,40px) system-ui;padding:18px 44px;border-radius:999px;border:0;color:#fff;background:linear-gradient(135deg,#ff2d95,#8a5cff);box-shadow:0 0 40px #ff2d9599;cursor:pointer;animation:vzP 1.6s ease-in-out infinite}#vzGo.on{animation:none;background:linear-gradient(135deg,#00c853,#00b8d4)}@keyframes vzP{50%{transform:scale(1.05)}}'+
+'#vz .r{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}#vz select,#vz button.s,#vz label{background:#0d0620cc;color:#fff;border:1px solid #8a5cff88;border-radius:999px;padding:7px 12px;font-size:14px}#vzNow{color:#cfc6ff;font-size:14px;min-height:18px}'+
+'#vzMenu{display:flex;flex-direction:column;gap:4px;max-height:38vh;overflow:auto;min-width:min(92vw,360px);background:#0a041acc;border:1px solid #8a5cff55;border-radius:16px;padding:8px;backdrop-filter:blur(6px)}#vzMenu button{text-align:left;background:none;border:0;color:#fff;padding:8px 12px;border-radius:10px;font-size:15px;cursor:pointer}#vzMenu button:hover{background:#ff2d9555}#vzMenu b{color:#ffd23f;font-size:12px;padding:6px 12px 0;text-align:left}'+
+'#vzYT{position:fixed;right:8px;bottom:8px;z-index:6;width:240px;height:135px;opacity:.85}body:not(.cxyt) #vzYT{display:none}#vzBack{position:fixed;left:10px;bottom:10px;z-index:4;display:none}body.vzoff #vzBack{display:block}';document.head.appendChild(st);
+var vz=document.createElement('div');vz.id='vz';vz.innerHTML='<h1>Super X G 🐲</h1><div id="vzNow">📻 Kali radio + MilkDrop</div><button id="vzGo">▶ START AUTO</button>'+
+ '<div class="r"><select id="vzSt"></select><label><input type="checkbox" id="vzFsA"> auto pełny ekran</label><button class="s" id="vzFs">⛶</button><button class="s" id="vzPrev">🎨 następna wizualizacja</button><button class="s" id="vzTiles">▦ kafelki</button></div><div id="vzMenu"></div>';
+var vb=document.createElement('button');vb.id='vzBack';vb.className='s';vb.textContent='🌌 scena';vb.style.cssText='background:#1a0830;color:#fff;border:1px solid #8a5cff;border-radius:999px;padding:8px 14px';
+function stage(on,init){document.body.classList.toggle('vzoff',!on);lss('d7stage',on?'on':'off');if(on&&!init)startMilk()}
+function menu(){var m=$('vzMenu'),L=$('launch');if(!L||!L.querySelector('.tile'))return setTimeout(menu,80);var h='';[].forEach.call(L.querySelectorAll('.cxg'),function(g){h+='<b>'+g.querySelector('h3').textContent+'</b>';[].forEach.call(g.querySelectorAll('.tile'),function(t){h+='<button data-t="'+t.dataset.t+'">'+t.textContent.trim()+'</button>'})});if(!h)return setTimeout(menu,80);m.innerHTML=h;
+ m.onclick=function(e){var b=e.target.closest('button');if(!b)return;var t=$('launch').querySelector('.tile[data-t="'+b.dataset.t+'"]');if(t)t.click();else if(window.HXTabs)HXTabs.open(b.dataset.t)}}
+function go(){var a=A();if(a&&a.ctx.resume)a.ctx.resume();if(!R.on)radio(true);startMilk(true);if(lsg('d7autofs','1')=='1'&&window.D7FS&&!D7FS.el())D7FS.on(document.documentElement);$('vzGo').classList.add('on');$('vzGo').textContent='🔊 AUTO gra';lss('d7started','1')}
+function mountStage(){document.body.appendChild(vz);document.body.appendChild(vb);fillSt($('vzSt'));$('vzSt').value=lsg('d7radioSt','0');$('vzSt').onchange=function(){$('cxSt').value=this.value;lss('d7radioSt',this.value);radio(true)};
+ $('vzFsA').checked=lsg('d7autofs','1')=='1';$('vzFsA').onchange=function(){lss('d7autofs',this.checked?'1':'0')};$('vzGo').onclick=function(){if(R.on&&$('vzGo').classList.contains('on')){radio(false);$('vzGo').classList.remove('on');$('vzGo').textContent='▶ START AUTO'}else go()};
+ $('vzFs').onclick=function(){window.D7FS&&D7FS.toggle(document.documentElement)};$('vzPrev').onclick=function(){startMilk(true);if(MV)nextPreset()};$('vzTiles').onclick=function(){stage(false)};vb.onclick=function(){stage(true)};
+ stage(lsg('d7stage','on')!='off',true);menu();
+ /* auto-attempt on load (works in APK / when autoplay allowed); otherwise the big button waits for a tap */
+ if(!TEST)setTimeout(function(){var a=A();if(!a)return;try{a.ctx.resume()}catch(e){}setTimeout(function(){if(a.ctx.state=='running'&&!R.on){radio(true);startMilk(true);$('vzGo').classList.add('on');$('vzGo').textContent='🔊 AUTO gra'}else if(!R.on)$('vzNow').textContent='▶ dotknij START AUTO (przeglądarka wymaga dotknięcia)'},300)},900)}
+window.D7Stage={on:function(){stage(true)},off:function(){stage(false)},go:go,state:function(){return{stage:!document.body.classList.contains('vzoff'),menu:$('vzMenu').querySelectorAll('button').length,autofs:lsg('d7autofs','1')}}};
+
+mountBar();group();mountStage();setTimeout(net,1200);setInterval(net,60000);
 })();
 /* v67 polish: typography, glow, glass cards, staggered entrance, smooth hovers (visual only — all v66 functions unchanged) */
 (function(){var s=document.createElement('style');s.textContent=

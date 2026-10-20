@@ -157,7 +157,7 @@ function boot(){new Deck('A',$('#dA'),$('#mxA'),'#ffb300');new Deck('B',$('#dB')
  $('#fs').onclick=function(){var d=document;if(d.fullscreenElement)d.exitFullscreen();else(d.documentElement.requestFullscreen||function(){}).call(d.documentElement)};
  document.addEventListener('keydown',function(e){if(e.target.tagName=='INPUT'||e.target.tagName=='SELECT')return;var k=e.key.toLowerCase();if(k=='q')decks[0].q('.play').click();if(k=='p')decks[1].q('.play').click();var pi='12345678'.indexOf(k);if(pi>=0)pad(pi)});
  window.D7Auto=function(){if(!autoMix)startAuto(true);return 'auto-mix'};
- window.WeDJ={aiLog:aiLog,brainAsk:brainAsk,decks:decks,fx:setFx,pad:pad,auto:startAuto,ctx:function(){return AC},detectBpm:detectBpm};
+ window.WeDJ={pre:function(){ctx();return PRE},master:function(){return masterDeck()},stat:function(t){stat(t)},xf:function(v){if(v==null)return +$('#xf').value;$('#xf').value=v;applyXf()},aiLog:aiLog,brainAsk:brainAsk,decks:decks,fx:setFx,pad:pad,auto:startAuto,ctx:function(){return AC},detectBpm:detectBpm};
  requestAnimationFrame(loop);stat('gotowe · wybierz utwór (🎵 demo / 📻 radio / 💾 plik)')}
 if(document.readyState=='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
