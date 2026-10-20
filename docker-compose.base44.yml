@@ -1,0 +1,30 @@
+# Base44 sandbox runbook for this repo.
+#
+# The repo is a plain static site (HTML/CSS/JS + assets, no build step, no backend):
+# nginx serves the working tree directly, bind-mounted read-only, so edits on disk
+# are visible immediately (refresh the preview; there is no watcher to run).
+#
+# Usage: docker compose -f docker-compose.base44.yml up -d --build
+name: d7-static
+
+services:
+  web:
+    image: nginx:1.27-alpine
+    restart: on-failure
+    ports:
+      - "3000:80"
+    volumes:
+      - ./:/usr/share/nginx/html:ro
+      - ./docker/nginx.base44.conf:/etc/nginx/conf.d/default.conf:ro
+      # Sandbox checkout is a root-owned 0700 dir → run the sandbox nginx as root.
+      - ./docker/nginx.base44-main.conf:/etc/nginx/nginx.conf:ro
+    environment:
+      # Platform-provided; bare so it is passed through only when set.
+      - BASE44_PREVIEW_MODE
+    healthcheck:
+      # Real HTTP response from the app served over nginx, not just an open port.
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/index.html || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
