@@ -10,38 +10,46 @@ section{display:none;padding:12px 14px}section.on{display:block}.card{background
 .row{display:flex;gap:8px}input,textarea{flex:1;background:#0c0620;color:#fff;border:1px solid #3a1f73;border-radius:12px;padding:10px;font-size:15px}
 #bst{font-size:13px;color:#9ef}.big{font-size:20px;font-weight:700;letter-spacing:1px;color:#00e5ff;user-select:all}.lock{opacity:.5}small{opacity:.7}</style></head><body>
 <header><h1>Ghost X G 🐲</h1><small>DJ DaX · Kraków · AI działające bez internetu</small> <span id="ver"></span></header>
-<nav><button data-t="chat">💬 Czat</button><button data-t="bots">🤖 Autoboty AI SI</button><button data-t="brain">🧠 Mózg</button><button data-t="full">💎 Pełna wersja</button></nav>
+<a href="../hiphopx.html" id="open7d" style="display:block;margin:6px 14px 10px;padding:14px;border-radius:16px;background:linear-gradient(90deg,#ff2bd6,#6b21ff,#00e5ff);color:#fff;font-weight:900;font-size:17px;text-align:center;text-decoration:none">🎛 Otwórz pełną aplikację 7D DJ<br><small style="font-weight:600">decki WeDJ/Pioneer · 2000 CC · pętle · Remixlive · radio Kali/techno/hip-hop · MilkDrop 3D + rekin · boty</small></a><nav><button data-t="chat">💬 Czat</button><button data-t="bots">🤖 Autoboty AI SI</button><button data-t="brain">🧠 Mózg</button><button data-t="full">💎 Ghost Open SI</button></nav>
 <section id="chat" class="on"><div class="card" id="log"></div><div class="row"><input id="q" placeholder="Napisz do Ghost X G…"><button id="send">➤</button></div><div id="bst"></div></section>
-<section id="bots"><div class="card"><b>Autoboty AI SI</b> <small>(pełna wersja; korzystają z mózgu offline → online → reguły)</small></div><div id="botlist"></div>
+<section id="bots"><div class="card"><b>Autoboty AI SI</b> <small>(za darmo; mózg offline → online → reguły)</small></div><div id="botlist"></div>
 <div class="card"><textarea id="bin" rows="2" placeholder="Temat / szczegóły (np. impreza hip-hop w sobotę, Kazimierz)"></textarea></div><div class="card" id="bout">…</div></section>
-<section id="brain"><div class="card"><b>🧠 Mózg AI offline</b><p>Jednorazowe pobranie darmowego modelu do pamięci przeglądarki (Cache API). Potem czat działa w trybie samolotowym.</p>
-<p>• WebGPU (nowe Chrome/Android): <b>Qwen2.5-0.5B</b> ~ 280 MB plików, ~1 GB RAM/VRAM<br>• Bez WebGPU (WASM): <b>Qwen2.5-0.5B</b> (WASM, ONNX q4) ~ 480 MB, ~1–1,5 GB RAM, wolniej</p>
+<section id="brain"><div class="card"><button id="dl2" style="width:100%;font-size:20px;padding:16px">🧠 Pobierz mózg AI (za darmo)</button></div><div class="card"><b>🧠 Mózg AI offline</b><p>Jednorazowe pobranie darmowego modelu do pamięci przeglądarki (Cache API). Potem czat działa w trybie samolotowym.</p>
+<p>• WebGPU (nowe Chrome/Android): <b>Qwen2.5-0.5B</b> ~ 280 MB, ~1 GB RAM<br>• Bez WebGPU (WASM): <b>Qwen2.5-0.5B</b> ONNX q4 ~ 480 MB, ~1–1,5 GB RAM, wolniej<br>• 💎 Ghost Open SI: <b>Qwen2.5-1.5B</b> ~ 0,9–1,2 GB, ≥ 6 GB RAM telefonu</p>
 <p><small>Zalecane: Wi-Fi, telefon z ≥ 4 GB RAM. Pierwsze uruchomienie może trwać kilka minut.</small></p>
 <button id="dl">⬇️ Pobierz mózg AI</button> <button class="o" id="clr">🗑️ Usuń model</button><p id="bst2"></p></div></section>
-<section id="full"><div class="card"><b>💎 Pełna wersja – 5 zł / 1 € / 1 $</b><p>Odblokowuje Autoboty AI SI i nieograniczony czat. Płatność jednorazowa.</p>
+<section id="full"><div class="card"><b>💎 Ghost Open SI – 5 zł / 1 € / 1 $</b><p>Ghost X G (cała aplikacja 7D + mózg AI) jest <b>w 100% darmowy</b>. Ghost Open SI to osobna płatna edycja z dodatkami SI:</p>
+<ul><li>🧠 Większy mózg <b>Qwen2.5-1.5B</b> (lepszy polski)</li><li>🤖 Premium autoboty: Ogłoszenie imprezy + hashtagi, Rider techniczny, Oferta dla klubu, Setlista 2 h z BPM</li><li>🎛 Presety AI DJ auto-set (Hip-hop Kraków, Techno noc, Wesele, Chill)</li><li>💾 Eksport czatu i wyników (.txt)</li></ul>
 <p>📱 <b>BLIK na telefon:</b><br><span class="big">730 377 357</span></p>
 <p>🏦 <b>Przelew Nest Bank – IBAN:</b><br><span class="big">PL45 1870 1045 2083 1058 7576 0001</span><br>Odbiorca: Daniel Dydo</p>
-<p>📝 <b>Tytuł:</b> <span class="big">Ghost X G + twój e-mail</span></p>
-<p><small>Po zaksięgowaniu Daniel wyśle ręcznie kod odblokowujący na podany e-mail (zwykle w ciągu 24 h).</small></p>
-<div class="row"><input id="code" placeholder="Kod odblokowania GX-…"><button id="ub">🔓</button></div><p id="ust"></p></div></section>
+<p>📝 <b>Tytuł:</b> <span class="big">Ghost Open SI + twój e-mail</span></p>
+<p><small>Po zaksięgowaniu Daniel wyśle ręcznie kod odblokowujący na e-mail (zwykle w 24 h).</small></p>
+<div class="row"><input id="code" placeholder="Kod Ghost Open SI GX-…"><button id="ub">🔓</button></div><p id="ust"></p></div>
+<div class="card" id="pro"><b>💎 Funkcje Ghost Open SI</b> <span id="plock"></span><p><label><input type="checkbox" id="big" style="flex:none"> 🧠 Używaj większego mózgu Qwen2.5-1.5B</label></p><div id="pbots"></div><div id="presets"></div><button class="o" id="exp">💾 Eksportuj czat (.txt)</button><pre id="pout" style="white-space:pre-wrap"></pre></div></section>
 <script src="unlock.js"></script><script src="brain.js"></script><script>
 var $=function(i){return document.getElementById(i)},hist=[];
 document.querySelectorAll('nav button').forEach(function(b){b.onclick=function(){document.querySelectorAll('section').forEach(function(s){s.classList.toggle('on',s.id==b.dataset.t)})}});
-function free(){return !GXUnlock.full()}var LIMIT=20;
+function pro(){return GXUnlock.full()}
 function add(t,c,src){var d=document.createElement('div');d.className='m '+c;d.textContent=t;if(src){var s=document.createElement('div');s.className='src';s.textContent=src;d.appendChild(s)}$('log').appendChild(d);$('log').scrollTop=1e9}
 GXBrain.onstatus=function(s){$('bst').textContent=s;$('bst2').textContent=s};GXBrain.onstatus(GXBrain.status);
 add('Siema! Jestem Ghost X G 🐲. Pytaj o muzykę, DJ-ing, Kraków albo cokolwiek.','b','start');
 async function send(){var q=$('q').value.trim();if(!q)return;var n=+(localStorage.getItem('gx_n_'+new Date().toDateString())||0);
- if(free()&&n>=LIMIT){add('Limit '+LIMIT+' wiadomości dziennie w wersji darmowej. 💎 Pełna wersja: 5 zł.','b','limit');return}
  localStorage.setItem('gx_n_'+new Date().toDateString(),n+1);$('q').value='';add(q,'u');var r=await GXBrain.ask(q,hist);hist.push({role:'user',content:q},{role:'assistant',content:r.a});add(r.a,'b',r.src)}
 $('send').onclick=send;$('q').onkeydown=function(e){if(e.key=='Enter')send()};
 var BOTS=[['🎉 Opis imprezy','Napisz krótki, energetyczny opis imprezy z DJ DaX: '],['🎧 Playlista','Zaproponuj playlistę 10 utworów (wykonawca – tytuł) na: '],['📣 Post FB','Napisz krótki post na Facebook z emoji dla DJ DaX o: '],['📅 Plan dnia','Ułóż krótki plan dnia w punktach dla DJ-a, uwzględniając: '],['🎤 Tekst rap','Napisz 8 wersów rapu po polsku o: ']];
 BOTS.forEach(function(b){var e=document.createElement('button');e.className='o';e.style.margin='4px';e.textContent=b[0];e.onclick=async function(){
- if(free()){$('bout').textContent='🔒 Autoboty AI SI są w pełnej wersji (5 zł). Zobacz 💎.';return}
  $('bout').textContent='⏳ '+b[0]+'…';var r=await GXBrain.ask(b[1]+($('bin').value||'Kraków, sobota'),[]);$('bout').textContent=r.a+'\n\n— '+r.src};$('botlist').appendChild(e)});
-$('dl').onclick=function(){localStorage.removeItem('gx_model');GXBrain.load()};
+$('dl2').onclick=$('dl').onclick=function(){localStorage.removeItem('gx_model');GXBrain.load()};
 $('clr').onclick=async function(){localStorage.removeItem('gx_model');(await caches.keys()).forEach(function(k){if(/webllm|transformers/.test(k))caches.delete(k)});GXBrain.engine=null;GXBrain.kind='rules';GXBrain.onstatus('Model usunięty')};
-$('ub').onclick=async function(){$('ust').textContent=(await GXUnlock.tryCode($('code').value))?'✅ Pełna wersja odblokowana. Dziękuję! 🐲':'❌ Nieprawidłowy kod'};
-$('ver').textContent=GXUnlock.full()?'💎 PEŁNA':'· wersja darmowa';GXBrain.autoload();
+$('ub').onclick=async function(){$('ust').textContent=(await GXUnlock.tryCode($('code').value))?'✅ Ghost Open SI odblokowany. Dziękuję! 🐲':'❌ Nieprawidłowy kod';proUI()};
+$('ver').textContent=pro()?'💎 Ghost Open SI':'· 100% za darmo';
+var PB=[['📣 Ogłoszenie + hashtagi','Napisz ogłoszenie imprezy z 10 hashtagami dla DJ DaX: '],['🔌 Rider techniczny','Napisz rider techniczny DJ-a (sprzęt, nagłośnienie, czas) dla: '],['🤝 Oferta dla klubu','Napisz krótką ofertę współpracy DJ DaX dla klubu: '],['⏱️ Setlista 2 h z BPM','Ułóż setlistę 2 h (utwór – BPM – tonacja) na: ']];
+var PR={'Hip-hop Kraków':'boom-bap 88–95 BPM, polski rap, Kazimierz','Techno noc':'techno 128–136 BPM, ciemne, hipnotyczne','Wesele':'hity PL i świat, od 100 do 128 BPM','Chill':'lo-fi/chillhop 70–90 BPM'};
+function proUI(){$('ver').textContent=pro()?'💎 Ghost Open SI':'· 100% za darmo';$('plock').textContent=pro()?'✅ aktywne':'🔒 wymaga kodu';$('big').checked=localStorage.getItem('gx_big')==='1'}
+function need(){if(!pro()){$('pout').textContent='🔒 To funkcja Ghost Open SI 💎 (5 zł). Wpisz kod powyżej.';return false}return true}
+PB.forEach(function(b){var e=document.createElement('button');e.className='o';e.style.margin='4px';e.textContent='💎 '+b[0];e.onclick=async function(){if(!need())return;$('pout').textContent='⏳';var r=await GXBrain.ask(b[1]+($('bin').value||'Kraków, sobota'),[]);$('pout').textContent=r.a+'\n— '+r.src};$('pbots').appendChild(e)});
+Object.keys(PR).forEach(function(k){var e=document.createElement('button');e.className='o';e.style.margin='4px';e.textContent='🎛 '+k;e.onclick=async function(){if(!need())return;$('pout').textContent='⏳';var r=await GXBrain.ask('Przygotuj auto-set DJ (kolejność 8 utworów, BPM, przejścia, FX) w stylu: '+PR[k],[]);$('pout').textContent='🎛 '+k+'\n'+r.a+'\n— '+r.src};$('presets').appendChild(e)});
+$('big').onchange=function(){if(!need()){this.checked=false;return}localStorage.setItem('gx_big',this.checked?'1':'0');localStorage.removeItem('gx_model');$('pout').textContent='Zmieniono mózg – przeładuj i pobierz model ponownie.'};
+$('exp').onclick=function(){if(!need())return;var t=hist.map(function(m){return (m.role=='user'?'Ty: ':'Ghost: ')+m.content}).join('\n\n')+'\n\n'+$('pout').textContent;var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'}));a.download='ghost-open-si.txt';a.click()};proUI();GXBrain.autoload();
 if('serviceWorker' in navigator&&location.protocol!='file:')navigator.serviceWorker.register('sw.js');
 </script></body></html>
