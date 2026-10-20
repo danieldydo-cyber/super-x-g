@@ -1,0 +1,55 @@
+{
+  "file": "/workspace/gdj/g-dj-super-pro.html",
+  "bots": [
+    {
+      "name": "G",
+      "id": "990af3d4-2d64-4833-8277-f6131a5e1336",
+      "url": "grokbot://app/v1/agent?id=990af3d4-2d64-4833-8277-f6131a5e1336"
+    },
+    {
+      "name": "SuperGrok",
+      "id": "25bf78ab-b1d9-4817-8d63-a9f64bf47670",
+      "url": "grokbot://app/v1/agent?id=25bf78ab-b1d9-4817-8d63-a9f64bf47670"
+    },
+    {
+      "name": "77",
+      "id": "33dab54b-9d16-43b6-aa8b-4a5875051aed",
+      "url": "grokbot://app/v1/agent?id=33dab54b-9d16-43b6-aa8b-4a5875051aed"
+    },
+    {
+      "name": "DargonMoon",
+      "id": "8cd795b4-e5c2-4f5c-96c8-bf88d85b3278",
+      "url": "grokbot://app/v1/agent?id=8cd795b4-e5c2-4f5c-96c8-bf88d85b3278"
+    },
+    {
+      "name": "AutoFix",
+      "id": "9efe9295-6a59-49f0-94e0-2c7b11dc6eff",
+      "url": "grokbot://app/v1/agent?id=9efe9295-6a59-49f0-94e0-2c7b11dc6eff"
+    },
+    {
+      "name": "SuperCharger",
+      "id": "a29a2aa1-5395-4a53-9a76-ab1832b622e5",
+      "url": "grokbot://app/v1/agent?id=a29a2aa1-5395-4a53-9a76-ab1832b622e5"
+    },
+    {
+      "name": "D",
+      "id": "d56dc24c-0f3f-4fc4-91fd-1b2ccafdea06",
+      "url": "grokbot://app/v1/agent?id=d56dc24c-0f3f-4fc4-91fd-1b2ccafdea06"
+    },
+    {
+      "name": "Dragon",
+      "id": "db0dd1c5-3595-4211-ad3f-76706a40a063",
+      "url": "grokbot://app/v1/agent?id=db0dd1c5-3595-4211-ad3f-76706a40a063"
+    },
+    {
+      "name": "SuperBotD",
+      "id": "fdd4f671-6385-4f12-87ec-95c9a562b79a",
+      "url": "grokbot://app/v1/agent?id=fdd4f671-6385-4f12-87ec-95c9a562b79a"
+    },
+    {
+      "name": "MoePieseDevil",
+      "id": "fa62e2c3-8d27-4ea8-852e-ef6fd348da76",
+      "url": "grokbot://app/v1/agent?id=fa62e2c3-8d27-4ea8-852e-ef6fd348da76"
+    }
+  ]
+}

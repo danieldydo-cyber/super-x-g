@@ -1,0 +1,45 @@
+{
+ "source": "/workspace/gdj/bots.json (names only)",
+ "bots": [
+  {
+   "name": "G",
+   "role": "👑 lider, DJ i auto-host"
+  },
+  {
+   "name": "SuperGrok",
+   "role": "research i odpowiedzi"
+  },
+  {
+   "name": "77",
+   "role": "sync, pamięć, harmonogram"
+  },
+  {
+   "name": "DargonMoon",
+   "role": "kreatywne pomysły i sety"
+  },
+  {
+   "name": "AutoFix",
+   "role": "diagnoza i naprawa"
+  },
+  {
+   "name": "SuperCharger",
+   "role": "boost i szybkość"
+  },
+  {
+   "name": "D",
+   "role": "hub D7 DJ / muzyka"
+  },
+  {
+   "name": "Dragon",
+   "role": "audio, MC-707, wydajność"
+  },
+  {
+   "name": "SuperBotD",
+   "role": "buildy i deploy"
+  },
+  {
+   "name": "MoePieseDevil",
+   "role": "diabelski styl, hype, humor"
+  }
+ ]
+}
