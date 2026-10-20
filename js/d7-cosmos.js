@@ -15,7 +15,7 @@ var css=document.createElement('style');css.textContent=
 '#cxRadio.on{background:#ff2d55!important}.cxbeat{transition:transform .08s}';
 document.head.appendChild(css);
 /* ---------- groups (fewer top-level choices; every tile still reachable) ---------- */
-var GROUPS=[['🎧 DJ & Decki','2 decki WeDJ, PRO8, DXF, klasyki',['pioneer','pro8','dxf','pioneerold','dj','gdj','gpro','proc']],
+var GROUPS=[['🎧 DJ & Decki','2 decki WeDJ, PRO8, DXF, klasyki',['pioneer','remix','pro8','dxf','pioneerold','dj','gdj','gpro','proc']],
  ['🌌 Wizualizacje','MilkDrop X, X7S, v51',['milk','x7s','v51','kalic']],['📻 Radio & Muzyka','Kali radio, beaty, studio',['kali','radiogen','hiphop','studio']],
  ['🤖 Boty & AI','Bot Builder, 7 mózgów, agenci, czat',['bb','brains','agents','bots','super','mrd','dpage','sbg','g','builder','dagents']],
  ['🛠 Narzędzia','Auto-Fix 7777, aplikacje',['fix','superapp','app']],['⬇ Aplikacja & Wsparcie','APK, płatności (tylko informacje)',['dl','pay']]];
@@ -167,7 +167,33 @@ function mountStage(){document.body.appendChild(vz);document.body.appendChild(vb
  if(!TEST)setTimeout(function(){var a=A();if(!a)return;try{a.ctx.resume()}catch(e){}setTimeout(function(){if(a.ctx.state=='running'&&!R.on){radio(true);startMilk(true);$('vzGo').classList.add('on');$('vzGo').textContent='🔊 AUTO gra'}else if(!R.on)$('vzNow').textContent='▶ dotknij START AUTO (przeglądarka wymaga dotknięcia)'},300)},900)}
 window.D7Stage={on:function(){stage(true)},off:function(){stage(false)},go:go,state:function(){return{stage:!document.body.classList.contains('vzoff'),menu:$('vzMenu').querySelectorAll('button').length,autofs:lsg('d7autofs','1')}}};
 
-mountBar();group();mountStage();setTimeout(net,1200);setInterval(net,60000);
+/* ---------- v70 hero: "S ver G 🐲 S Dragon" + animated glowing original dragon logo (hidden in pure viz) + SuperGrok next-action bar ---------- */
+var hs=document.createElement('style');hs.textContent='#vzHero{display:flex;flex-direction:column;align-items:center;gap:4px}#vzLogo{width:clamp(110px,18vw,200px);height:auto;filter:drop-shadow(0 0 14px #ff2d95) drop-shadow(0 0 28px #8a5cff);animation:dgFloat 4s ease-in-out infinite}'+
+'@keyframes dgFloat{50%{transform:translateY(-8px) rotate(-2deg)}}#vzLogo .wing{transform-origin:100px 92px;animation:dgWing 1.6s ease-in-out infinite}#vzLogo .wing2{animation-delay:-.8s}@keyframes dgWing{50%{transform:scaleY(.72) rotate(-6deg)}}'+
+'#vzLogo .eye{animation:dgEye 3s infinite}@keyframes dgEye{0%,92%,100%{opacity:1}95%{opacity:.1}}#vzLogo .fire{animation:dgFire .9s ease-in-out infinite alternate;transform-origin:150px 74px}@keyframes dgFire{to{transform:scaleX(1.25);opacity:.6}}'+
+'#vzHero h1 .s2{display:block;font-size:.42em;letter-spacing:.3em;-webkit-text-fill-color:#ffd23f;text-shadow:0 0 12px #ff2d95}html.d7pure #vzHero{display:none!important}'+
+'#sgNext{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;align-items:center;max-width:min(94vw,820px)}#sgNext b{color:#2de2ff;font-size:13px}#sgNext button{background:linear-gradient(135deg,#2a1356,#0d2a4a);color:#fff;border:1px solid #2de2ff88;border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;box-shadow:0 0 10px #2de2ff33}#sgNext button:hover{box-shadow:0 0 16px #ff2d95}#sgNext small{color:#a9b4d6}';
+document.head.appendChild(hs);
+var LOGO='<svg id="vzLogo" viewBox="0 0 200 160" aria-label="S Dragon logo"><defs><linearGradient id="dgG" x1="0" x2="1"><stop offset="0" stop-color="#2de2ff"/><stop offset=".5" stop-color="#8a5cff"/><stop offset="1" stop-color="#ff2d95"/></linearGradient><linearGradient id="dgW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff2d95"/><stop offset="1" stop-color="#8a5cff" stop-opacity=".4"/></linearGradient></defs>'+
+ '<path class="wing" d="M100 92 L60 22 L74 52 L46 40 L66 70 L34 66 L78 92 Z" fill="url(#dgW)" stroke="#ffd23f" stroke-width="1.5"/><path class="wing wing2" d="M108 90 L120 30 L124 58 L146 40 L134 72 Z" fill="url(#dgW)" opacity=".75"/>'+
+ '<path d="M30 130 C 10 110, 40 92, 64 104 C 88 116, 98 96, 104 84 C 110 70, 128 62, 146 66 L 162 60 L 156 72 C 162 76, 162 84, 152 88 L 132 90 C 120 104, 112 124, 84 132 C 64 138, 44 142, 30 130 Z" fill="#160733" stroke="url(#dgG)" stroke-width="4" stroke-linejoin="round"/>'+
+ '<path d="M30 130 C 20 140, 8 138, 4 128 C 14 132, 22 128, 30 130" fill="url(#dgG)"/><path d="M146 66 L 150 50 L 156 64 M 136 66 L 136 52 L 144 64" stroke="#ffd23f" stroke-width="3" fill="none" stroke-linecap="round"/>'+
+ '<circle class="eye" cx="146" cy="74" r="3.2" fill="#ffd23f"/><path class="fire" d="M162 80 C 176 74, 186 82, 196 76 C 188 86, 178 88, 162 84 Z" fill="#ff8a00" opacity=".9"/>'+
+ '<path d="M60 112 l6 -8 l2 9 l7 -7 l1 9 l7 -6" stroke="#2de2ff" stroke-width="2" fill="none" stroke-linecap="round"/><text x="0" y="0" font-size="0"></text></svg>';
+function mountHero(){var h=vz.querySelector('h1');if(!h)return;var w=document.createElement('div');w.id='vzHero';h.parentNode.insertBefore(w,h);w.innerHTML=LOGO;h.innerHTML='S ver G 🐲 <span class="s2">S Dragon</span>';w.appendChild(h);
+ var sg=document.createElement('div');sg.id='sgNext';sg.innerHTML='<b>🧠 SuperGrok:</b> <small>myślę…</small>';var mn=$('vzMenu');mn.parentNode.insertBefore(sg,mn);suggest();setInterval(suggest,120000)}
+/* SuperGrok next-action suggestions: 7-brain chain (grok brain) → validated action ids; offline heuristic fallback */
+var ACT={radio:['📻 Włącz Kali radio',function(){$('vzSt').value='0';$('cxSt').value='0';radio(true)}],techno:['⚡ Stacja techno',function(){var i=STN.findIndex(function(s){return s[2]=='techno'});$('cxSt').value=i;radio(true)}],hiphop:['🎤 Stacja hip-hop',function(){var i=STN.findIndex(function(s){return s[2]=='hiphop'});$('cxSt').value=i;radio(true)}],
+ gen:['🎛 Generator beatów',function(){var i=STN.findIndex(function(s){return s[1]=='gen:ai'});$('cxSt').value=i;radio(true)}],mega:['🤖 AI DJ Mega Set',function(){if(window.HXTabs)HXTabs.open('pioneer');setTimeout(function(){try{var f=document.querySelector('#hxbody>iframe');f.contentWindow.WeDJMega.start()}catch(e){}},3500)}],
+ decks:['🎚 Decki WeDJ',function(){HXTabs.open('pioneer')}],viz:['🌌 Czysta wizualizacja',function(){if(window.D7Ctl)D7Ctl.pureOn(mk,true)}],shark:['🦈 Rekin MilkDrop',function(){if(window.D7Ctl)D7Ctl.shark(true)}],bots:['🤖 Uruchom boty',function(){if(window.D7Ctl)D7Ctl.bots()}],chat:['💬 Pogadaj z Bot D',function(){HXTabs.open('dpage')}],x7s:['✨ X7S klasyk',function(){HXTabs.open('x7s')}]};
+var SG={src:'',ids:[]};
+function offlineSug(){var h=new Date().getHours(),o=[];o.push(R.on?'viz':'radio');o.push(h>=20||h<4?'techno':h<12?'hiphop':'gen');o.push(R.on?'mega':'decks');o.push(lsg('d7shark','1')=='1'?'chat':'shark');o.push('bots');return o.filter(function(x,i,a){return a.indexOf(x)==i}).slice(0,4)}
+function paintSug(ids,src){SG={src:src,ids:ids};var sg=$('sgNext');if(!sg)return;sg.innerHTML='<b>🧠 SuperGrok poleca:</b>'+ids.map(function(k){return '<button data-a="'+k+'">'+ACT[k][0]+'</button>'}).join('')+'<small>'+src+'</small>';sg.onclick=function(e){var b=e.target.closest('button');if(b&&ACT[b.dataset.a]){ACT[b.dataset.a][1]();lss('d7lastAct',b.dataset.a);setTimeout(suggest,1500)}}}
+function suggest(){paintSug(offlineSug(),'offline (zasady)');if(!window.SBDJ||TEST)return;var keys=Object.keys(ACT),st='radio '+(R.on?'gra: '+STN[+$('cxSt').value][0]:'wyłączone')+', godzina '+new Date().getHours()+', ostatnia akcja '+lsg('d7lastAct','brak');
+ Promise.race([SBDJ.brain('grok','Jesteś SuperGrok, koordynator aplikacji DJ. Stan: '+st+'. Wybierz 4 najlepsze NASTĘPNE akcje dla użytkownika z listy id: '+keys.join(', ')+'. Odpowiedz tylko JSON: {"next":["id","id","id","id"]}'),new Promise(function(r){setTimeout(function(){r('[offline]')},20000)})]).then(function(a){var j=null;try{j=JSON.parse(String(a).match(/\{[\s\S]*\}/)[0])}catch(e){}var ids=j&&Array.isArray(j.next)?j.next.filter(function(k){return ACT[k]}).slice(0,4):[];if(ids.length>=2&&!/\[offline\]/.test(a))paintSug(ids,'7 mózgów · live');},function(){})}
+window.D7Suggest={now:suggest,state:function(){return SG},run:function(k){ACT[k]&&ACT[k][1]()}};
+
+mountBar();group();mountStage();mountHero();setTimeout(net,1200);setInterval(net,60000);
 })();
 /* v67 polish: typography, glow, glass cards, staggered entrance, smooth hovers (visual only — all v66 functions unchanged) */
 (function(){var s=document.createElement('style');s.textContent=

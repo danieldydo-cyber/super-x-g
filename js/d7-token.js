@@ -75,4 +75,4 @@ window.addEventListener('message',function(e){if(e.data&&e.data.type=='d7:resize
 })();
 
 /* v69: universal controls (Play/AUTO/Stop all/bots/🦈/pure viz) */
-(function(){if(window.__d7ctlL)return;window.__d7ctlL=1;var pn=location.pathname;if(!/\/(dxf|d)\//.test(pn)&&/(\/|\/index\.html|\/kali-live\.html|\/pro-dj\.html)$/.test(pn))return;/* original Special X v38 pages stay untouched */var s=document.currentScript&&document.currentScript.src||'',b=s?s.replace(/js\/d7-token\.js.*$/,''):'';var e=document.createElement('script');e.src=b+'js/d7-ctl.js?v=1069';e.async=true;(document.head||document.documentElement).appendChild(e)})();
+(function(){if(window.__d7ctlL)return;window.__d7ctlL=1;var pn=location.pathname;if(!/\/(dxf|d)\//.test(pn)&&/(\/|\/index\.html|\/kali-live\.html|\/pro-dj\.html)$/.test(pn))return;/* original Special X v38 pages stay untouched */var s=document.currentScript&&document.currentScript.src||'',b=s?s.replace(/js\/d7-token\.js.*$/,''):'';var e=document.createElement('script');e.src=b+'js/d7-ctl.js?v=1070';e.async=true;(document.head||document.documentElement).appendChild(e)})();

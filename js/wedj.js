@@ -134,14 +134,14 @@ function startAuto(on){autoMix=on==null?!autoMix:on;$('#aimix').classList.toggle
 /* ---------- Render (≤30 fps, DPR-aware, 1080p cap) ---------- */
 function fit(c){var r=c.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2),w=Math.round(r.width*dpr),h=Math.round(r.height*dpr),s=Math.min(1,(window.D7Res?D7Res.cap()[0]:1920)/Math.max(w,1));w=Math.max(2,w*s|0);h=Math.max(2,h*s|0);if(c.width!=w||c.height!=h){c.width=w;c.height=h}return c.getContext('2d')}
 function drawDeck(D){var g=fit(D.wf),W=D.wf.width,H=D.wf.height;g.fillStyle='#000';g.fillRect(0,0,W,H);var p=D.pos(),dur=D.dur();
- if(D.peaks&&dur){var win=8,N=D.peaks.length,pps=N/dur;g.fillStyle=D.col;for(var x=0;x<W;x+=2){var t=p-win/2+x/W*win;if(t<0||t>dur)continue;var v=D.peaks[Math.min(N-1,(t*pps)|0)];g.fillRect(x,H/2-v*H/2,2,v*H)}
+ if(D.peaks&&dur){var win=8,N=D.peaks.length,pps=N/dur;var bh=D.id=='A'?185:295;for(var x=0;x<W;x+=2){var t=p-win/2+x/W*win;if(t<0||t>dur)continue;var ix=Math.min(N-1,(t*pps)|0),v=D.peaks[ix],pv=D.peaks[Math.max(0,ix-1)],hf=Math.min(1,Math.abs(v-pv)*9);/* frequency colour: smooth/bass = deck hue, transient/high = warm */g.fillStyle='hsl('+Math.round(bh+hf*110+v*30)%360+',100%,'+Math.round(42+v*28+hf*12)+'%)';g.fillRect(x,H/2-v*H/2,2,v*H)}
   if(D.bpm){var bs=60/D.bpm;g.fillStyle='rgba(255,255,255,.35)';for(var bt=Math.ceil((p-win/2)/bs)*bs;bt<p+win/2;bt+=bs)g.fillRect((bt-p+win/2)/win*W,0,1,H)}
   D.cues.forEach(function(c,i){if(c!=null&&Math.abs(c-p)<win/2){g.fillStyle='#ffb300';g.fillRect((c-p+win/2)/win*W-1,0,3,H)}});
   if(D.loopLen){g.fillStyle='rgba(0,229,255,.18)';g.fillRect((D.loopStart-p+win/2)/win*W,0,D.loopSec()/win*W,H)}
   var o=fit(D.ov),OW=D.ov.width,OH=D.ov.height;if(!D._ovd||D._ovd!==D.peaks){D._ovd=D.peaks;D._ovImg=null}o.fillStyle='#000';o.fillRect(0,0,OW,OH);o.fillStyle='#556';for(var i=0;i<OW;i++){var v2=D.peaks[(i/OW*N)|0];o.fillRect(i,OH/2-v2*OH/2,1,v2*OH)}o.fillStyle='#fff';o.fillRect(p/dur*OW,0,2,OH)}
  else if(D.radio){g.fillStyle='#334';g.font=(H/4|0)+'px system-ui';g.fillText('📻 LIVE '+D.name,10,H/2)}
  g.fillStyle='#fff';g.fillRect(W/2-1,0,2,H);D.q('.tm').textContent=fmt(p)+' / '+fmt(dur);
- if(D.playing)D.angle+=(D.effRate()*2*Math.PI*33.3/60)/30;D.q('.jog i').style.transform='rotate('+D.angle+'rad)'}
+ if(D.playing)D.angle+=(D.effRate()*2*Math.PI*33.3/60)/30;D.q('.jog i').style.transform='rotate('+D.angle+'rad)';var J=D.q('.jog');J.style.setProperty('--ang',D.angle+'rad');J.classList.toggle('spin',D.playing)}
 var lastF=0,vu,beatN=-1;
 function loop(t){requestAnimationFrame(loop);if(document.hidden||t-lastF<33)return;lastF=t;decks.forEach(drawDeck);
  if(ANA){var g=fit(vu),W=vu.width,H=vu.height,e=energy();g.fillStyle='#000';g.fillRect(0,0,W,H);g.fillStyle=e.rms>.7?'#ff4081':'#00e5ff';g.fillRect(0,0,W*Math.min(1,e.rms*1.4),H)}

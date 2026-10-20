@@ -4,7 +4,7 @@
    The launcher host answers "I'm current" so opening PRO8 no longer reloads the whole app / closes the overlay. */
 try{if(navigator.serviceWorker){navigator.serviceWorker.addEventListener('message',function(e){var d=e.data;if(d&&d.type=='d7-version?'&&e.ports&&e.ports[0])e.ports[0].postMessage({v:d.v})});navigator.serviceWorker.startMessages&&navigator.serviceWorker.startMessages()}}catch(e){}
 var TABS=[['bb','🐲 Start · Super Bot G 777',null],['brains','🧠 7 Mózgów',null],['agents','🤖 777 agentów',null],['bots','⚙️ Ustawienia botów',null],['fix','🛡 7777 Auto-Fix',null],['milk','🌌 MilkDrop',null],['hiphop','🎤 HIPHOP X',null],['dxf','💎 DXF','dxf/index.html'],['dl','⬇ Pobierz APK',null],['pay','💖 Wsparcie / Płatności',null],['super','🧠 D7 SUPER (boty)','super.html'],['pro8','🎧 D7 DJ PRO8','pro8-tile.html'],
-['pioneer','🎚 Pioneer PRO DJ (WeDJ 2-deck)','wedj.html'],['pioneerold','🎚 Pioneer (stary)','pro-dj-tile.html'],['kali','📻 Kali Live','kali-live-tile.html'],['x7s','X71/X7S classic','classic.html'],
+['pioneer','🎚 Pioneer PRO DJ (WeDJ 2-deck)','wedj.html'],['remix','🎛 Remixlive X (pady, FX, Audio In)','remixlive.html'],['pioneerold','🎚 Pioneer (stary)','pro-dj-tile.html'],['kali','📻 Kali Live','kali-live-tile.html'],['x7s','X71/X7S classic','classic.html'],
 ['sbg','🤖 SuperBot G','superbotg.html'],['g','G','g.html'],['gpro','G PRO','g-pro.html'],['gdj','G DJ Super PRO','g-dj-super-pro.html'],
 ['superapp','SuperApp','superapp.html'],['radiogen','📡 Radio Gen','radio-gen.html'],['dj','DJ','dj.html'],['app','App','app.html'],
 ['v51','v51','v51.html'],['dpage','D','d.html'],['mrd','💧 Mr D Fluid','public-chat.html'],['studio','🎛 D77 Studio','d/studio.html'],
