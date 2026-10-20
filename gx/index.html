@@ -1,0 +1,47 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ghost X G 🐲</title><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#6b21ff">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ghost X G"><link rel="apple-touch-icon" href="icon-180.png">
+<style>body{margin:0;font-family:system-ui,sans-serif;background:radial-gradient(circle at 30% 0,#2a0b5e,#05030c 60%);color:#eee;min-height:100vh;padding:env(safe-area-inset-top) 0 0}
+header{padding:14px 16px;text-align:center}h1{margin:0;font-size:26px;background:linear-gradient(90deg,#b388ff,#00e5ff);-webkit-background-clip:text;color:transparent}
+nav{display:flex;gap:6px;overflow:auto;padding:0 10px}nav button{flex:1;white-space:nowrap}
+button{background:#6b21ff;color:#fff;border:0;border-radius:12px;padding:10px 12px;font-size:15px}button.o{background:#1b1035;border:1px solid #6b21ff}
+section{display:none;padding:12px 14px}section.on{display:block}.card{background:#140b2acc;border:1px solid #3a1f73;border-radius:16px;padding:12px;margin:10px 0}
+#log{height:46vh;overflow:auto}.m{margin:6px 0;padding:8px 10px;border-radius:12px;max-width:85%}.u{background:#6b21ff;margin-left:auto}.b{background:#1f1440}.src{font-size:11px;opacity:.6}
+.row{display:flex;gap:8px}input,textarea{flex:1;background:#0c0620;color:#fff;border:1px solid #3a1f73;border-radius:12px;padding:10px;font-size:15px}
+#bst{font-size:13px;color:#9ef}.big{font-size:20px;font-weight:700;letter-spacing:1px;color:#00e5ff;user-select:all}.lock{opacity:.5}small{opacity:.7}</style></head><body>
+<header><h1>Ghost X G 🐲</h1><small>DJ DaX · Kraków · AI działające bez internetu</small> <span id="ver"></span></header>
+<nav><button data-t="chat">💬 Czat</button><button data-t="bots">🤖 Autoboty AI SI</button><button data-t="brain">🧠 Mózg</button><button data-t="full">💎 Pełna wersja</button></nav>
+<section id="chat" class="on"><div class="card" id="log"></div><div class="row"><input id="q" placeholder="Napisz do Ghost X G…"><button id="send">➤</button></div><div id="bst"></div></section>
+<section id="bots"><div class="card"><b>Autoboty AI SI</b> <small>(pełna wersja; korzystają z mózgu offline → online → reguły)</small></div><div id="botlist"></div>
+<div class="card"><textarea id="bin" rows="2" placeholder="Temat / szczegóły (np. impreza hip-hop w sobotę, Kazimierz)"></textarea></div><div class="card" id="bout">…</div></section>
+<section id="brain"><div class="card"><b>🧠 Mózg AI offline</b><p>Jednorazowe pobranie darmowego modelu do pamięci przeglądarki (Cache API). Potem czat działa w trybie samolotowym.</p>
+<p>• WebGPU (nowe Chrome/Android): <b>Qwen2.5-0.5B</b> ~ 280 MB plików, ~1 GB RAM/VRAM<br>• Bez WebGPU (WASM): <b>Qwen2.5-0.5B</b> (WASM, ONNX q4) ~ 480 MB, ~1–1,5 GB RAM, wolniej</p>
+<p><small>Zalecane: Wi-Fi, telefon z ≥ 4 GB RAM. Pierwsze uruchomienie może trwać kilka minut.</small></p>
+<button id="dl">⬇️ Pobierz mózg AI</button> <button class="o" id="clr">🗑️ Usuń model</button><p id="bst2"></p></div></section>
+<section id="full"><div class="card"><b>💎 Pełna wersja – 5 zł / 1 € / 1 $</b><p>Odblokowuje Autoboty AI SI i nieograniczony czat. Płatność jednorazowa.</p>
+<p>📱 <b>BLIK na telefon:</b><br><span class="big">730 377 357</span></p>
+<p>🏦 <b>Przelew Nest Bank – IBAN:</b><br><span class="big">PL45 1870 1045 2083 1058 7576 0001</span><br>Odbiorca: Daniel Dydo</p>
+<p>📝 <b>Tytuł:</b> <span class="big">Ghost X G + twój e-mail</span></p>
+<p><small>Po zaksięgowaniu Daniel wyśle ręcznie kod odblokowujący na podany e-mail (zwykle w ciągu 24 h).</small></p>
+<div class="row"><input id="code" placeholder="Kod odblokowania GX-…"><button id="ub">🔓</button></div><p id="ust"></p></div></section>
+<script src="unlock.js"></script><script src="brain.js"></script><script>
+var $=function(i){return document.getElementById(i)},hist=[];
+document.querySelectorAll('nav button').forEach(function(b){b.onclick=function(){document.querySelectorAll('section').forEach(function(s){s.classList.toggle('on',s.id==b.dataset.t)})}});
+function free(){return !GXUnlock.full()}var LIMIT=20;
+function add(t,c,src){var d=document.createElement('div');d.className='m '+c;d.textContent=t;if(src){var s=document.createElement('div');s.className='src';s.textContent=src;d.appendChild(s)}$('log').appendChild(d);$('log').scrollTop=1e9}
+GXBrain.onstatus=function(s){$('bst').textContent=s;$('bst2').textContent=s};GXBrain.onstatus(GXBrain.status);
+add('Siema! Jestem Ghost X G 🐲. Pytaj o muzykę, DJ-ing, Kraków albo cokolwiek.','b','start');
+async function send(){var q=$('q').value.trim();if(!q)return;var n=+(localStorage.getItem('gx_n_'+new Date().toDateString())||0);
+ if(free()&&n>=LIMIT){add('Limit '+LIMIT+' wiadomości dziennie w wersji darmowej. 💎 Pełna wersja: 5 zł.','b','limit');return}
+ localStorage.setItem('gx_n_'+new Date().toDateString(),n+1);$('q').value='';add(q,'u');var r=await GXBrain.ask(q,hist);hist.push({role:'user',content:q},{role:'assistant',content:r.a});add(r.a,'b',r.src)}
+$('send').onclick=send;$('q').onkeydown=function(e){if(e.key=='Enter')send()};
+var BOTS=[['🎉 Opis imprezy','Napisz krótki, energetyczny opis imprezy z DJ DaX: '],['🎧 Playlista','Zaproponuj playlistę 10 utworów (wykonawca – tytuł) na: '],['📣 Post FB','Napisz krótki post na Facebook z emoji dla DJ DaX o: '],['📅 Plan dnia','Ułóż krótki plan dnia w punktach dla DJ-a, uwzględniając: '],['🎤 Tekst rap','Napisz 8 wersów rapu po polsku o: ']];
+BOTS.forEach(function(b){var e=document.createElement('button');e.className='o';e.style.margin='4px';e.textContent=b[0];e.onclick=async function(){
+ if(free()){$('bout').textContent='🔒 Autoboty AI SI są w pełnej wersji (5 zł). Zobacz 💎.';return}
+ $('bout').textContent='⏳ '+b[0]+'…';var r=await GXBrain.ask(b[1]+($('bin').value||'Kraków, sobota'),[]);$('bout').textContent=r.a+'\n\n— '+r.src};$('botlist').appendChild(e)});
+$('dl').onclick=function(){localStorage.removeItem('gx_model');GXBrain.load()};
+$('clr').onclick=async function(){localStorage.removeItem('gx_model');(await caches.keys()).forEach(function(k){if(/webllm|transformers/.test(k))caches.delete(k)});GXBrain.engine=null;GXBrain.kind='rules';GXBrain.onstatus('Model usunięty')};
+$('ub').onclick=async function(){$('ust').textContent=(await GXUnlock.tryCode($('code').value))?'✅ Pełna wersja odblokowana. Dziękuję! 🐲':'❌ Nieprawidłowy kod'};
+$('ver').textContent=GXUnlock.full()?'💎 PEŁNA':'· wersja darmowa';GXBrain.autoload();
+if('serviceWorker' in navigator&&location.protocol!='file:')navigator.serviceWorker.register('sw.js');
+</script></body></html>
