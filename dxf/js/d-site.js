@@ -22,7 +22,7 @@
   }
   // ---------------- shared public knowledge (live server) + optional brains (Ollama / OpenRouter free / custom)
   var KB = null, hist = ls('hist') || [];
-  fetch('/d-knowledge.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (j) { KB = j; }).catch(function () {});
+  fetch((location.pathname.indexOf('/super-x-g/')===0?'/super-x-g':'')+'/d-knowledge.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (j) { KB = j; }).catch(function () {});
   function ls(k, v) { try { if (v === undefined) return JSON.parse(localStorage.getItem('d.web.' + k) || 'null'); localStorage.setItem('d.web.' + k, JSON.stringify(v)); } catch (_) { return null; } }
   function brain() { return ls('brain'); }
   function paintBrain() { var b = brain(); document.getElementById('brainBtn').textContent = '🔌 Mózg: ' + (b ? b.label : 'offline'); }
