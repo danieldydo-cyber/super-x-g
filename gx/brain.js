@@ -2,7 +2,8 @@
    Model files are downloaded once and kept in the browser Cache API (WebLLM "webllm/*" caches, transformers.js "transformers-cache"). No keys, no secrets. */
 (function(){
 var G=window.GXBrain={engine:null,kind:'rules',status:'Mózg: reguły offline (pobierz model, aby mieć AI bez internetu)',onstatus:null};
-var BIG=localStorage.getItem('gx_big')==='1'&&localStorage.getItem('gx_full')==='1';G.big=BIG;var WEBLLM_MODEL=BIG?'Qwen2.5-1.5B-Instruct-q4f16_1-MLC':'Qwen2.5-0.5B-Instruct-q4f16_1-MLC', TJS_MODEL=BIG?'onnx-community/Qwen2.5-1.5B-Instruct':'onnx-community/Qwen2.5-0.5B-Instruct';var MN=BIG?'Qwen2.5-1.5B':'Qwen2.5-0.5B';
+var TIER=+(localStorage.getItem('gx_tier')||(localStorage.getItem('gx_full')==='1'?1:0)),BG=localStorage.getItem('gx_big')||'0';if(BG==='3'&&TIER<2)BG='1';if(BG==='1'&&TIER<1)BG='0';G.big=BG;
+var WEBLLM_MODEL={'0':'Qwen2.5-0.5B-Instruct-q4f16_1-MLC','1':'Qwen2.5-1.5B-Instruct-q4f16_1-MLC','3':'Qwen2.5-3B-Instruct-q4f16_1-MLC'}[BG], TJS_MODEL=BG==='0'?'onnx-community/Qwen2.5-0.5B-Instruct':'onnx-community/Qwen2.5-1.5B-Instruct';var MN={'0':'Qwen2.5-0.5B','1':'Qwen2.5-1.5B','3':'Qwen2.5-3B'}[BG];
 var SYS='Jesteś Ghost X G 🐲, asystent DJ DaX (Daniel Dydo) z Krakowa. Odpowiadaj krótko, po polsku, konkretnie. Tematy: DJ, muzyka, hip-hop, imprezy, technika, codzienne sprawy.';
 function st(s){G.status=s;if(G.onstatus)G.onstatus(s)}
 G.hasWebGPU=function(){return !!navigator.gpu};
@@ -17,7 +18,7 @@ G.load=async function(force){
   try{
     var t=await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2');t.env.allowLocalModels=false;t.env.useBrowserCache=true;
     G.engine=await t.pipeline('text-generation',TJS_MODEL,{dtype:'q4',device:'wasm',progress_callback:function(p){if(p.status==='progress')st('Model '+MN+': '+(p.file||'')+' '+Math.round(p.progress||0)+'%')}});
-    G.kind='tjs';localStorage.setItem('gx_model','tjs');st('🧠 Mózg offline: '+MN+' (WASM) gotowy');return G.kind}catch(e){console.warn('tjs',e);st('Nie udało się pobrać modelu: '+String(e.message||e).slice(0,80)+' – działam online/reguły')}
+    G.kind='tjs';localStorage.setItem('gx_model','tjs');st('🧠 Mózg offline: '+(BG==='3'?'Qwen2.5-1.5B (3B wymaga WebGPU)':MN)+' (WASM) gotowy');return G.kind}catch(e){console.warn('tjs',e);st('Nie udało się pobrać modelu: '+String(e.message||e).slice(0,80)+' – działam online/reguły')}
   return 'rules'};
 async function local(msgs){
   if(G.kind==='webllm'){var r=await G.engine.chat.completions.create({messages:msgs,max_tokens:256,temperature:0.7});return r.choices[0].message.content}
