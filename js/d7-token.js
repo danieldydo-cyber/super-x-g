@@ -69,7 +69,10 @@ window.addEventListener('message',function(e){if(e.data&&e.data.type=='d7:resize
    amplitude-modulated by d7:beat messages and fed into each visualizer (connectAudio), never to the speakers. */
 (function(){if(window.parent===window||window.__d7bc)return;window.__d7bc=1;var vizs=[],bc;
  function wrap(m){if(!m||m.__d7w)return m;var root=m.default&&m.default.createVisualizer?m.default:m;if(!root.createVisualizer||root.__d7w)return m;var orig=root.createVisualizer.bind(root);
-  root.createVisualizer=function(ctx){var v=orig.apply(null,arguments);try{var o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=55;g.gain.value=0;o.connect(g);o.start();v.connectAudio(g);vizs.push({ctx:ctx,g:g})}catch(e){}return v};root.__d7w=1;return m}
+  root.createVisualizer=function(ctx){var v=orig.apply(null,arguments);try{(window.__d7bv=window.__d7bv||[]).push({v:v,c:arguments[1]})}catch(e){}try{var o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=55;g.gain.value=0;o.connect(g);o.start();v.connectAudio(g);vizs.push({ctx:ctx,g:g})}catch(e){}return v};root.__d7w=1;return m}
  try{bc=window.butterchurn;Object.defineProperty(window,'butterchurn',{configurable:true,enumerable:true,get:function(){return bc},set:function(v){bc=wrap(v)}});if(bc)wrap(bc)}catch(e){}
  window.addEventListener('d7beat',function(e){var d=e.detail||{};vizs.forEach(function(x){try{var t=x.ctx.currentTime;x.g.gain.cancelScheduledValues(t);x.g.gain.setValueAtTime(Math.min(1,(d.level||0)*1.4),t);x.g.gain.setTargetAtTime(0.05,t+0.04,0.12)}catch(z){}})});
 })();
+
+/* v69: universal controls (Play/AUTO/Stop all/bots/🦈/pure viz) */
+(function(){if(window.__d7ctlL)return;window.__d7ctlL=1;var pn=location.pathname;if(!/\/(dxf|d)\//.test(pn)&&/(\/|\/index\.html|\/kali-live\.html|\/pro-dj\.html)$/.test(pn))return;/* original Special X v38 pages stay untouched */var s=document.currentScript&&document.currentScript.src||'',b=s?s.replace(/js\/d7-token\.js.*$/,''):'';var e=document.createElement('script');e.src=b+'js/d7-ctl.js?v=1069';e.async=true;(document.head||document.documentElement).appendChild(e)})();
