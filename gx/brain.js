@@ -30,7 +30,7 @@ async function local(msgs,tok,ab){
     var o=await G.engine(msgs,{max_new_tokens:140,do_sample:false,repetition_penalty:1.1,streamer:str});var g=o[0].generated_text;return out2||(Array.isArray(g)?g[g.length-1].content:String(g))}
   throw 0}
 async function online(msgs,tok,ab){
-  var c=new AbortController();ab.online=c;var to=setTimeout(function(){c.abort()},25000);
+  var c=new AbortController();ab.online=c;var to=setTimeout(function(){c.abort()},12000);
   var r=await fetch('https://text.pollinations.ai/openai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'openai',messages:msgs,stream:true}),signal:c.signal});
   if(!r.ok)throw r.status;var out='';
   if(r.body&&/event-stream/.test(r.headers.get('content-type')||'')){var rd=r.body.getReader(),dec=new TextDecoder(),buf='';
