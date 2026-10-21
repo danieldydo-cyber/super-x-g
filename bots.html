@@ -1,4 +1,4 @@
-<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!doctype html><html lang="pl"><head><script src="js/pages-api-shim.js?v=1"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>7D · D7 Universal Bots</title><meta name="theme-color" content="#05060c">
 <style>
 :root{--bg:#05060c;--pan:#0d0f1c;--acc:#ff2bd6;--acc2:#00f0ff;--tx:#e9e6ff;--mut:#8a87a8}
@@ -169,4 +169,4 @@ async function psend(){const t=$('pMsg').value.trim();if(!t)return;if(!SUB){rend
  try{d.lastChild.textContent=await ask(SUB.bot,pref+t)}catch(e){d.lastChild.textContent='❌ Brak połączenia ('+e.message+')'}}
 $('pMsg').addEventListener('keydown',e=>{if(e.key==='Enter')psend()});
 init().then(renderSubs);setInterval(init,60000);
-</script></body></html>
+</script><script src="js/gx-share.js"></script><script src="js/dragon-dash.js?v=1"></script><script src="js/dragon-sales-bot.js?v=1"></script></body></html>
