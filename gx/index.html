@@ -55,4 +55,4 @@ $('big').onchange=function(){var v=this.value;if(v!=='0'&&!need()||v==='3'&&!nee
 $('exp').onclick=function(){if(!need())return;var t=hist.map(function(m){return (m.role=='user'?'Ty: ':'Ghost: ')+m.content}).join('\n\n')+'\n\n'+$('pout').textContent;var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'}));a.download='ghost-open-si.txt';a.click()};proUI();GXBrain.autoload();
 function hashTab(){var t=location.hash.slice(1);if(t&&document.getElementById(t)&&document.getElementById(t).tagName=='SECTION')document.querySelectorAll('section').forEach(function(x){x.classList.toggle('on',x.id==t)})}hashTab();window.onhashchange=hashTab;
 if('serviceWorker' in navigator&&location.protocol!='file:')navigator.serviceWorker.register('sw.js');
-</script><script src="../js/dragon-sales-bot.js?v=1"></script></body></html>
+</script><script src="../js/dragon-sales-bot.js?v=2"></script></body></html>

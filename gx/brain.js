@@ -34,8 +34,8 @@ async function online(msgs,tok,ab){
   var r=await fetch('https://text.pollinations.ai/openai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'openai',messages:msgs,stream:true}),signal:c.signal});
   if(!r.ok)throw r.status;var out='';
   if(r.body&&/event-stream/.test(r.headers.get('content-type')||'')){var rd=r.body.getReader(),dec=new TextDecoder(),buf='';
-    while(true){var x=await rd.read();if(x.done)break;buf+=dec.decode(x.value,{stream:true});var ls=buf.split('\n');buf=ls.pop();
-      ls.forEach(function(l){l=l.trim();if(l.indexOf('data:')!==0)return;var d=l.slice(5).trim();if(d==='[DONE]')return;try{var j=JSON.parse(d),t=j.choices&&j.choices[0]&&j.choices[0].delta&&j.choices[0].delta.content;if(t){out+=t;tok(out)}}catch(e){}})}}
+    var done=false;try{while(!done){var x=await rd.read();if(x.done)break;buf+=dec.decode(x.value,{stream:true});var ls=buf.split('\n');buf=ls.pop();
+      ls.forEach(function(l){l=l.trim();if(l.indexOf('data:')!==0)return;var d=l.slice(5).trim();if(d==='[DONE]'){done=true;return}try{var j=JSON.parse(d),t=j.choices&&j.choices[0]&&j.choices[0].delta&&j.choices[0].delta.content;if(t){out+=t;tok(out);clearTimeout(to);to=setTimeout(function(){c.abort()},8000)}}catch(e){}})}}catch(e){if(!out)throw e}try{rd.cancel()}catch(e){}}
   else{var j=await r.json();out=j.choices[0].message.content;tok(out)}
   clearTimeout(to);if(!out)throw 'empty';return out}
 var RULES=[[/cze|hej|siema|witam/i,'Siema! Tu Ghost X G 🐲 – DJ DaX z Krakowa. W czym pomóc?'],[/bpm|tempo/i,'Hip-hop: 85–100 BPM, house: 120–128, techno: 128–140, DnB: 170–175. Miksuj w zakresie ±6%.'],[/mix|miks|przej/i,'Przejście: zgraj BPM, wejdź na 16 lub 32 takcie, utnij basy (EQ low) w jednym utworze i płynnie zamień.'],[/kraków|krakow/i,'Kraków 🐉 – Smok Wawelski pozdrawia! Kluby: Kazimierz, Rynek, Zabłocie.'],[/płat|kup|pełn|cena|sklep/i,'Ghost X G jest w 100% darmowy. 💎 Ghost Open SI 5 zł / 1 € / 1 $, 👑 Maxi Ghost SI 99 € / 50 zł – 🛒 Sklep.'],[/godz|czas|data/i,function(){return 'Teraz: '+new Date().toLocaleString('pl-PL')}],[/pomoc|help|co umiesz/i,'Umiem: czat, autoboty, porady DJ. Offline po pobraniu mózgu AI.']];
