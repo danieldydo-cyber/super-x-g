@@ -1,5 +1,5 @@
 /* Ghost X G SW: app shell cache + caches CDN AI libraries so the offline brain works without internet. Model weights are cached by the libs themselves (Cache API). */
-var C='gx-v3',CORE=['./','index.html','brain.js','unlock.js','manifest.json','icon-192.png','icon-512.png','../dj777si.html'];
+var C='gx-v77',CORE=['./','index.html','brain.js','unlock.js','manifest.json','icon-192.png','icon-512.png','../dj777si.html'];
 self.addEventListener('install',function(e){e.waitUntil(caches.open(C).then(function(c){return Promise.all(CORE.map(function(u){return c.add(u).catch(function(){})}))}))});
 self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(x){return x.indexOf('gx-')==0&&x!=C}).map(function(x){return caches.delete(x)}))}))});
 self.addEventListener('fetch',function(e){var r=e.request,u=new URL(r.url);if(r.method!='GET')return;
