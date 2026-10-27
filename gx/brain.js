@@ -29,13 +29,16 @@ async function local(msgs,tok,ab){
   if(G.kind==='tjs'){var out2='';var str=new G.tjs.TextStreamer(G.engine.tokenizer,{skip_prompt:true,skip_special_tokens:true,callback_function:function(x){out2+=x;tok(out2)}});
     var o=await G.engine(msgs,{max_new_tokens:140,do_sample:false,repetition_penalty:1.1,streamer:str});var g=o[0].generated_text;return out2||(Array.isArray(g)?g[g.length-1].content:String(g))}
   throw 0}
+async function onlineGet(msgs,tok,ab){var c=new AbortController();ab.online=c;var to=setTimeout(function(){c.abort()},20000);
+  var q=msgs[msgs.length-1].content,sy=(msgs[0]&&msgs[0].role==='system')?msgs[0].content:SYS;
+  try{var r=await fetch('https://text.pollinations.ai/'+encodeURIComponent(q)+'?system='+encodeURIComponent(sy),{signal:c.signal});if(!r.ok)throw r.status;var t=(await r.text()).trim();if(!t)throw 'empty';tok(t);return t}finally{clearTimeout(to)}}
 async function online(msgs,tok,ab){
-  var c=new AbortController();ab.online=c;var to=setTimeout(function(){c.abort()},12000);
-  var r=await fetch('https://text.pollinations.ai/openai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'openai',messages:msgs,stream:true}),signal:c.signal});
+  var c=new AbortController();ab.online=c;var to=setTimeout(function(){c.abort()},20000);
+  var r=await fetch('https://text.pollinations.ai/openai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'openai-fast',messages:msgs,stream:true}),signal:c.signal});
   if(!r.ok)throw r.status;var out='';
   if(r.body&&/event-stream/.test(r.headers.get('content-type')||'')){var rd=r.body.getReader(),dec=new TextDecoder(),buf='';
     var done=false;try{while(!done){var x=await rd.read();if(x.done)break;buf+=dec.decode(x.value,{stream:true});var ls=buf.split('\n');buf=ls.pop();
-      ls.forEach(function(l){l=l.trim();if(l.indexOf('data:')!==0)return;var d=l.slice(5).trim();if(d==='[DONE]'){done=true;return}try{var j=JSON.parse(d),t=j.choices&&j.choices[0]&&j.choices[0].delta&&j.choices[0].delta.content;if(t){out+=t;tok(out);clearTimeout(to);to=setTimeout(function(){c.abort()},8000)}}catch(e){}})}}catch(e){if(!out)throw e}try{rd.cancel()}catch(e){}}
+      ls.forEach(function(l){l=l.trim();if(l.indexOf('data:')!==0)return;var d=l.slice(5).trim();if(d==='[DONE]'){done=true;return}try{var j=JSON.parse(d),dl=j.choices&&j.choices[0]&&j.choices[0].delta,t=dl&&dl.content;if(!t&&dl&&dl.reasoning){clearTimeout(to);to=setTimeout(function(){c.abort()},15000)}if(t){out+=t;tok(out);clearTimeout(to);to=setTimeout(function(){c.abort()},8000)}}catch(e){}})}}catch(e){if(!out)throw e}try{rd.cancel()}catch(e){}}
   else{var j=await r.json();out=j.choices[0].message.content;tok(out)}
   clearTimeout(to);if(!out)throw 'empty';return out}
 var RULES=[[/cze|hej|siema|witam/i,'Siema! Tu Ghost X G 🐲 – DJ DaX z Krakowa. W czym pomóc?'],[/bpm|tempo/i,'Hip-hop: 85–100 BPM, house: 120–128, techno: 128–140, DnB: 170–175. Miksuj w zakresie ±6%.'],[/mix|miks|przej/i,'Przejście: zgraj BPM, wejdź na 16 lub 32 takcie, utnij basy (EQ low) w jednym utworze i płynnie zamień.'],[/kraków|krakow/i,'Kraków 🐉 – Smok Wawelski pozdrawia! Kluby: Kazimierz, Rynek, Zabłocie.'],[/płat|kup|pełn|cena|sklep/i,'Ghost X G jest w 100% darmowy. 💎 Ghost Open SI 5 zł / 1 € / 1 $, 👑 Maxi Ghost SI 99 € / 50 zł – 🛒 Sklep.'],[/godz|czas|data/i,function(){return 'Teraz: '+new Date().toLocaleString('pl-PL')}],[/pomoc|help|co umiesz/i,'Umiem: czat, autoboty, porady DJ. Offline po pobraniu mózgu AI.']];
@@ -52,7 +55,7 @@ G.ask=async function(q,hist,opts){opts=opts||{};var t0=performance.now(),tok=opt
   var lsrc=G.kind==='webllm'?'🧠 offline '+MN+' (WebGPU)':'🧠 offline '+MN;
   var tasks=[];
   if(allowLocal&&G.engine&&(G.kind==='webllm'||!navigator.onLine))tasks.push(local(msgs,mk('local'),ab).then(function(a){return {a:a,src:lsrc,n:'local'}}));
-  if(navigator.onLine&&opts.online!==false)tasks.push(online(msgs,mk('online'),ab).then(function(a){return {a:a,src:'🌐 Pollinations',n:'online'}}));
+  if(navigator.onLine&&opts.online!==false)tasks.push(online(msgs,mk('online'),ab).catch(function(e){if(winner&&winner!=='online')throw e;return onlineGet(msgs,mk('online'),ab)}).then(function(a){return {a:a,src:'🌐 Pollinations',n:'online'}}));
   if(allowLocal&&G.engine&&G.kind==='tjs'&&navigator.onLine)tasks.push(new Promise(function(res,rej){setTimeout(function(){if(winner)return rej('late');local(msgs,mk('local'),ab).then(function(a){res({a:a,src:lsrc,n:'local'})},rej)},6000)}));
   var r=null;if(tasks.length){var settled=tasks.map(function(p){return p.then(function(v){return v},function(){return null})});
     r=await new Promise(function(res){var left=settled.length;settled.forEach(function(p){p.then(function(v){if(v&&(!winner||v.n===winner)&&v.a)res(v);else if(--left===0)res(null)})})})}

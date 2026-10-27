@@ -14,7 +14,7 @@ var cur=null;function build(d){var h='<!doctype html><html lang="pl"><head><meta
 async function gen(){st.textContent='⚡ AI…';var r=await GXBrain.ask('Aplikacja: '+pr.value+'. Napisz: 1 zdanie opisu, potem 5 krótkich punktów (każdy w nowej linii zaczynającej się od "- ").',[],{system:'Jesteś generatorem treści aplikacji. Po polsku, krótko.',nocache:true});
  var lines=r.a.split('\n').map(function(l){return l.trim()}).filter(Boolean),pts=lines.filter(function(l){return /^[-•*\d]/.test(l)}).map(function(l){return l.replace(/^[-•*\d.)\s]+/,'')}).slice(0,5),desc=(lines.filter(function(l){return !/^[-•*\d]/.test(l)})[0]||pr.value).replace(/\*\*/g,'');
  if(!pts.length)pts=['🎧 Muzyka','🎉 Imprezy','📻 Radio','🧠 AI','🐲 Kraków'];build({name:nm.value,desc:desc,points:pts,system:'Jesteś '+nm.value+'. '+pr.value+'. Odpowiadaj krótko po polsku.'});st.textContent='✅ '+r.src+' · '+r.ms+' ms'}
-gen.onclick=gen;
+document.getElementById('gen').onclick=gen;
 // minimal ZIP (stored) with CRC32
 var CRC=(function(){var t=[];for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();function crc(b){var c=0xFFFFFFFF;for(var i=0;i<b.length;i++)c=CRC[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
 window.GXZip=function(files){var enc=new TextEncoder(),parts=[],cd=[],off=0;files.forEach(function(f){var nb=enc.encode(f.name),db=typeof f.data==='string'?enc.encode(f.data):f.data,c=crc(db),h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint32(14,c,true);h.setUint32(18,db.length,true);h.setUint32(22,db.length,true);h.setUint16(26,nb.length,true);parts.push(new Uint8Array(h.buffer),nb,db);
