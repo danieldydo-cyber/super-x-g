@@ -1,0 +1,41 @@
+<!doctype html><html lang="pl"><head><title>🐲 Setlist Maker – DJ DaX</title><meta name="description" content="Setlist Maker dla DJ-ów: tracki, BPM, tonacja, czas, suma seta, eksport TXT. DJ DaX 🐲">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#05030c"><link rel="icon" href="gx/icon-192.png">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:radial-gradient(circle at 50% 0,#2a0b5e,#05030c 60%) fixed;color:#eee;padding:14px;min-height:100vh}main{max-width:720px;margin:auto}
+h1{text-align:center;margin:8px 0 4px;background:linear-gradient(90deg,#b388ff,#00e5ff);-webkit-background-clip:text;background-clip:text;color:transparent}h2{color:#00e5ff;font-size:18px}
+.sub{text-align:center;opacity:.8;margin:0 0 14px;font-size:14px}.card{background:#140b2a;border:1px solid #3a1f73;border-radius:16px;padding:14px;margin:12px 0}
+button,.btn{background:#6b21ff;color:#fff;border:0;border-radius:10px;padding:10px 14px;font-size:15px;text-decoration:none;display:inline-block;cursor:pointer;margin:3px 0}button:hover,.btn:hover{background:#8a4dff}button.alt{background:#1b1035;border:1px solid #6b21ff}
+input,select{background:#0c0620;color:#fff;border:1px solid #3a1f73;border-radius:10px;padding:10px;font-size:15px;width:100%}label{font-size:12px;opacity:.8;display:block;margin-bottom:3px}
+.big{font:900 64px/1 monospace;color:#00e5ff;text-shadow:0 0 18px #00e5ff88;text-align:center}.mono{font-family:monospace}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:7px;border-bottom:1px solid #2a1650;text-align:left}th{color:#b388ff}tr.hit td{background:#00e5ff22;color:#00e5ff}
+.nav{text-align:center;font-size:13px;margin-top:16px}.nav a{color:#0ef;margin:0 6px}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1;min-width:100px}
+</style>
+<style>.tr{display:flex;align-items:center;gap:8px;background:#0c0620;border:1px solid #3a1f73;border-radius:12px;padding:8px;margin:6px 0}.tr .n{color:#b388ff;font:700 14px monospace;width:24px}.tr .i{flex:1;min-width:0}.tr .i b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tr .i small{opacity:.75}.tr button{padding:6px 9px;margin:0}
+.tot{text-align:center;font:900 28px monospace;color:#00e5ff}</style></head><body><main>
+<h1>🐲 Setlist Maker</h1><p class="sub">Układaj sety, licz łączny czas, eksportuj do .txt. Zapis w przeglądarce (localStorage).</p>
+<div class="card"><label>Nazwa seta</label><input id="name" value="Mój set" maxlength="60">
+<form id="f"><div class="row" style="margin-top:8px"><div style="flex:3"><label>Tytuł / artysta</label><input id="ti" required maxlength="100"></div>
+<div><label>BPM</label><input id="bp" type="number" min="20" max="300" step="0.1"></div><div><label>Tonacja</label><input id="ke" maxlength="4" placeholder="8A / Am"></div><div><label>Czas (m:ss)</label><input id="du" placeholder="5:30"></div></div>
+<button type="submit">➕ Dodaj track</button></form></div>
+<div class="card"><div id="list"></div><p class="tot" id="tot">0:00</p><p class="sub" id="meta"></p>
+<div class="row"><button id="exp">⬇️ Eksport .txt</button><button class="alt" id="clr">🗑 Wyczyść</button></div></div>
+<p class="nav"><a href="bpm.html">👆 BPM Tapper</a><a href="looptimer.html">⏱ Loop Timer</a><a href="shop.html">🛒 Sklep</a></p></main>
+<script>
+var $=function(i){return document.getElementById(i)},K='djdax-setlist-v1',S={name:'Mój set',tracks:[]};
+try{var x=JSON.parse(localStorage.getItem(K));if(x&&Array.isArray(x.tracks))S=x}catch(e){}
+function save(){try{S.name=$('name').value;localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+function pd(s){s=(s||'').trim();if(!s)return 0;var p=s.split(':').map(Number);if(p.some(isNaN))return 0;return p.length===3?p[0]*3600+p[1]*60+p[2]:p.length===2?p[0]*60+p[1]:p[0]*60}
+function fd(t){t=Math.round(t);var h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;return h?h+':'+('0'+m).slice(-2)+':'+('0'+s).slice(-2):m+':'+('0'+s).slice(-2)}
+function render(){var L=$('list');L.innerHTML='';$('name').value=S.name;
+S.tracks.forEach(function(t,i){var d=document.createElement('div');d.className='tr';var n=document.createElement('span');n.className='n';n.textContent=i+1;var inf=document.createElement('div');inf.className='i';var b=document.createElement('b');b.textContent=t.title;var sm=document.createElement('small');sm.textContent=(t.bpm?t.bpm+' BPM · ':'')+(t.key?t.key+' · ':'')+fd(t.dur);inf.append(b,sm);d.append(n,inf);
+[['▲',-1],['▼',1],['✕',0]].forEach(function(a){var bt=document.createElement('button');bt.className='alt';bt.textContent=a[0];bt.onclick=function(){if(a[1]===0)S.tracks.splice(i,1);else{var j=i+a[1];if(j<0||j>=S.tracks.length)return;var tmp=S.tracks[i];S.tracks[i]=S.tracks[j];S.tracks[j]=tmp}save();render()};d.appendChild(bt)});L.appendChild(d)});
+if(!S.tracks.length)L.innerHTML='<p class="sub">Brak tracków – dodaj pierwszy 🐲</p>';
+var tot=S.tracks.reduce(function(a,t){return a+t.dur},0),bs=S.tracks.filter(function(t){return t.bpm});
+$('tot').textContent=fd(tot);$('meta').textContent=S.tracks.length+' tracków'+(bs.length?' · śr. BPM '+(bs.reduce(function(a,t){return a+t.bpm},0)/bs.length).toFixed(1):'')}
+$('f').onsubmit=function(e){e.preventDefault();S.tracks.push({title:$('ti').value.trim(),bpm:parseFloat($('bp').value)||0,key:$('ke').value.trim(),dur:pd($('du').value)});['ti','bp','ke','du'].forEach(function(i){$(i).value=''});save();render();$('ti').focus()};
+$('name').addEventListener('input',save);
+$('clr').onclick=function(){if(confirm('Usunąć wszystkie tracki?')){S.tracks=[];save();render()}};
+$('exp').onclick=function(){var o=S.name+'\nDJ DaX 🐲\n'+'='.repeat(30)+'\n';S.tracks.forEach(function(t,i){o+=(i+1)+'. '+t.title+' | '+(t.bpm||'-')+' BPM | '+(t.key||'-')+' | '+fd(t.dur)+'\n'});o+='='.repeat(30)+'\nŁącznie: '+$('tot').textContent+' ('+S.tracks.length+' tracków)\n';
+var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([o],{type:'text/plain;charset=utf-8'}));a.download=(S.name.replace(/[^\w\-]+/g,'_')||'setlist')+'.txt';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500)};
+render();
+</script></body></html>

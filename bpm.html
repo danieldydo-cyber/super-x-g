@@ -1,0 +1,34 @@
+<!doctype html><html lang="pl"><head><title>🐲 BPM Tapper – DJ DaX</title><meta name="description" content="Darmowy tap tempo BPM dla DJ-ów + tabela BPM gatunków. DJ DaX 🐲">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#05030c"><link rel="icon" href="gx/icon-192.png">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:radial-gradient(circle at 50% 0,#2a0b5e,#05030c 60%) fixed;color:#eee;padding:14px;min-height:100vh}main{max-width:720px;margin:auto}
+h1{text-align:center;margin:8px 0 4px;background:linear-gradient(90deg,#b388ff,#00e5ff);-webkit-background-clip:text;background-clip:text;color:transparent}h2{color:#00e5ff;font-size:18px}
+.sub{text-align:center;opacity:.8;margin:0 0 14px;font-size:14px}.card{background:#140b2a;border:1px solid #3a1f73;border-radius:16px;padding:14px;margin:12px 0}
+button,.btn{background:#6b21ff;color:#fff;border:0;border-radius:10px;padding:10px 14px;font-size:15px;text-decoration:none;display:inline-block;cursor:pointer;margin:3px 0}button:hover,.btn:hover{background:#8a4dff}button.alt{background:#1b1035;border:1px solid #6b21ff}
+input,select{background:#0c0620;color:#fff;border:1px solid #3a1f73;border-radius:10px;padding:10px;font-size:15px;width:100%}label{font-size:12px;opacity:.8;display:block;margin-bottom:3px}
+.big{font:900 64px/1 monospace;color:#00e5ff;text-shadow:0 0 18px #00e5ff88;text-align:center}.mono{font-family:monospace}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:7px;border-bottom:1px solid #2a1650;text-align:left}th{color:#b388ff}tr.hit td{background:#00e5ff22;color:#00e5ff}
+.nav{text-align:center;font-size:13px;margin-top:16px}.nav a{color:#0ef;margin:0 6px}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1;min-width:100px}
+</style>
+<style>#pad{width:100%;height:190px;font-size:28px;font-weight:900;border-radius:20px;background:radial-gradient(circle,#6b21ff,#2a0b5e);border:2px solid #00e5ff;box-shadow:0 0 24px #00e5ff55;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}#pad.hit{transform:scale(.98);box-shadow:0 0 44px #ff2bd6}</style></head><body><main>
+<h1>🐲 BPM Tapper</h1><p class="sub">Stukaj w rytm – średnie BPM na żywo. Spacja / Enter też działa.</p>
+<div class="card"><div class="big" id="bpm">--</div><p class="sub" id="info">Stuknij min. 2 razy</p>
+<button id="pad" aria-label="TAP">🐲 TAP</button>
+<div class="row"><button class="alt" id="reset">↺ Reset</button><button class="alt" id="half">÷2</button><button class="alt" id="dbl">×2</button></div>
+<p class="sub">Dokładne: <span class="mono" id="exact">--</span> BPM · 1 beat = <span class="mono" id="ms">--</span> ms · 1 takt (4/4) = <span class="mono" id="bar">--</span> s</p></div>
+<div class="card"><h2>Zakresy BPM wg gatunku</h2><table id="gt"><tr><th>Gatunek</th><th>BPM</th></tr></table><p class="sub">Podświetlenie = pasuje do Twojego tempa.</p></div>
+<p class="nav"><a href="looptimer.html">⏱ Loop Timer</a><a href="setlist.html">📋 Setlist</a><a href="shop.html">🛒 Sklep</a></p></main>
+<script>
+var G=[["Downtempo / Chill",60,90],["Hip-hop / Trap",70,100],["Reggae / Dub",60,90],["Reggaeton",88,100],["R&B / Pop",90,115],["House",118,130],["Deep / Tech House",120,128],["Disco / Nu-disco",110,125],["Techno",125,150],["Trance",130,150],["Psytrance",140,150],["Drum & Bass",160,180],["Dubstep",138,142],["Hardstyle",145,160],["Hardcore / Gabber",160,200]];
+var t=[],N=8,$=function(i){return document.getElementById(i)},tbl=$('gt'),bpm=0;
+G.forEach(function(g,i){var r=tbl.insertRow();r.id='g'+i;r.insertCell().textContent=g[0];r.insertCell().textContent=g[1]+"–"+g[2]})
+function show(){if(!bpm){$('bpm').textContent='--';$('exact').textContent=$('ms').textContent=$('bar').textContent='--'}else{$('bpm').textContent=Math.round(bpm);$('exact').textContent=bpm.toFixed(2);$('ms').textContent=(60000/bpm).toFixed(1);$('bar').textContent=(240/bpm).toFixed(3)}
+G.forEach(function(g,i){$('g'+i).className=bpm&&bpm>=g[1]-.5&&bpm<=g[2]+.5?'hit':''})}
+function tap(){var n=performance.now();if(t.length&&n-t[t.length-1]>2500)t=[];t.push(n);if(t.length>N+1)t.shift();
+if(t.length>1){bpm=60000/((t[t.length-1]-t[0])/(t.length-1));$('info').textContent='Stuknięć: '+t.length+' (średnia z ostatnich '+Math.min(t.length-1,N)+' odstępów)'}else $('info').textContent='Stuknij jeszcze raz…';show();
+var p=$('pad');p.classList.add('hit');setTimeout(function(){p.classList.remove('hit')},90)}
+$('pad').addEventListener('pointerdown',function(e){e.preventDefault();tap()});
+document.addEventListener('keydown',function(e){if((e.code==='Space'||e.code==='Enter')&&e.target.tagName!=='BUTTON'){e.preventDefault();tap()}});
+$('reset').onclick=function(){t=[];bpm=0;$('info').textContent='Zresetowano. Stuknij min. 2 razy';show()};
+$('half').onclick=function(){if(bpm){bpm/=2;show()}};$('dbl').onclick=function(){if(bpm){bpm*=2;show()}};show();
+</script></body></html>
