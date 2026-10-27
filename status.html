@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panel statusu botów 🐲</title>
+<style>
+:root{--bg:#07090d;--card:#0e131b;--line:#1c2a3a;--g:#00ff9c;--r:#ff3860;--y:#ffd23f;--c:#00e5ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0,#0b1a24,var(--bg) 60%);color:#d8e6f0;font-family:ui-monospace,Menlo,Consolas,monospace;min-height:100vh;padding:24px}
+h1{color:var(--c);text-shadow:0 0 14px #00e5ff66;letter-spacing:1px;margin:0 0 6px}
+.sub{color:#7f93a6;margin-bottom:22px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+a.tile{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;text-decoration:none;color:inherit;transition:.15s}
+a.tile:hover{border-color:var(--c);box-shadow:0 0 18px #00e5ff44;transform:translateY(-2px)}
+.name{font-size:20px;color:#fff;font-weight:bold}.desc{color:#7f93a6;font-size:13px;margin:6px 0 14px}
+.st{display:flex;align-items:center;gap:8px;font-size:13px}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--y);box-shadow:0 0 8px var(--y)}
+.up .dot{background:var(--g);box-shadow:0 0 10px var(--g)}.down .dot{background:var(--r);box-shadow:0 0 10px var(--r)}
+.note{margin-top:26px;border:1px solid var(--line);border-left:4px solid var(--y);background:var(--card);border-radius:10px;padding:16px;font-size:14px;line-height:1.5}
+.foot{margin-top:18px;color:#56677a;font-size:12px}
+</style></head><body>
+<h1>Panel statusu botów 🐲</h1>
+<div class="sub">Wszystkie boty i linki w jednym miejscu · sprawdzone przy otwarciu strony</div>
+<div class="grid">
+<a class="tile" href="v77.html" data-check="v77.html"><div class="name">v77</div><div class="desc">Główna aplikacja</div><div class="st"><span class="dot"></span><span class="txt">sprawdzam…</span></div></a>
+<a class="tile" href="hiphopx.html" data-check="hiphopx.html"><div class="name">HipHopX</div><div class="desc">Stały adres (zawsze działa) — zapasowy link do 7D</div><div class="st"><span class="dot"></span><span class="txt">sprawdzam…</span></div></a>
+<a class="tile" href="shop.html" data-check="shop.html"><div class="name">Shop</div><div class="desc">Sklep</div><div class="st"><span class="dot"></span><span class="txt">sprawdzam…</span></div></a>
+<a class="tile" href="ghostxg.html" data-check="ghostxg.html"><div class="name">Ghost X G</div><div class="desc">Ghost X G</div><div class="st"><span class="dot"></span><span class="txt">sprawdzam…</span></div></a>
+<a class="tile" href="https://chambers-software-blah-americans.trycloudflare.com" data-tunnel="1" target="_blank" rel="noopener"><div class="name">7D (tunel tymczasowy)</div><div class="desc">Link tymczasowy z 2026-10-27 — użyj stałego linku HipHopX, jeśli nie działa</div><div class="st"><span class="dot"></span><span class="txt">sprawdzam…</span></div></a>
+</div>
+<div class="note">⚠️ Uczciwa uwaga: linki tymczasowe (trycloudflare.com) mogą być offline — tunel często się zrywa. Stałe linki GitHub Pages (v77, HipHopX, Shop, Ghost X G) działają zawsze. Gdy 7D nie odpowiada, otwórz stały adres <a href="hiphopx.html" style="color:var(--c)">hiphopx.html</a>.</div>
+<div class="foot">Strona statyczna · bez haseł i kodów · status = test fetch() w Twojej przeglądarce</div>
+<script>
+function set(el,cls,t){el.classList.remove("up","down");if(cls)el.classList.add(cls);el.querySelector(".txt").textContent=t}
+document.querySelectorAll("a.tile[data-check]").forEach(function(el){
+  fetch(el.dataset.check,{cache:"no-store"}).then(function(r){r.ok?set(el,"up","online ("+r.status+")"):set(el,"down","offline ("+r.status+")")}).catch(function(){set(el,"down","offline")});
+});
+var t=document.querySelector("a.tile[data-tunnel]");
+var ctl=new AbortController(),to=setTimeout(function(){ctl.abort()},6000);
+fetch(t.href,{mode:"no-cors",signal:ctl.signal}).then(function(){clearTimeout(to);set(t,"up","odpowiada (nieweryfikowalne)")}).catch(function(){set(t,"","może być offline, użyj stałego linku")});
+</script></body></html>
