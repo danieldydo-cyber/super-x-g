@@ -1,0 +1,62 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>🐲 DJ Supreme D · Kali Live Auto</title><meta name="theme-color" content="#05030c"><link rel="icon" href="favicon.png"><link rel="manifest" href="manifest.json">
+<style>
+html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:"Segoe UI",system-ui,sans-serif;color:#fff}
+canvas{position:fixed;inset:0;width:100vw;height:100vh;display:block}
+#top{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;gap:10px;padding:max(10px,env(safe-area-inset-top)) 14px 10px;background:linear-gradient(#000a,#0000);z-index:5;transition:opacity .6s}
+#top b{font-size:17px;letter-spacing:.06em;background:linear-gradient(90deg,#ff2bd6,#ffd23f,#00e5ff);-webkit-background-clip:text;color:transparent}
+#st{font-size:12px;opacity:.8;flex:1}
+.btn{background:#140b2acc;border:1px solid #ff2bd6;color:#fff;border-radius:14px;padding:10px 14px;font:700 15px system-ui;cursor:pointer;min-width:46px;min-height:46px;backdrop-filter:blur(6px)}
+#start{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:6;font-size:28px;padding:22px 44px;border-radius:999px;border:0;background:linear-gradient(90deg,#ff2bd6,#6b21ff,#00e5ff);box-shadow:0 0 40px #ff2bd6aa;color:#fff;font-weight:900;cursor:pointer}
+#bot{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:center;gap:10px;padding:10px 10px max(14px,env(safe-area-inset-bottom));z-index:5;transition:opacity .6s}
+body.idle #top,body.idle #bot{opacity:0}
+</style></head><body>
+<canvas id="c"></canvas><canvas id="c2"></canvas>
+<div id="top"><b>🐲 DJ SUPREME D</b><span id="st">📻 Radio Kali · łączenie…</span><a class="btn" href="hiphopx.html?menu=1" target="_top" onclick="if(top!==self){try{top.document.getElementById('dsMB').click();return false}catch(e){}}" title="Menu">☰ Menu</a></div>
+<button id="start">▶ START</button>
+<div id="bot"><button class="btn" id="pp">⏸</button><button class="btn" id="nx">🎨 Wizualizacja</button><button class="btn" id="fs">⛶</button><input id="vol" type="range" min="0" max="1" step=".05" value=".9" style="width:110px"></div>
+<script src="libs/butterchurn.min.js"></script><script src="libs/butterchurnPresets.min.js"></script><script src="libs/butterchurnPresetsExtra.min.js"></script>
+<script>
+(function(){
+var URL_KALI='https://stream.radiokaliveronika.pl/stream';
+var cv=document.getElementById('c'),st=document.getElementById('st'),sb=document.getElementById('start');
+var el=new Audio();el.preload='none';el.src=URL_KALI;el.volume=.9;
+var ac=null,an=null,md=null,names=[],P={},pi=0,fake=true,data=new Uint8Array(256),t0=performance.now();
+function size(){cv.width=innerWidth*(devicePixelRatio>1?1.5:1);cv.height=innerHeight*(devicePixelRatio>1?1.5:1);if(md)md.setRendererSize(cv.width,cv.height)}
+addEventListener('resize',size);size();
+var cv2=document.getElementById('c2');function size2(){cv2.width=cv.width;cv2.height=cv.height}addEventListener('resize',size2);size2();var g2=null;
+function graph(){if(ac)return;try{ac=new (window.AudioContext||window.webkitAudioContext)();an=ac.createAnalyser();an.fftSize=512;data=new Uint8Array(an.frequencyBinCount);
+ an.connect(ac.destination);
+ // only route through WebAudio if stream sends CORS headers (otherwise audio would go silent)
+ var ctl=new AbortController();fetch(URL_KALI,{mode:'cors',signal:ctl.signal}).then(function(r){ctl.abort();if(!r.ok)return;try{var wasP=!el.paused;el.crossOrigin='anonymous';el.src=URL_KALI;if(wasP)el.play().catch(function(){});var n=ac.createMediaElementSource(el);n.connect(an);fake=false;if(md)md.connectAudio(an)}catch(e){}}).catch(function(){});
+ if(window.butterchurn){var B=butterchurn.default||butterchurn;md=B.createVisualizer(ac,cv,{width:cv.width,height:cv.height,pixelRatio:1});md.connectAudio(an);
+  [window.butterchurnPresets,window.butterchurnPresetsExtra].forEach(function(m){if(!m)return;var o=m.getPresets?m.getPresets():(m.default&&m.default.getPresets?m.default.getPresets():{});Object.assign(P,o)});
+  names=Object.keys(P);if(names.length){pi=Math.floor(Math.random()*names.length);md.loadPreset(P[names[pi]],0)}}
+}catch(e){console.warn('audio graph',e)}}
+// beat-synced fallback 2D visualizer (runs immediately, even without audio)
+function draw2d(t){if(!g2)g2=cv2.getContext('2d');var w=cv2.width,h=cv2.height,bpm=124,beat=(t/60000*bpm)%1,pulse=Math.pow(1-beat,3);
+ if(an&&!fake)an.getByteFrequencyData(data);else for(var i=0;i<data.length;i++)data[i]=(128+110*Math.sin(t/300+i*.2)*Math.cos(i*.05))*(.5+.5*pulse);
+ g2.fillStyle='rgba(5,3,12,.25)';g2.fillRect(0,0,w,h);var cx=w/2,cy=h/2,R=Math.min(w,h)*.22*(1+.15*pulse);
+ for(var i=0;i<128;i++){var v=data[i]/255,a=i/128*Math.PI*2+t/4000,r2=R+v*R*1.2;g2.strokeStyle='hsl('+((i*3+t/20)%360)+',100%,60%)';g2.lineWidth=3;g2.beginPath();g2.moveTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R);g2.lineTo(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2);g2.stroke()}
+ g2.font=(R*.7|0)+'px serif';g2.textAlign='center';g2.textBaseline='middle';g2.fillText('🐲',cx,cy)}
+function loop(t){requestAnimationFrame(loop);if(md&&ac&&ac.state==='running'&&!fake){cv2.style.display='none';try{md.render()}catch(e){md=null}}else{cv2.style.display='block';draw2d(t)}}
+requestAnimationFrame(loop);
+setInterval(function(){if(md&&names.length){pi=(pi+1)%names.length;md.loadPreset(P[names[pi]],2.5)}},25000);
+function fsOn(){var d=document.documentElement;try{(d.requestFullscreen||d.webkitRequestFullscreen||function(){}).call(d)}catch(e){}}
+function go(user){graph();if(ac&&ac.state==='suspended')ac.resume();
+ el.play().then(function(){sb.style.display='none';st.textContent='📻 Radio Kali Live'+(fake?' (wizualizacja beat)':'');document.getElementById('pp').textContent='⏸'})
+ .catch(function(e){if(e&&e.name==='NotAllowedError'){sb.style.display='block';st.textContent='Dotknij ▶ START'}else{sb.style.display='none';st.textContent='📻 Radio Kali chwilowo niedostępne – wizualizacja działa';}});
+ if(user)fsOn()}
+window.DJAuto={start:go,stream:URL_KALI};
+sb.onclick=function(){go(true)};
+document.getElementById('pp').onclick=function(){if(el.paused){go(false)}else{el.pause();this.textContent='▶'}};
+document.getElementById('nx').onclick=function(){if(md&&names.length){pi=(pi+1)%names.length;md.loadPreset(P[names[pi]],1.5)}};
+document.getElementById('fs').onclick=function(){document.fullscreenElement?document.exitFullscreen():fsOn()};
+document.getElementById('vol').oninput=function(){el.volume=+this.value};
+el.addEventListener('error',function(){st.textContent='📻 Radio Kali chwilowo niedostępne – wizualizacja działa';sb.style.display='none'});
+var idt;function wake(){document.body.classList.remove('idle');clearTimeout(idt);idt=setTimeout(function(){document.body.classList.add('idle')},4000)}
+['mousemove','touchstart','keydown'].forEach(function(e){addEventListener(e,wake,{passive:true})});wake();
+document.addEventListener('pointerdown',function f(){if(el.paused)go(true);document.removeEventListener('pointerdown',f)},{once:true});
+go(false);
+})();
+</script></body></html>
