@@ -194,4 +194,5 @@ addEventListener('keydown',function(e){if(e.key!='Escape')return;var f=document.
 function place(){var h=$('ui').getBoundingClientRect().bottom+4;ids.forEach(function(id){var el=$(id);if(el&&id!='ghP'){el.style.top=h+'px';el.style.maxHeight='calc(100vh - '+(h+8)+'px)'}})}place();addEventListener('resize',place);setInterval(place,1500);document.addEventListener('click',place,true);
 window.X7Panels={ids:ids};})();
 </script>
+<script src="js/x7-download.js"></script>
 </body></html>
