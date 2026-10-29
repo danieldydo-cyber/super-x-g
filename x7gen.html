@@ -1,0 +1,70 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Super Genius X7 Generator X 🐲</title><link rel="icon" href="favicon.png">
+<style>html,body{margin:0;height:100%;background:#000;color:#fff;font:13px system-ui;overflow:hidden}#mv{position:fixed;inset:0;width:100vw;height:100vh}#ov{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none}
+#ui{position:fixed;left:0;right:0;top:0;padding:6px;background:linear-gradient(#000c,#0000);display:flex;flex-wrap:wrap;gap:5px;align-items:center;z-index:5}#ui.hide{opacity:0}#ui button,#ui select{background:#1a0830cc;color:#fff;border:1px solid #7b2cff;border-radius:9px;padding:5px 8px}#ui input[type=range]{width:80px}
+#vj{position:fixed;left:10px;bottom:10px;z-index:5;background:#000a;border:1px solid #7b2cff;border-radius:12px;padding:6px 10px;max-width:70vw}#info{position:fixed;right:10px;bottom:10px;z-index:5;opacity:.8;max-width:45vw;text-align:right}</style></head><body>
+<canvas id="mv"></canvas><canvas id="ov"></canvas>
+<div id="ui"><b>Super Genius X7 Generator X 🐲</b><a href="v77.html" style="color:#fc0">⬅ v77</a>
+<select id="mode"><option value="all">All x7</option><option value="pro8">PRO8 MilkDrop</option><option value="778">Mix Visuals 778</option><option value="2077">MilkDrop 2077</option><option value="cosmos">Cosmos</option><option value="custom">X7 Custom generated</option><option value="botvj">🤖 Bot VJ</option></select>
+<button id="mic">🎤 Mic</button><button id="tab">🖥 Tab</button><button id="kali">📻 Kali</button>
+<button id="prev">◀</button><button id="next">▶ Next</button><button id="rnd">🎲 Random</button><button id="lock">🔓 Lock</button><button id="fs">⛶</button>
+Tempo<input id="tempo" type="range" min="2" max="30" value="10">Kolor<input id="hue" type="range" min="0" max="360" value="0">Speed<input id="spd" type="range" min="0.2" max="3" step="0.1" value="1">
+<label><input type="checkbox" id="alien" checked>👽</label><label><input type="checkbox" id="shark">🦈</label>
+<select id="bot"></select><label><input type="checkbox" id="rot" checked>auto-rotate bots</label></div>
+<div id="vj"></div><div id="info">ładuję…</div>
+<script src="libs/butterchurn.min.js"></script><script src="libs/butterchurnPresets.min.js"></script><script src="libs/butterchurnPresetsExtra.min.js"></script>
+<script>window.__gxAlienPrev=localStorage.getItem('gx_alien')</script><script src="js/cosmic-layer.js"></script><script src="gx/brain.js"></script>
+<script>
+(function(){var $=function(i){return document.getElementById(i)};
+// cosmic-layer auto overlay off: x7gen draws its own (shark OFF by default per Daniel)
+try{if(window.GXCosmic){var c=document.getElementById('gxCosmic');if(c)c.style.display='none';GXCosmic.on=false;if(window.__gxAlienPrev!==null)localStorage.setItem('gx_alien',window.__gxAlienPrev)}}catch(e){}
+var bc=window.butterchurn&&(butterchurn.default||butterchurn),P={};
+function addPack(m){try{m=m&&(m.default||m);var o=m.getPresets?m.getPresets():m;for(var k in o)P[k]=o[k]}catch(e){}}
+addPack(window.butterchurnPresets);addPack(window.butterchurnPresetsExtra);
+var base=Object.keys(P).filter(function(k){return P[k]&&typeof P[k]=='object'});
+// X7 custom generator: mutate existing presets' baseVals -> new named presets (reuses 778 seed idea)
+function rng(s){return function(){s=(s*16807)%2147483647;return (s-1)/2147483646}}
+function mutate(seed){var r=rng(seed),src=P[base[Math.floor(r()*base.length)]],p=JSON.parse(JSON.stringify(src));p.baseVals=p.baseVals||{};var b=p.baseVals;
+ ['zoom','rot','warp','decay','echo_zoom','wave_r','wave_g','wave_b','cx','cy','dx','dy'].forEach(function(k){if(typeof b[k]=='number')b[k]=b[k]*(0.8+r()*0.4)});b.wave_mode=Math.floor(r()*8);return p}
+for(var s=1;s<=77;s++){try{P['X7 Gen #'+s]=mutate(s*7777)}catch(e){}}
+var all=Object.keys(P),RE={pro8:/flexi|martin|geiss|rovastar|krash|eo\.|unchained|fluid|liquid/i,'778':/./,'2077':/neon|cyber|electr|digital|laser|grid|tech|matrix|glitch|shark|ocean|fish|aqua|deep|fire|explosion/i,cosmos:/alien|ufo|space|star|cosmic|galax|planet|nebula|orb|magellan|nova/i,custom:/^X7 Gen/};
+function pack(m){if(m=='all'||m=='botvj')return all;var re=RE[m],l=all.filter(function(k){return re.test(k)});return l.length?l:all}
+var counts={};['pro8','778','2077','cosmos','custom','all'].forEach(function(m){counts[m]=pack(m).length});window.X7={presets:P,counts:counts,frames:0};
+// bot crew (simulated in-browser, names from agents hub / d7-agents)
+var BOTS=[{n:'Bot D 🐲',p:'all',h:0,t:8,b:2.5},{n:'🐲 SuperGrok',p:'cosmos',h:270,t:12,b:4},{n:'🧠 Brain Guard',p:'pro8',h:200,t:16,b:5},{n:'🧠 Mózg Kod',p:'2077',h:120,t:6,b:1.5},{n:'Bot Pamięć',p:'778',h:40,t:14,b:3},{n:'MegaBot',p:'custom',h:320,t:5,b:1},{n:'DJ Dragon ⚡',p:'2077',h:10,t:7,b:2},{n:'Agent #777',p:'all',h:180,t:10,b:3}];
+$('bot').innerHTML=BOTS.map(function(b,i){return '<option value="'+i+'">'+b.n+'</option>'}).join('');var bi=0,botT=0;
+var LINES=['przejmuje decki 🎛','blend na bit 🔥','kosmiczny drop 👽','tempo w górę ⚡','czysty MilkDrop 🌌'];
+function say(b){var el=$('vj'),off=b.n+' VJ: '+LINES[Math.floor(Math.random()*LINES.length)];el.textContent='🎧 VJ teraz: '+off+' (symulowana ekipa botów)';
+ if(b.n.indexOf('Bot D')==0&&window.GXBrain&&GXBrain.engine&&GXBrain.ask){try{GXBrain.ask('Jednym krótkim zdaniem skomentuj jako VJ wizualizacje MilkDrop.',[],{}).then(function(r){var t=typeof r=='string'?r:(r&&(r.text||r.reply));if(t)el.textContent='🎧 VJ teraz: '+b.n+': '+String(t).slice(0,120)}).catch(function(){})}catch(e){}}}
+function takeBot(i){bi=i;var b=BOTS[i];$('bot').value=i;$('tempo').value=b.t;$('hue').value=b.h;botT=performance.now();say(b);next()}
+$('bot').onchange=function(){takeBot(+this.value)};
+var mv=$('mv'),ov=$('ov'),ox=ov.getContext('2d'),ac=null,viz=null,an=null,data=null,live=false,locked=false,hist=[],cur='',lastSw=0,beatAvg=0,pulse=0;
+function size(){var d=Math.min(devicePixelRatio||1,2),w=innerWidth,h=innerHeight;mv.width=w*d;mv.height=h*d;ov.width=w;ov.height=h;if(viz)viz.setRendererSize(w*d,h*d)}addEventListener('resize',size);
+function audio(){if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();an=ac.createAnalyser();an.fftSize=512;data=new Uint8Array(an.frequencyBinCount)}if(ac.state=='suspended')ac.resume();return ac}
+function initViz(){if(viz||!bc)return;audio();try{viz=bc.createVisualizer(ac,mv,{width:mv.width,height:mv.height,pixelRatio:1});size();next()}catch(e){$('info').textContent='WebGL niedostępny: '+e.message}}
+function conn(n){try{n.connect(an);viz&&viz.connectAudio(n);live=true}catch(e){}}
+$('mic').onclick=function(){audio();initViz();navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){conn(ac.createMediaStreamSource(s));$('info').textContent='🎤 mic'}).catch(function(){$('info').textContent='brak mic – beat fallback'})};
+$('tab').onclick=function(){audio();initViz();navigator.mediaDevices.getDisplayMedia({video:true,audio:true}).then(function(s){if(!s.getAudioTracks().length){$('info').textContent='brak audio karty';return}conn(ac.createMediaStreamSource(s));$('info').textContent='🖥 tab audio'}).catch(function(){})};
+$('kali').onclick=function(){audio();initViz();var el=new Audio();el.crossOrigin='anonymous';el.src='https://stream.radiokaliveronika.pl/stream';el.play().then(function(){try{var n=ac.createMediaElementSource(el);n.connect(ac.destination);conn(n);$('info').textContent='📻 Kali'}catch(e){$('info').textContent='📻 Kali (bez analizy – CORS), beat fallback'}}).catch(function(){$('info').textContent='📻 Kali niedostępne – beat fallback'})};
+function curPack(){var m=$('mode').value;return m=='botvj'?pack(BOTS[bi].p):pack(m)}
+function load(k,bl){if(!viz||!P[k])return;try{viz.loadPreset(P[k],bl);cur=k;$('info').textContent=$('mode').selectedOptions[0].text+' · '+k.slice(0,60)+' · '+curPack().length+' presetów'}catch(e){}}
+function next(){var l=curPack(),k=l[Math.floor(Math.random()*l.length)];hist.push(cur);load(k,$('mode').value=='botvj'?BOTS[bi].b:2.7*(1/+$('spd').value));lastSw=performance.now()}
+$('next').onclick=next;$('rnd').onclick=function(){$('mode').value='all';next()};$('prev').onclick=function(){var k=hist.pop();if(k)load(k,1)};
+$('lock').onclick=function(){locked=!locked;this.textContent=locked?'🔒 Locked':'🔓 Lock'};$('mode').onchange=function(){if(this.value=='botvj')takeBot(bi);next()};
+$('fs').onclick=function(){var d=document.documentElement;(document.fullscreenElement?document.exitFullscreen():(d.requestFullscreen||d.webkitRequestFullscreen).call(d))};
+var hideT;addEventListener('pointermove',function(){$('ui').classList.remove('hide');clearTimeout(hideT);hideT=setTimeout(function(){$('ui').classList.add('hide')},4000)});
+addEventListener('keydown',function(e){if(e.key=='ArrowRight'||e.key==' ')next();if(e.key=='ArrowLeft')$('prev').onclick();if(e.key=='f')$('fs').onclick()});
+document.addEventListener('pointerdown',function f(){audio();initViz();document.removeEventListener('pointerdown',f)});
+function level(){var bpmMs=60000/(60+(+$('tempo').value)*5),t=performance.now();if(live&&an){an.getByteFrequencyData(data);var s=0;for(var i=0;i<16;i++)s+=data[i];s/=16*255;var beat=s>beatAvg*1.35&&s>0.2;beatAvg=beatAvg*0.95+s*0.05;return {level:s,beat:beat}}
+ var ph=(t%bpmMs)/bpmMs;return {level:0.3+0.7*Math.exp(-ph*6),beat:ph<0.05}}
+var beats=0;size();try{initViz()}catch(e){}
+(function loop(t){requestAnimationFrame(loop);var a=level();if(a.beat){beats++;pulse=1}pulse*=0.9;
+ if(viz){try{viz.render();X7.frames++}catch(e){}}
+ var m=$('mode').value,every=+$('tempo').value*1000;if(!locked&&(t-lastSw>every||(a.beat&&beats%32==0&&t-lastSw>2000)))next();
+ if(m=='botvj'&&$('rot').checked&&t-botT>every*3)takeBot((bi+1)%BOTS.length);
+ var h=+$('hue').value;mv.style.filter=(h?'hue-rotate('+h+'deg) ':'')+'brightness('+(1+0.25*pulse)+')';
+ ox.clearRect(0,0,ov.width,ov.height);if(window.GXCosmic&&($('alien').checked||$('shark').checked)&&(m=='cosmos'||m=='all'||m=='778'||m=='botvj'||$('shark').checked))try{GXCosmic.draw(ox,ov.width,ov.height,t,a,{shark:$('shark').checked,alien:$('alien').checked,speed:+$('spd').value})}catch(e){}
+})(0);
+$('vj').textContent='🎧 Tryby: PRO8 '+counts.pro8+' · 778 '+counts['778']+' · 2077 '+counts['2077']+' · Cosmos '+counts.cosmos+' · Custom '+counts.custom+' · All x7 '+counts.all+' — kliknij, aby włączyć audio (beat fallback działa bez audio)';
+})();
+</script></body></html>
