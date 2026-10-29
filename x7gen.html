@@ -9,8 +9,8 @@
 <button id="mic">🎤 Mic</button><button id="tab">🖥 Tab</button><button id="kali">📻 Kali</button>
 <button id="prev">◀</button><button id="next">▶ Next</button><button id="rnd">🎲 Random</button><button id="lock">🔓 Lock</button><button id="fs">⛶</button>
 Tempo<input id="tempo" type="range" min="2" max="30" value="10">Kolor<input id="hue" type="range" min="0" max="360" value="0">Speed<input id="spd" type="range" min="0.2" max="3" step="0.1" value="1">
-<label><input type="checkbox" id="alien" checked>👽</label><label><input type="checkbox" id="shark">🦈</label>
-<select id="bot"></select><label><input type="checkbox" id="rot" checked>auto-rotate bots</label></div>
+<label><input type="checkbox" id="alien">👽</label><label><input type="checkbox" id="shark">🦈</label>
+<select id="bot"></select><button id="pMix">🎚 Mikser</button><button id="pBots">🤖 Boty i agenci</button><button id="pSt">📻 Stacje</button><label><input type="checkbox" id="rot" checked>auto-rotate bots</label></div>
 <div id="vj"></div><div id="info">ładuję…</div>
 <script src="libs/butterchurn.min.js"></script><script src="libs/butterchurnPresets.min.js"></script><script src="libs/butterchurnPresetsExtra.min.js"></script>
 <script>window.__gxAlienPrev=localStorage.getItem('gx_alien')</script><script src="js/cosmic-layer.js"></script><script src="gx/brain.js"></script>
@@ -57,7 +57,7 @@ addEventListener('keydown',function(e){if(e.key=='ArrowRight'||e.key==' ')next()
 document.addEventListener('pointerdown',function f(){audio();initViz();document.removeEventListener('pointerdown',f)});
 function level(){var bpmMs=60000/(60+(+$('tempo').value)*5),t=performance.now();if(live&&an){an.getByteFrequencyData(data);var s=0;for(var i=0;i<16;i++)s+=data[i];s/=16*255;var beat=s>beatAvg*1.35&&s>0.2;beatAvg=beatAvg*0.95+s*0.05;return {level:s,beat:beat}}
  var ph=(t%bpmMs)/bpmMs;return {level:0.3+0.7*Math.exp(-ph*6),beat:ph<0.05}}
-var beats=0;size();try{initViz()}catch(e){}
+window.__x7ac=audio();X7.connect=function(n){conn(n)};var beats=0;size();try{initViz()}catch(e){}
 (function loop(t){requestAnimationFrame(loop);var a=level();if(a.beat){beats++;pulse=1}pulse*=0.9;
  if(viz){try{viz.render();X7.frames++}catch(e){}}
  var m=$('mode').value,every=+$('tempo').value*1000;if(!locked&&(t-lastSw>every||(a.beat&&beats%32==0&&t-lastSw>2000)))next();
@@ -67,4 +67,65 @@ var beats=0;size();try{initViz()}catch(e){}
 })(0);
 $('vj').textContent='🎧 Tryby: PRO8 '+counts.pro8+' · 778 '+counts['778']+' · 2077 '+counts['2077']+' · Cosmos '+counts.cosmos+' · Custom '+counts.custom+' · All x7 '+counts.all+' — kliknij, aby włączyć audio (beat fallback działa bez audio)';
 })();
-</script></body></html>
+</script>
+<style>.pn{position:fixed;top:48px;z-index:6;background:#0a0214ee;border:1px solid #7b2cff;border-radius:12px;padding:8px;max-height:75vh;overflow:auto;font-size:12px;display:none}.pn.on{display:block}.pn button,.pn select,.pn input{background:#1a0830;color:#fff;border:1px solid #7b2cff;border-radius:8px;padding:4px 6px;margin:2px}.pn h4{margin:4px 0}
+#mixP{left:6px;width:min(420px,94vw)}#botP{left:50%;transform:translateX(-50%);width:min(380px,94vw)}#stP{right:6px;width:min(400px,94vw)}#stL div{padding:3px;border-bottom:1px solid #2a1050;cursor:pointer}#stL div:hover{background:#2a1050}
+#start{position:fixed;inset:0;z-index:9;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#000a;cursor:pointer}#start b{font-size:40px;padding:20px 40px;border:3px solid #ff2d55;border-radius:20px;background:#3a0a28}
+#ytw{position:fixed;right:6px;bottom:40px;width:200px;height:113px;z-index:4;opacity:.85}#ytw.min{width:2px;height:2px;opacity:0}</style>
+<div id="start"><b>▶ START</b><p>Radio Kali (YouTube) + MilkDrop X7 · pełny ekran</p></div>
+<div id="ytw"><div id="ytp"></div></div>
+<div class="pn" id="mixP"><h4>🎚 DJ mikser</h4>
+<div>Deck A: <select id="dA"></select> Vol <input type="range" id="vA" min="0" max="100" value="100"><div id="nA" style="color:#fc0"></div>EQ L<input type="range" id="lA" min="-24" max="12" value="0" style="width:60px">M<input type="range" id="mA" min="-24" max="12" value="0" style="width:60px">H<input type="range" id="hA" min="-24" max="12" value="0" style="width:60px">Filtr<input type="range" id="fA" min="-100" max="100" value="0" style="width:70px"></div>
+<div>Crossfader A <input type="range" id="xf" min="0" max="100" value="0" style="width:200px"> B</div>
+<div>Deck B: <select id="dB"></select> Vol <input type="range" id="vB" min="0" max="100" value="100"><div id="nB" style="color:#fc0"></div>EQ L<input type="range" id="lB" min="-24" max="12" value="0" style="width:60px">M<input type="range" id="mB" min="-24" max="12" value="0" style="width:60px">H<input type="range" id="hB" min="-24" max="12" value="0" style="width:60px">Filtr<input type="range" id="fB" min="-100" max="100" value="0" style="width:70px"></div>
+<small>YouTube: tylko głośność/crossfader (EQ/filtr niemożliwe – YouTube nie udostępnia audio do Web Audio). Stacje HTML: EQ/filtr tylko gdy serwer pozwala CORS.</small> <button id="ytHide">📺 pokaż/ukryj YouTube</button></div>
+<div class="pn" id="botP"><h4>🤖 Boty i agenci</h4><select id="bSel"></select> Rola <select id="bRole"><option value="vj">🎨 VJ (presety)</option><option value="dj">🎧 DJ (wybiera stacje)</option><option value="talk">💬 Komentarze (GXBrain)</option><option value="all">⚡ Wszystko</option></select>
+<button id="bGo">Przejmij</button><label><input type="checkbox" id="bRot" checked> auto-rotate</label><div id="bLog" style="margin-top:6px;color:#9ef"></div><small>Symulowana ekipa botów w przeglądarce (nazwy z agents.html / d7-agents), nie 777 prawdziwych autonomicznych agentów.</small></div>
+<div class="pn" id="stP"><h4>📻 Stacje hip-hop / techno</h4><select id="sG"><option value="">wszystkie</option><option>hiphop</option><option>rap</option><option>techno</option><option>house</option><option>trance</option></select><input id="sQ" placeholder="szukaj…" style="width:110px"> <button id="sNext">⏭ next</button> <label><input type="radio" name="sd" value="A" checked>A</label><label><input type="radio" name="sd" value="B">B</label>
+<br><input id="rbQ" placeholder="radio-browser live (tag/nazwa)" style="width:170px"><button id="rbGo">🔎 live</button><div id="sC"></div><div id="stL"></div></div>
+<script src="https://www.youtube.com/iframe_api" async></script>
+<script>
+(function(){var $=function(i){return document.getElementById(i)},KALI_YT='jMRlCH3B6mY',KALI_HTTP='https://stream.radiokaliveronika.pl/stream';
+var ST=[],yt=null,ytReady=false,decks={A:{},B:{}},AC=null;
+['pMix:mixP','pBots:botP','pSt:stP'].forEach(function(x){x=x.split(':');$(x[0]).onclick=function(){$(x[1]).classList.toggle('on')}});
+$('ytHide').onclick=function(){$('ytw').classList.toggle('min')};
+window.onYouTubeIframeAPIReady=function(){yt=new YT.Player('ytp',{videoId:KALI_YT,playerVars:{autoplay:1,mute:1,playsinline:1,controls:1},events:{onReady:function(){ytReady=true;try{yt.mute();yt.playVideo()}catch(e){}apply()},onStateChange:function(e){if(e.data==1&&!yt.isMuted())$('start').style.display='none'}}})};
+function ac(){if(!AC){try{AC=window.__x7ac||new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state=='suspended')AC.resume();return AC}
+function srcOpts(){var o='<option value="yt:'+KALI_YT+'">▶ Kali YouTube LIVE</option><option value="'+KALI_HTTP+'">📻 Kali stream (radiokaliveronika.pl)</option><option value="">— cisza —</option>';ST.forEach(function(s,i){o+='<option value="st:'+i+'">'+s.genre+' · '+s.name.replace(/</g,'')+'</option>'});return o}
+function stopDeck(d){var k=decks[d];if(k.el){try{k.el.pause();k.el.src=''}catch(e){}}if(k.yt&&yt&&ytReady)try{yt.mute()}catch(e){};decks[d]={}}
+function setDeck(d,v){stopDeck(d);var k=decks[d],n=$('n'+d);if(!v){n.textContent='cisza';return}
+ if(v.indexOf('yt:')==0){k.yt=true;n.textContent='▶ YouTube '+v.slice(3)+' – EQ/filtr niedostępne dla YouTube';if(yt&&ytReady){try{if(yt.getVideoData().video_id!=v.slice(3))yt.loadVideoById(v.slice(3));yt.unMute();yt.playVideo()}catch(e){}}apply();return}
+ var s=v.indexOf('st:')==0?ST[+v.slice(3)]:{name:'Kali stream',url:v,cors:false},el=new Audio();k.el=el;k.st=s;el.preload='none';
+ var a=ac();if(s.cors&&a){el.crossOrigin='anonymous';try{var src=a.createMediaElementSource(el),lo=a.createBiquadFilter(),mi=a.createBiquadFilter(),hi=a.createBiquadFilter(),fl=a.createBiquadFilter(),g=a.createGain();lo.type='lowshelf';lo.frequency.value=250;mi.type='peaking';mi.frequency.value=1000;mi.Q.value=1;hi.type='highshelf';hi.frequency.value=4000;fl.type='allpass';src.connect(lo);lo.connect(mi);mi.connect(hi);hi.connect(fl);fl.connect(g);g.connect(a.destination);k.lo=lo;k.mi=mi;k.hi=hi;k.fl=fl;k.g=g;if(window.X7&&X7.connect)X7.connect(g)}catch(e){k.g=null}}
+ el.src=s.url;el.play().then(function(){n.textContent='📻 '+s.name+(k.g?' · EQ/filtr ✓ + analiza beatu':' · bez EQ (serwer bez CORS) – tylko głośność')}).catch(function(){n.textContent='⚠ '+s.name+' nie gra (blokada/offline) – ⏭ next'});apply()}
+function eq(d){var k=decks[d];if(!k.g)return;k.lo.gain.value=+$('l'+d).value;k.mi.gain.value=+$('m'+d).value;k.hi.gain.value=+$('h'+d).value;var f=+$('f'+d).value;if(f<-2){k.fl.type='lowpass';k.fl.frequency.value=200*Math.pow(100,(100+f)/100)}else if(f>2){k.fl.type='highpass';k.fl.frequency.value=20*Math.pow(200,f/100)}else k.fl.type='allpass'}
+function apply(){var x=+$('xf').value/100,vol={A:+$('vA').value/100*Math.min(1,2*(1-x)),B:+$('vB').value/100*Math.min(1,2*x)};
+ ['A','B'].forEach(function(d){var k=decks[d];if(k.g)k.g.gain.value=vol[d],k.el.volume=1;else if(k.el)k.el.volume=vol[d];if(k.yt&&yt&&ytReady)try{yt.setVolume(Math.round(vol[d]*100))}catch(e){};eq(d)})}
+['vA','vB','xf','lA','mA','hA','fA','lB','mB','hB','fB'].forEach(function(i){$(i).oninput=apply});
+$('dA').onchange=function(){setDeck('A',this.value)};$('dB').onchange=function(){setDeck('B',this.value)};
+function renderSt(){var g=$('sG').value,q=$('sQ').value.toLowerCase(),l=ST.map(function(s,i){return [s,i]}).filter(function(x){return(!g||x[0].genre==g)&&(!q||(x[0].name+' '+x[0].tags).toLowerCase().indexOf(q)>=0)});
+ $('sC').textContent=l.length+' / '+ST.length+' zweryfikowanych stacji';$('stL').innerHTML=l.slice(0,300).map(function(x){return '<div data-i="'+x[1]+'">'+(x[0].cors?'🎚':'📻')+' '+x[0].name.replace(/</g,'')+' <small>'+x[0].genre+' '+x[0].country+' '+(x[0].bitrate||'')+'k</small></div>'}).join('');return l}
+$('sG').onchange=renderSt;$('sQ').oninput=renderSt;function deckSel(){return document.querySelector('input[name=sd]:checked').value}
+function playSt(i){var d=deckSel();$('d'+d).value='st:'+i;setDeck(d,'st:'+i);$('xf').value=d=='A'?0:100;apply()}
+$('stL').onclick=function(e){var t=e.target.closest('[data-i]');if(t)playSt(+t.dataset.i)};
+$('sNext').onclick=function(){var l=renderSt();if(!l.length)return;var cur=$('d'+deckSel()).value,ci=cur.indexOf('st:')==0?+cur.slice(3):-1,pos=l.findIndex(function(x){return x[1]==ci});playSt(l[(pos+1)%l.length][1])};
+$('rbGo').onclick=function(){var q=encodeURIComponent($('rbQ').value||'hiphop');fetch('https://de1.api.radio-browser.info/json/stations/search?name='+q+'&hidebroken=true&order=clickcount&reverse=true&limit=60').then(function(r){return r.json()}).then(function(a){var n=0;a.forEach(function(s){var u=s.url_resolved||s.url;if(u&&u.indexOf('https://')==0&&!/\.m3u8?$|\.pls$/.test(u)){ST.push({name:'🔎 '+s.name.trim().slice(0,70),url:u,genre:'live',tags:s.tags||'',country:s.countrycode||'',bitrate:s.bitrate||0,cors:false});n++}});$('dA').innerHTML=$('dB').innerHTML=srcOpts();$('sG').value='';$('sQ').value='🔎';renderSt()}).catch(function(){$('sC').textContent='radio-browser API niedostępne'})};
+fetch('stations.json').then(function(r){return r.json()}).then(function(j){ST=j.stations||[];var a=$('dA').value,b=$('dB').value;$('dA').innerHTML=$('dB').innerHTML=srcOpts();$('dA').value=a||'yt:'+KALI_YT;$('dB').value=b||'';renderSt();window.X7&&(X7.stations=ST.length)}).catch(function(){});
+$('dA').innerHTML=$('dB').innerHTML=srcOpts();$('dA').value='yt:'+KALI_YT;$('dB').value='';decks.A={yt:true};$('nA').textContent='▶ Kali YouTube LIVE – EQ/filtr niedostępne dla YouTube';
+// first tap: fullscreen + unmute YouTube
+function go(){$('start').style.display='none';try{var d=document.documentElement;if(!document.fullscreenElement)(d.requestFullscreen||d.webkitRequestFullscreen).call(d).catch&&d.requestFullscreen().catch(function(){})}catch(e){}ac();if(yt&&ytReady&&decks.A.yt)try{yt.unMute();yt.playVideo();apply()}catch(e){}}
+$('start').addEventListener('click',go);document.addEventListener('pointerdown',function f(){go();document.removeEventListener('pointerdown',f)},true);
+// bots & agents
+var CREW=['Bot D 🐲','🐲 SuperGrok','🧠 Brain Guard','🧠 Mózg Kod','Bot Pamięć','MegaBot','DJ Dragon ⚡','Agent #777','🤖 SBDJ','🧠 Builder','🎧 Super Bot G','👽 Agent Kosmos'];
+$('bSel').innerHTML=CREW.map(function(n,i){return '<option value="'+i+'">'+n+'</option>'}).join('');var bI=0,bT=0;
+var OFF=['ten bit to ogień 🔥','czas na zmianę klimatu','crossfade w drodze 🎚','kosmos wjeżdża 👽','trzymamy groove'];
+function log(t){$('bLog').textContent=CREW[bI]+': '+t;var v=$('vj');if(v)v.textContent='🎧 '+CREW[bI]+' · '+t+' (symulowani boty)'}
+function act(){var r=$('bRole').value,bs=$('bot');if(r=='vj'||r=='all'){if(bs&&bI<bs.options.length){bs.value=bI;bs.onchange&&bs.onchange()}else{var n=$('next');n&&n.click()}log('VJ: miksuje presety')}
+ if(r=='dj'||r=='all'){if(ST.length){var g=['hiphop','rap','techno','house','trance'][bI%5],l=ST.map(function(s,i){return[s,i]}).filter(function(x){return x[0].genre==g});if(l.length){var p=l[Math.floor(Math.random()*l.length)];$('d'+(bI%2?'B':'A'));log('DJ: gra '+g+' → '+p[0].name);var d=bI%2?'B':'A';$('d'+d).value='st:'+p[1];setDeck(d,'st:'+p[1]);$('xf').value=d=='A'?0:100;apply()}}}
+ if(r=='talk'||r=='all'){var off=OFF[Math.floor(Math.random()*OFF.length)];log(off);if(window.GXBrain&&GXBrain.engine&&GXBrain.ask){try{GXBrain.ask('Jako '+CREW[bI]+' skomentuj krótko set DJ i wizualizacje.',[],{}).then(function(x){var t=typeof x=='string'?x:(x&&(x.text||x.reply));if(t)log(String(t).slice(0,140))}).catch(function(){})}catch(e){}}}bT=performance.now()}
+$('bGo').onclick=function(){bI=+$('bSel').value;act()};$('bSel').onchange=function(){bI=+this.value};
+setInterval(function(){if($('bRot').checked&&$('botP').classList.contains('on')&&performance.now()-bT>20000){bI=(bI+1)%CREW.length;$('bSel').value=bI;act()}},2000);
+window.X7Mix={decks:decks,KALI_YT:KALI_YT,setDeck:setDeck,stations:function(){return ST.length}};
+})();
+</script>
+</body></html>
