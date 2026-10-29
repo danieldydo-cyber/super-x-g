@@ -1,5 +1,5 @@
 <!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Super Genius X7 Generator X 🐲</title><link rel="icon" href="favicon.png">
+<title>Super Genius X7 Generator X 🐲</title><link rel="icon" href="favicon.png"><link rel="manifest" href="x7gen.webmanifest"><link rel="apple-touch-icon" href="gx/icon-shark-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#6b21ff">
 <style>html,body{margin:0;height:100%;background:#000;color:#fff;font:13px system-ui;overflow:hidden}#mv{position:fixed;inset:0;width:100vw;height:100vh}#ov{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none}
 #ui{position:fixed;left:0;right:0;top:0;padding:6px;background:linear-gradient(#000c,#0000);display:flex;flex-wrap:wrap;gap:5px;align-items:center;z-index:5}#ui.hide{opacity:0}#ui button,#ui select{background:#1a0830cc;color:#fff;border:1px solid #7b2cff;border-radius:9px;padding:5px 8px}#ui input[type=range]{width:80px}
 #vj{position:fixed;left:10px;bottom:10px;z-index:5;background:#000a;border:1px solid #7b2cff;border-radius:12px;padding:6px 10px;max-width:70vw}#info{position:fixed;right:10px;bottom:10px;z-index:5;opacity:.8;max-width:45vw;text-align:right}</style></head><body>
@@ -205,6 +205,12 @@ window.X7Panels={ids:ids};})();
 <button id="dbShare" style="min-height:44px">📤 Wyślij stan X7 do D BOT (link)</button> <button id="dbCopy" style="min-height:44px">📋 Kopiuj link</button><div id="dbMsg" style="color:#9ef"></div>
 <h4>🕸 Bot mesh</h4><div id="dbMesh">ładuję samples/bot-mesh.json…</div>
 <small>Połączenie: link/uruchomienie aplikacji + link ze stanem (preset, stacja, tryb, scena). Brak stałej synchronizacji na żywo między telefonem a stroną (wymagałaby serwera; tunel jest tymczasowy).</small></div>
+<div class="pn" id="blP"><h4>💳 Wesprzyj BLIK</h4>
+<div style="font-size:22px;font-weight:bold;margin:6px 0">📱 BLIK na telefon: <span id="blNum">730 377 357</span></div><button type="button" id="blCopy" style="min-height:44px;font-size:16px">📋 Kopiuj numer</button>
+<ol style="padding-left:20px;line-height:1.6"><li>Otwórz aplikację swojego banku.</li><li>Wybierz <b>BLIK</b> → <b>Przelew na telefon</b>.</li><li>Wpisz numer <b>730 377 357</b> i kwotę.</li><li>Zatwierdź przelew w aplikacji banku.</li></ol>
+<h4>🏦 Przelew tradycyjny</h4><div>Nest Bank · IBAN:<br><b id="blIban" style="font-size:16px">PL45 1870 1045 2083 1058 7576 0001</b></div><button type="button" id="blCopyI" style="min-height:44px;font-size:16px">📋 Kopiuj IBAN</button>
+<div style="margin-top:8px"><a href="shop.html" style="color:#fc0;font-size:16px">🛒 Sklep · 💎 · 👑</a></div><div id="blMsg" style="color:#9ef"></div>
+<small>Tylko informacja – strona nie pobiera płatności ani danych karty. Płatność wykonujesz w aplikacji swojego banku.</small></div>
 <div class="pn" id="vizP"><h4>🌌 Wizualizacje</h4>Tryb <select id="vzMode"></select> <button id="vzPrev">◀</button><button id="vzNext">▶</button><button id="vzRnd">🎲</button><button id="vzLock">🔓/🔒</button><br>
 👻 Scena <select id="vzGh"></select> <label><input type="checkbox" id="vzGhOn">👻 Ghost</label> <label><input type="checkbox" id="vzDr">🐉 Smok</label> <label><input type="checkbox" id="vzAl">👽</label> <label><input type="checkbox" id="vzSh">🦈</label><br>
 <input id="vzQ" placeholder="szukaj presetu…" style="width:60%"> <span id="vzC"></span><div id="vzL" style="max-height:45vh;overflow:auto"></div></div>
@@ -227,7 +233,7 @@ function list(){var q=$('vzQ').value.toLowerCase(),ks=Object.keys((window.X7&&X7
  $('vzL').innerHTML=ks.slice(0,400).map(function(k){return '<div data-k="'+encodeURIComponent(k)+'"'+(k==c?' class="cur"':'')+'>'+k.replace(/</g,'')+'</div>'}).join('')}
 $('vzQ').oninput=list;$('vzL').onclick=function(e){var d=e.target.closest('[data-k]');if(d&&X7.load){X7.load(decodeURIComponent(d.dataset.k),2);list()}};
 // --- window manager
-var WIN=['vizP','stP','mixP','botP','ghP','x7dl','dbP'],order=[],pos={},css=document.createElement('style');document.head.appendChild(css);
+var WIN=['vizP','stP','mixP','botP','ghP','x7dl','dbP','blP'],order=[],pos={},css=document.createElement('style');document.head.appendChild(css);
 function title(el){var h=el.querySelector('h4,h3');return h?h.textContent.replace(/[⛶✕]/g,'').trim().slice(0,22):el.id}
 function mobile(){return innerWidth<700}var busy=false;function cls(e,c,v){if(e.classList.contains(c)!==v)e.classList.toggle(c,v)}
 function layout(){if(busy)return;busy=true;try{layout0()}finally{busy=false}}function layout0(){var top=$('ui').getBoundingClientRect().bottom+6,W=innerWidth,H=innerHeight,open=WIN.filter(function(i){var e=$(i);return e&&e.classList.contains('on')});
@@ -299,5 +305,16 @@ window.X7DBot={state:state,link:link};
 // register with window manager if present
 setTimeout(function(){if(window.X7WM)X7WM.layout()},500);
 })();
+</script>
+
+<script>
+(function(){var $=function(i){return document.getElementById(i)},el=$('blP');
+var b=document.createElement('button');b.type='button';b.id='pBlik';b.textContent='💳 Wesprzyj BLIK';b.style.background='#007a3d';b.onclick=function(){el.classList.toggle('on')};$('ui').appendChild(b);
+var bar=document.createElement('div');bar.className='pnb';bar.innerHTML='<button type="button" class="pfs" title="Pełny ekran">⛶</button><button type="button" class="pcl" title="Zamknij (Esc)">✕</button>';bar.querySelector('.pfs').onclick=function(e){e.stopPropagation();el.classList.toggle('fs')};bar.querySelector('.pcl').onclick=function(e){e.stopPropagation();el.classList.remove('on','fs')};el.insertBefore(bar,el.firstChild);
+addEventListener('keydown',function(e){if(e.key=='Escape'){if(el.classList.contains('fs'))el.classList.remove('fs');else el.classList.remove('on')}});
+function cp(t,ok){function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');$('blMsg').textContent='✓ '+ok}catch(e){$('blMsg').textContent=t}a.remove()}
+ if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){$('blMsg').textContent='✓ '+ok},fb);else fb()}
+$('blCopy').onclick=function(){cp('730377357','skopiowano numer BLIK 730377357')};$('blCopyI').onclick=function(){cp('PL45187010452083105875760001','skopiowano IBAN')};
+if(/[?&#]blik\b/.test(location.href))el.classList.add('on');window.X7Blik={el:el};})();
 </script>
 </body></html>
