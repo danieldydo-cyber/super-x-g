@@ -80,7 +80,11 @@ $('vj').textContent='🎧 Tryby: PRO8 '+counts.pro8+' · 778 '+counts['778']+' �
 <div>Deck B: <select id="dB"></select> Vol <input type="range" id="vB" min="0" max="100" value="100"><div id="nB" style="color:#fc0"></div>EQ L<input type="range" id="lB" min="-24" max="12" value="0" style="width:60px">M<input type="range" id="mB" min="-24" max="12" value="0" style="width:60px">H<input type="range" id="hB" min="-24" max="12" value="0" style="width:60px">Filtr<input type="range" id="fB" min="-100" max="100" value="0" style="width:70px"></div>
 <small>YouTube: tylko głośność/crossfader (EQ/filtr niemożliwe – YouTube nie udostępnia audio do Web Audio). Stacje HTML: EQ/filtr tylko gdy serwer pozwala CORS.</small> <button id="ytHide">📺 pokaż/ukryj YouTube</button></div>
 <div class="pn" id="botP"><h4>🤖 Boty i agenci</h4><select id="bSel"></select> Rola <select id="bRole"><option value="vj">🎨 VJ (presety)</option><option value="dj">🎧 DJ (wybiera stacje)</option><option value="talk">💬 Komentarze (GXBrain)</option><option value="all">⚡ Wszystko</option></select>
-<button id="bGo">Przejmij</button><label><input type="checkbox" id="bRot" checked> auto-rotate</label><div id="bLog" style="margin-top:6px;color:#9ef"></div><small>Symulowana ekipa botów w przeglądarce (nazwy z agents.html / d7-agents), nie 777 prawdziwych autonomicznych agentów.</small></div>
+<button id="bGo">Przejmij</button><label><input type="checkbox" id="bRot" checked> auto-rotate</label><div id="bLog" style="margin-top:6px;color:#9ef"></div><small>Symulowana ekipa botów w przeglądarce (nazwy z agents.html / d7-agents), nie 777 prawdziwych autonomicznych agentów.</small><div id="hgBox" style="margin-top:8px;border-top:1px solid #2a1050;padding-top:6px"><b>🌲 Leśny Duch – hologram czatu</b> <button type="button" id="hgTog" style="min-height:40px">🎭 Hologram ON</button> <button type="button" id="hgMute" style="min-height:40px">🔊 Głos ON</button>
+<div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap"><canvas id="hgC" width="240" height="220" style="width:200px;height:184px"></canvas><div id="hgChat" style="flex:1;min-width:150px;max-height:184px;overflow:auto;font-size:13px"></div></div>
+<div style="display:flex;gap:4px"><input id="hgIn" placeholder="Napisz do botów…" style="flex:1"><button type="button" id="hgSend" style="min-height:40px">➤</button></div>
+<small>Hologram z Twojego wideo (pętla). Mówi przez syntezę mowy przeglądarki; usta nie są zsynchronizowane z mową (animacja pulsuje z głosem).</small>
+<video id="hgV" muted loop playsinline preload="auto" style="display:none"><source src="img/holo/lesny-duch.webm" type="video/webm"><source src="img/holo/lesny-duch.mp4" type="video/mp4"></video></div></div>
 <div class="pn" id="stP"><h4>📻 Stacje hip-hop / techno</h4><select id="sG"><option value="">wszystkie</option><option>hiphop</option><option>rap</option><option>techno</option><option>house</option><option>trance</option></select><input id="sQ" placeholder="szukaj…" style="width:110px"> <button id="sNext">⏭ next</button> <label><input type="radio" name="sd" value="A" checked>A</label><label><input type="radio" name="sd" value="B">B</label>
 <br><input id="rbQ" placeholder="radio-browser live (tag/nazwa)" style="width:170px"><button id="rbGo">🔎 live</button><div id="sC"></div><div id="stL"></div></div>
 <script src="https://www.youtube.com/iframe_api" async></script>
@@ -316,5 +320,33 @@ function cp(t,ok){function fb(){var a=document.createElement('textarea');a.value
  if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){$('blMsg').textContent='✓ '+ok},fb);else fb()}
 $('blCopy').onclick=function(){cp('730377357','skopiowano numer BLIK 730377357')};$('blCopyI').onclick=function(){cp('PL45187010452083105875760001','skopiowano IBAN')};
 if(/[?&#]blik\b/.test(location.href))el.classList.add('on');window.X7Blik={el:el};})();
+</script>
+
+<script>
+(function(){var $=function(i){return document.getElementById(i)},v=$('hgV'),c=$('hgC'),x=c.getContext('2d'),tmp=document.createElement('canvas'),tx=tmp.getContext('2d',{willReadFrequently:true});tmp.width=160;tmp.height=147;
+var on=localStorage.getItem('x7_holo')!=='0',muted=localStorage.getItem('x7_holo_mute')==='1',talk=0,speaking=false,last=0,gl=0;
+function ui(){$('hgTog').textContent=on?'🎭 Hologram ON':'🎭 Hologram OFF';$('hgMute').textContent=muted?'🔇 Głos OFF':'🔊 Głos ON';c.style.display=on?'block':'none'}ui();
+$('hgTog').onclick=function(){on=!on;localStorage.setItem('x7_holo',on?'1':'0');ui();if(on)v.play().catch(function(){})};$('hgMute').onclick=function(){muted=!muted;localStorage.setItem('x7_holo_mute',muted?'1':'0');if(muted&&window.speechSynthesis)speechSynthesis.cancel();ui()};
+function draw(t){requestAnimationFrame(draw);if(!on||t-last<1000/30)return;var p=$('botP');if(!p||!p.classList.contains('on')||p.classList.contains('wmMin'))return;last=t;if(v.paused)v.play().catch(function(){});
+ var W=c.width,H=c.height;x.clearRect(0,0,W,H);if(v.readyState<2)return;var vw=v.videoWidth,vh=v.videoHeight;tx.drawImage(v,vw*.12,0,vw*.76,vh,0,0,160,147);var d=tx.getImageData(0,0,160,147),a=d.data;
+ function ss(p,q,z){return Math.min(1,Math.max(0,(z-p)/(q-p)))}for(var y=0;y<147;y++)for(var i=0;i<160;i++){var k=(y*160+i)*4,r=a[k],g=a[k+1],b=a[k+2],l=(r*.3+g*.59+b*.11)/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),sat=(mx-mn)/(mx+1),dx=(i-80)/70,dy=(y-82)/78,q2=dx*dx+dy*dy,m=Math.max(0,1-q2*q2),dark=1-ss(.26,.40,l),metal=(i<90&&y>90)?(1-ss(.06,.14,sat))*ss(.45,.6,l):0;var al=m*Math.max(dark,metal);
+  var L=Math.min(1,Math.pow(l*2.4,1.1));a[k]=10+L*150;a[k+1]=60+L*195;a[k+2]=90+L*165;a[k+3]=al*(200+55*talk)}
+ tx.putImageData(d,0,0);gl=Math.max(0,gl-1);if(Math.random()<.02+talk*.05)gl=3;
+ var bob=Math.sin(t/600)*6,sc=1+.06*talk+.02*Math.sin(t/300);x.save();x.translate(W/2,H/2+bob);x.scale(sc,sc);x.shadowColor='#0ff';x.shadowBlur=6+14*talk;x.globalAlpha=.75+.2*Math.random()*(gl?1:.2);x.drawImage(tmp,-W/2,-H/2,W,H);
+ if(gl){var gy=Math.random()*H-H/2;x.drawImage(tmp,0,(gy+H/2)/H*147,160,10,-W/2+(Math.random()-.5)*20,gy,W,15)}x.restore();
+ x.fillStyle='rgba(0,0,0,.28)';for(var yy=(t/30)%3;yy<H;yy+=3)x.fillRect(0,yy,W,1);x.strokeStyle='rgba(0,255,255,'+(.3+.4*talk)+')';x.beginPath();x.ellipse(W/2,H-10,W*.35,8,0,0,7);x.stroke();talk*=speaking?.98:.85;if(speaking)talk=Math.max(talk,.5+.5*Math.abs(Math.sin(t/120)))}
+requestAnimationFrame(draw);
+function voice(){var vs=window.speechSynthesis?speechSynthesis.getVoices():[];return vs.filter(function(z){return/^pl/i.test(z.lang)})[0]||null}
+function say(txt){talk=1;if(muted||!window.speechSynthesis)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(String(txt).replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu,'').slice(0,220));var vv=voice();if(vv)u.voice=vv;u.lang='pl-PL';u.rate=1;u.pitch=.8;u.onstart=function(){speaking=true};u.onend=u.onerror=function(){speaking=false};u.onboundary=function(){talk=1};speechSynthesis.speak(u)}catch(e){}}
+function add(who,txt){var d=document.createElement('div');d.innerHTML='<b>'+who.replace(/</g,'')+':</b> '+String(txt).replace(/</g,'');$('hgChat').appendChild(d);$('hgChat').scrollTop=1e6}
+// bot replies from the existing bot log -> chat + speech
+var prev='';new MutationObserver(function(){var t=$('bLog').textContent;if(t&&t!==prev){prev=t;var i=t.indexOf(':');add(i>0?t.slice(0,i):'Bot',i>0?t.slice(i+1):t);say(t)}}).observe($('bLog'),{childList:true,characterData:true,subtree:true});
+var ROLE={'🧠 Builder':'buduję aplikacje i agentów – opisz, co mam zbudować','🧠 Mózg Kod':'piszę kod i naprawiam funkcje','Bot D 🐲':'jestem Bot D, prowadzę set i wizualizacje','🤖 SBDJ':'dobieram stacje i miksy','MegaBot':'generuję presety X7'};
+function offline(q,n){var r=ROLE[n]||'jestem z ekipy botów X7';if(/zbuduj|aplikac|agent|app/i.test(q))return n+': '+(ROLE[n]?r:'przekażę to do 🧠 Builder')+' – zapisałem pomysł: „'+q.slice(0,60)+'”.';if(/stacj|radio|muzyk/i.test(q))return n+': otwórz 📻 Stacje albo daj mi rolę DJ – zmienię stację.';if(/wizual|preset|smok|ghost/i.test(q))return n+': zmieniam wizualizacje 🌌 – kliknij ▶ albo daj mi rolę VJ.';return n+': '+r+'. Słyszę Cię: „'+q.slice(0,60)+'”.'}
+function send(){var q=$('hgIn').value.trim();if(!q)return;$('hgIn').value='';add('Ty',q);var sel=$('bSel'),n=sel&&sel.options[sel.selectedIndex]?sel.options[sel.selectedIndex].text:'Bot D 🐲';
+ function out(t){prev=t;add(n,t.indexOf(n+':')==0?t.slice(n.length+1):t);say(t)}
+ if(window.GXBrain&&GXBrain.engine&&GXBrain.ask){try{GXBrain.ask(q,[],{system:'Jesteś '+n+' z ekipy botów X7 (rola: '+(ROLE[n]||'pomocnik')+'). Odpowiadaj krótko po polsku.'}).then(function(r){var t=typeof r=='string'?r:(r&&(r.text||r.reply));out(t?String(t).slice(0,240):offline(q,n))}).catch(function(){out(offline(q,n))})}catch(e){out(offline(q,n))}}else out(offline(q,n))}
+$('hgSend').onclick=send;$('hgIn').addEventListener('keydown',function(e){if(e.key!='Escape')e.stopPropagation();if(e.key=='Enter')send()});
+window.X7Holo={say:say,get on(){return on},get talking(){return talk}};})();
 </script>
 </body></html>
