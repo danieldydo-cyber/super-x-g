@@ -4,7 +4,7 @@
 #ui{position:fixed;left:0;right:0;top:0;padding:6px;background:linear-gradient(#000c,#0000);display:flex;flex-wrap:wrap;gap:5px;align-items:center;z-index:5}#ui.hide{opacity:0}#ui button,#ui select{background:#1a0830cc;color:#fff;border:1px solid #7b2cff;border-radius:9px;padding:5px 8px}#ui input[type=range]{width:80px}
 #vj{position:fixed;left:10px;bottom:10px;z-index:5;background:#000a;border:1px solid #7b2cff;border-radius:12px;padding:6px 10px;max-width:70vw}#info{position:fixed;right:10px;bottom:10px;z-index:5;opacity:.8;max-width:45vw;text-align:right}</style></head><body>
 <canvas id="mv"></canvas><canvas id="ov"></canvas>
-<div id="ui"><b>Super Genius X7 Generator X 🐲</b><a href="v77.html" style="color:#fc0">⬅ v77</a>
+<div id="ui"><b>Super Genius X7 Generator X 🐲</b><a href="v77.html" style="color:#fc0">⬅ v77</a> <a href="ghost2.html" style="color:#f0d">👻 Ghost 2</a>
 <select id="mode"><option value="psyholo" selected>🌀 Psychodelik Hologram</option><option value="all">All x7</option><option value="pro8">PRO8 MilkDrop</option><option value="778">Mix Visuals 778</option><option value="2077">MilkDrop 2077</option><option value="cosmos">Cosmos</option><option value="custom">X7 Custom generated</option><option value="botvj">🤖 Bot VJ</option></select>
 <button id="mic">🎤 Mic</button><button id="tab">🖥 Tab</button><button id="kali">📻 Kali</button>
 <button id="prev">◀</button><button id="next">▶ Next</button><button id="rnd">🎲 Random</button><button id="lock">🔓 Lock</button><button id="fs">⛶</button>
@@ -365,7 +365,7 @@ function loop(t){requestAnimationFrame(loop);var on=$('mode').value=='psyholo';v
  if(!locked&&((a.beat&&beats%8==0&&t-lastMix>3000)||t-lastMix>7000)){mix(1.2+Math.random()*1.3);X7Psy.mixes++}
  var w=cv.width,h=cv.height;x.clearRect(0,0,w,h);
  // chroma split copy of MilkDrop (cyan/magenta) — drawn from the live butterchurn canvas
- try{sx.globalCompositeOperation='source-over';sx.drawImage(mv,0,0,sm.width,sm.height);var off=(3+6*(a.level||0)+(glitch?10:0))*(w/800);[[t1,'#ff00d0'],[t2,'#00f0ff']].forEach(function(z){var c=z[0].getContext('2d');z[0].width=sm.width;z[0].height=sm.height;c.drawImage(sm,0,0);c.globalCompositeOperation='multiply';c.fillStyle=z[1];c.fillRect(0,0,sm.width,sm.height);c.globalCompositeOperation='source-over'});x.globalCompositeOperation='lighter';x.globalAlpha=.28;x.drawImage(t1,off,0,w,h);x.drawImage(t2,-off,0,w,h);x.globalAlpha=1}catch(e){}
+ try{sx.globalCompositeOperation='source-over';sx.drawImage(mv,0,0,sm.width,sm.height);var off=(3+6*(a.level||0)+(glitch?10:0))*(w/800);[[t1,'#ff00d0'],[t2,'#00f0ff']].forEach(function(z){var c=z[0].getContext('2d');z[0].width=sm.width;z[0].height=sm.height;c.drawImage(sm,0,0);c.globalCompositeOperation='multiply';c.fillStyle=z[1];c.fillRect(0,0,sm.width,sm.height);c.globalCompositeOperation='source-over'});x.globalCompositeOperation='lighter';x.globalAlpha=.14;x.drawImage(t1,off,0,w,h);x.drawImage(t2,-off,0,w,h);x.globalAlpha=1}catch(e){}
  x.globalCompositeOperation='source-over';x.globalAlpha=1;
  // kaleidoscope pulse rings on beat
  x.save();x.translate(w/2,h/2);x.globalCompositeOperation='lighter';ring=ring.filter(function(r){return r.r<Math.max(w,h)});ring.forEach(function(r){r.r+=Math.max(w,h)*.02;var n=8;for(var i=0;i<n;i++){x.rotate(Math.PI*2/n);x.strokeStyle='hsla('+((r.h+i*45)%360)+',100%,60%,'+(.5*(1-r.r/Math.max(w,h)))+')';x.lineWidth=3;x.beginPath();x.moveTo(r.r*.3,0);x.lineTo(r.r,r.r*.25);x.lineTo(r.r*.8,-r.r*.2);x.stroke()}});x.restore();
