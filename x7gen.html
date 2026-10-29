@@ -197,6 +197,14 @@ window.X7Panels={ids:ids};})();
 <script src="js/x7-download.js"></script>
 
 <canvas id="dr" style="position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:3"></canvas>
+<div class="pn" id="dbP"><h4>🤖 D BOT · telefon</h4>
+<a class="big" id="dbOpen1" style="display:block;margin:6px 0;padding:12px;border-radius:12px;background:#3a0a28;border:1px solid #ff2d55;color:#fff;text-decoration:none;text-align:center">📱 Otwórz Super Bot D (DargonMoon)</a>
+<a class="big" id="dbOpen2" style="display:block;margin:6px 0;padding:12px;border-radius:12px;background:#3a0a28;border:1px solid #ff2d55;color:#fff;text-decoration:none;text-align:center">📱 Otwórz SuperBotD PRO 55 / D7 DJ</a>
+<small>Działa w Chrome na Androidzie, jeśli aplikacja jest zainstalowana (uruchomienie po nazwie pakietu). Jeśli nie – pobierze się APK.</small>
+<div style="margin:6px 0">⬇️ <a href="downloads/Super-Bot-D-DargonMoon.apk" download style="color:#fc0">Super-Bot-D-DargonMoon.apk</a> · <a href="downloads/SuperBotD-PRO-55.apk" download style="color:#fc0">SuperBotD-PRO-55.apk</a> · 🌐 <a href="chat-d.html" style="color:#fc0">Czat z Bot D (web)</a></div>
+<button id="dbShare" style="min-height:44px">📤 Wyślij stan X7 do D BOT (link)</button> <button id="dbCopy" style="min-height:44px">📋 Kopiuj link</button><div id="dbMsg" style="color:#9ef"></div>
+<h4>🕸 Bot mesh</h4><div id="dbMesh">ładuję samples/bot-mesh.json…</div>
+<small>Połączenie: link/uruchomienie aplikacji + link ze stanem (preset, stacja, tryb, scena). Brak stałej synchronizacji na żywo między telefonem a stroną (wymagałaby serwera; tunel jest tymczasowy).</small></div>
 <div class="pn" id="vizP"><h4>🌌 Wizualizacje</h4>Tryb <select id="vzMode"></select> <button id="vzPrev">◀</button><button id="vzNext">▶</button><button id="vzRnd">🎲</button><button id="vzLock">🔓/🔒</button><br>
 👻 Scena <select id="vzGh"></select> <label><input type="checkbox" id="vzGhOn">👻 Ghost</label> <label><input type="checkbox" id="vzDr">🐉 Smok</label> <label><input type="checkbox" id="vzAl">👽</label> <label><input type="checkbox" id="vzSh">🦈</label><br>
 <input id="vzQ" placeholder="szukaj presetu…" style="width:60%"> <span id="vzC"></span><div id="vzL" style="max-height:45vh;overflow:auto"></div></div>
@@ -219,7 +227,7 @@ function list(){var q=$('vzQ').value.toLowerCase(),ks=Object.keys((window.X7&&X7
  $('vzL').innerHTML=ks.slice(0,400).map(function(k){return '<div data-k="'+encodeURIComponent(k)+'"'+(k==c?' class="cur"':'')+'>'+k.replace(/</g,'')+'</div>'}).join('')}
 $('vzQ').oninput=list;$('vzL').onclick=function(e){var d=e.target.closest('[data-k]');if(d&&X7.load){X7.load(decodeURIComponent(d.dataset.k),2);list()}};
 // --- window manager
-var WIN=['vizP','stP','mixP','botP','ghP','x7dl'],order=[],pos={},css=document.createElement('style');document.head.appendChild(css);
+var WIN=['vizP','stP','mixP','botP','ghP','x7dl','dbP'],order=[],pos={},css=document.createElement('style');document.head.appendChild(css);
 function title(el){var h=el.querySelector('h4,h3');return h?h.textContent.replace(/[⛶✕]/g,'').trim().slice(0,22):el.id}
 function mobile(){return innerWidth<700}var busy=false;function cls(e,c,v){if(e.classList.contains(c)!==v)e.classList.toggle(c,v)}
 function layout(){if(busy)return;busy=true;try{layout0()}finally{busy=false}}function layout0(){var top=$('ui').getBoundingClientRect().bottom+6,W=innerWidth,H=innerHeight,open=WIN.filter(function(i){var e=$(i);return e&&e.classList.contains('on')});
@@ -267,6 +275,29 @@ function draw(t){requestAnimationFrame(draw);if(t-last<1000/45)return;last=t;var
  if(glitch>0){glitch--;var gy=Math.random()*h,gh=10+Math.random()*40;try{x.drawImage(cv,0,gy,w,gh,(Math.random()-.5)*30,gy,w,gh)}catch(e){}}
  window.X7Dragon.frames++}
 window.X7Dragon={frames:0,get on(){return drOn}};sync();requestAnimationFrame(draw);
+})();
+</script>
+
+
+<script>
+(function(){var $=function(i){return document.getElementById(i)},el=$('dbP'),base=location.href.split('#')[0].replace(/[^/]*$/,'');
+var b=document.createElement('button');b.type='button';b.id='pDb';b.textContent='🤖 D BOT';b.onclick=function(){el.classList.toggle('on')};$('ui').appendChild(b);
+function intent(pkg,apk){return 'intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package='+pkg+';S.browser_fallback_url='+encodeURIComponent(base+apk)+';end'}
+var and=/Android/i.test(navigator.userAgent);$('dbOpen1').href=and?intent('com.danieldydo.superbotd.dargonmoon','downloads/Super-Bot-D-DargonMoon.apk'):'downloads/Super-Bot-D-DargonMoon.apk';$('dbOpen2').href=and?intent('com.danieldydo.d7dj','downloads/SuperBotD-PRO-55.apk'):'downloads/SuperBotD-PRO-55.apk';
+var bar=document.createElement('div');bar.className='pnb';bar.innerHTML='<button type="button" class="pfs" title="Pełny ekran">⛶</button><button type="button" class="pcl" title="Zamknij (Esc)">✕</button>';bar.querySelector('.pfs').onclick=function(e){e.stopPropagation();el.classList.toggle('fs')};bar.querySelector('.pcl').onclick=function(e){e.stopPropagation();el.classList.remove('on','fs')};el.insertBefore(bar,el.firstChild);
+addEventListener('keydown',function(e){if(e.key=='Escape'){if(el.classList.contains('fs'))el.classList.remove('fs');else el.classList.remove('on')}});
+function state(){var a=$('dA');return {preset:window.X7&&X7.cur&&X7.cur(),mode:$('mode').value,deckA:a&&a.value,ghost:window.X7Ghost&&X7Ghost.scene,dragon:window.X7Dragon&&X7Dragon.on,t:Date.now()}}
+function link(){return base+'x7gen.html#x7='+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(state())))))}
+var bc=null;try{bc=new BroadcastChannel('x7-dbot')}catch(e){}
+function pub(){var s=state();try{localStorage.setItem('x7_state',JSON.stringify(s))}catch(e){}if(bc)bc.postMessage(s);return s}setInterval(pub,5000);
+$('dbShare').onclick=function(){var u=link();pub();if(navigator.share)navigator.share({title:'X7 → D BOT',text:'Stan X7 Generator X 🐲',url:u}).catch(function(){});else $('dbCopy').click()};
+$('dbCopy').onclick=function(){var u=link();(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){$('dbMsg').textContent='✓ skopiowano link'},function(){$('dbMsg').textContent=u})};
+// apply incoming state from link (additive)
+try{var m=location.hash.match(/x7=([^&]+)/);if(m){var st=JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1])))));setTimeout(function(){try{if(st.mode){$('mode').value=st.mode;$('mode').onchange()}if(st.preset&&X7.load)X7.load(st.preset,1);var gi=window.X7Ghost&&X7Ghost.scenes.findIndex(function(c){return c.n==st.ghost});if(gi>=0)X7Ghost.setScene(gi);if(st.deckA&&st.deckA.indexOf('st:')!=0&&$('dA'))$('dA').value=st.deckA}catch(e){}},1500)}}catch(e){}
+fetch('samples/bot-mesh.json').then(function(r){return r.json()}).then(function(j){var p=j.peers||j.bots||[];if(!p.length){$('dbMesh').textContent='bot-mesh.json na Pages jest pustym szablonem (brak peerów online) – synchronizacja mesh działa tylko przez serwer/tunel D BOT.';return}$('dbMesh').innerHTML=p.length+' peerów (zapis statyczny, '+(j.updatedAt||'')+'):<br>'+p.slice(0,20).map(function(x){return '• '+String(x.name||x.id).replace(/</g,'')+' <small>'+(x.role||'')+' · '+(x.status||'')+'</small>'}).join('<br>')}).catch(function(){$('dbMesh').textContent='bot-mesh.json niedostępny'});
+window.X7DBot={state:state,link:link};
+// register with window manager if present
+setTimeout(function(){if(window.X7WM)X7WM.layout()},500);
 })();
 </script>
 </body></html>
