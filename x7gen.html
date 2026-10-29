@@ -5,7 +5,7 @@
 #vj{position:fixed;left:10px;bottom:10px;z-index:5;background:#000a;border:1px solid #7b2cff;border-radius:12px;padding:6px 10px;max-width:70vw}#info{position:fixed;right:10px;bottom:10px;z-index:5;opacity:.8;max-width:45vw;text-align:right}</style></head><body>
 <canvas id="mv"></canvas><canvas id="ov"></canvas>
 <div id="ui"><b>Super Genius X7 Generator X 🐲</b><a href="v77.html" style="color:#fc0">⬅ v77</a>
-<select id="mode"><option value="all">All x7</option><option value="pro8">PRO8 MilkDrop</option><option value="778">Mix Visuals 778</option><option value="2077">MilkDrop 2077</option><option value="cosmos">Cosmos</option><option value="custom">X7 Custom generated</option><option value="botvj">🤖 Bot VJ</option></select>
+<select id="mode"><option value="psyholo" selected>🌀 Psychodelik Hologram</option><option value="all">All x7</option><option value="pro8">PRO8 MilkDrop</option><option value="778">Mix Visuals 778</option><option value="2077">MilkDrop 2077</option><option value="cosmos">Cosmos</option><option value="custom">X7 Custom generated</option><option value="botvj">🤖 Bot VJ</option></select>
 <button id="mic">🎤 Mic</button><button id="tab">🖥 Tab</button><button id="kali">📻 Kali</button>
 <button id="prev">◀</button><button id="next">▶ Next</button><button id="rnd">🎲 Random</button><button id="lock">🔓 Lock</button><button id="fs">⛶</button>
 Tempo<input id="tempo" type="range" min="2" max="30" value="10">Kolor<input id="hue" type="range" min="0" max="360" value="0">Speed<input id="spd" type="range" min="0.2" max="3" step="0.1" value="1">
@@ -27,7 +27,7 @@ function rng(s){return function(){s=(s*16807)%2147483647;return (s-1)/2147483646
 function mutate(seed){var r=rng(seed),src=P[base[Math.floor(r()*base.length)]],p=JSON.parse(JSON.stringify(src));p.baseVals=p.baseVals||{};var b=p.baseVals;
  ['zoom','rot','warp','decay','echo_zoom','wave_r','wave_g','wave_b','cx','cy','dx','dy'].forEach(function(k){if(typeof b[k]=='number')b[k]=b[k]*(0.8+r()*0.4)});b.wave_mode=Math.floor(r()*8);return p}
 for(var s=1;s<=77;s++){try{P['X7 Gen #'+s]=mutate(s*7777)}catch(e){}}
-var all=Object.keys(P),RE={pro8:/flexi|martin|geiss|rovastar|krash|eo\.|unchained|fluid|liquid/i,'778':/./,'2077':/neon|cyber|electr|digital|laser|grid|tech|matrix|glitch|shark|ocean|fish|aqua|deep|fire|explosion/i,cosmos:/alien|ufo|space|star|cosmic|galax|planet|nebula|orb|magellan|nova/i,custom:/^X7 Gen/};
+var all=Object.keys(P),RE={psyholo:/./,pro8:/flexi|martin|geiss|rovastar|krash|eo\.|unchained|fluid|liquid/i,'778':/./,'2077':/neon|cyber|electr|digital|laser|grid|tech|matrix|glitch|shark|ocean|fish|aqua|deep|fire|explosion/i,cosmos:/alien|ufo|space|star|cosmic|galax|planet|nebula|orb|magellan|nova/i,custom:/^X7 Gen/};
 function pack(m){if(m=='all'||m=='botvj')return all;var re=RE[m],l=all.filter(function(k){return re.test(k)});return l.length?l:all}
 var counts={};['pro8','778','2077','cosmos','custom','all'].forEach(function(m){counts[m]=pack(m).length});window.X7={presets:P,counts:counts,frames:0};
 // bot crew (simulated in-browser, names from agents hub / d7-agents)
@@ -133,8 +133,8 @@ window.X7Mix={decks:decks,KALI_YT:KALI_YT,setDeck:setDeck,stations:function(){re
 })();
 </script>
 
-<canvas id="gh" style="position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;mix-blend-mode:screen;z-index:1"></canvas>
-<div class="pn" id="ghP" style="right:6px;top:auto;bottom:40px;width:min(320px,94vw)"><h4>👻 Ghost Psychedelic</h4>Intensywność <input type="range" id="ghI" min="0" max="100" value="80"><br>Punkty <input type="range" id="ghN" min="3" max="12" value="7"><span id="ghNv">7</span><br>Smugi <input type="range" id="ghT" min="0" max="98" value="88"><br>Scena <select id="ghS"></select><button id="ghNx">⏭ scena</button><label><input type="checkbox" id="ghA" checked> auto</label><div id="ghInfo" style="color:#9ef"></div><small>Faza: intro/build/drop/breakdown wg energii · adaptacyjna rozdzielczość, max ~45 fps</small></div>
+<canvas id="gh" style="position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;mix-blend-mode:screen;z-index:1;opacity:.55"></canvas>
+<div class="pn" id="ghP" style="right:6px;top:auto;bottom:40px;width:min(320px,94vw)"><h4>👻 Ghost Psychedelic</h4>Intensywność <input type="range" id="ghI" min="0" max="100" value="35"><br>Punkty <input type="range" id="ghN" min="3" max="12" value="7"><span id="ghNv">7</span><br>Smugi <input type="range" id="ghT" min="0" max="98" value="72"><br>Scena <select id="ghS"></select><button id="ghNx">⏭ scena</button><label><input type="checkbox" id="ghA" checked> auto</label><div id="ghInfo" style="color:#9ef"></div><small>Faza: intro/build/drop/breakdown wg energii · adaptacyjna rozdzielczość, max ~45 fps</small></div>
 <script>
 (function(){var $=function(i){return document.getElementById(i)},cv=$('gh'),gl=cv.getContext('webgl',{premultipliedAlpha:false,alpha:true});
 var b=document.createElement('button');b.textContent='👻 Ghost';b.onclick=function(){$('ghP').classList.toggle('on')};$('ui').appendChild(b);
@@ -348,5 +348,34 @@ function send(){var q=$('hgIn').value.trim();if(!q)return;$('hgIn').value='';add
  if(window.GXBrain&&GXBrain.engine&&GXBrain.ask){try{GXBrain.ask(q,[],{system:'Jesteś '+n+' z ekipy botów X7 (rola: '+(ROLE[n]||'pomocnik')+'). Odpowiadaj krótko po polsku.'}).then(function(r){var t=typeof r=='string'?r:(r&&(r.text||r.reply));out(t?String(t).slice(0,240):offline(q,n))}).catch(function(){out(offline(q,n))})}catch(e){out(offline(q,n))}}else out(offline(q,n))}
 $('hgSend').onclick=send;$('hgIn').addEventListener('keydown',function(e){if(e.key!='Escape')e.stopPropagation();if(e.key=='Enter')send()});
 window.X7Holo={say:say,get on(){return on},get talking(){return talk}};})();
+</script>
+
+<canvas id="phx" style="position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:2"></canvas>
+<script>
+/* 🌀 Psychodelik Hologram: rapid MilkDrop preset mixing + hologram post-FX over MilkDrop (additive) */
+(function(){var $=function(i){return document.getElementById(i)},cv=$('phx'),x=cv.getContext('2d'),sm=document.createElement('canvas'),sx=sm.getContext('2d'),t1=document.createElement('canvas'),t2=document.createElement('canvas'),mv=$('mv'),last=0,beats=0,lastMix=0,glitch=0,ring=[],t0=performance.now();
+function size(){var k=innerWidth<700?.5:.6;cv.width=Math.round(innerWidth*k);cv.height=Math.round(innerHeight*k);sm.width=Math.round(cv.width/2);sm.height=Math.round(cv.height/2)}size();addEventListener('resize',size);
+function keys(){return Object.keys((window.X7&&X7.presets)||{})}
+function mix(bl){var k=keys();if(!k.length||!X7.load)return;X7.load(k[Math.floor(Math.random()*k.length)],bl);lastMix=performance.now()}
+window.X7Psy={mixes:0,frames:0};
+function loop(t){requestAnimationFrame(loop);var on=$('mode').value=='psyholo';var dr=$('dr');
+ if(!on){if(cv.style.display!='none'){cv.style.display='none';if(dr)dr.style.opacity=''}return}cv.style.display='block';if(t-last<1000/40)return;last=t;
+ var a=(window.X7&&X7.a)||{level:.4,beat:false},locked=/Locked/.test(($('lock')||{}).textContent||'');if(a.beat){beats++;ring.push({r:0,h:(t/20)%360});if(Math.random()<.4)glitch=4}
+ // rapid psychedelic preset mixing: blend two presets every 8 beats (or ~7 s), blend time 1.2-2.5 s
+ if(!locked&&((a.beat&&beats%8==0&&t-lastMix>3000)||t-lastMix>7000)){mix(1.2+Math.random()*1.3);X7Psy.mixes++}
+ var w=cv.width,h=cv.height;x.clearRect(0,0,w,h);
+ // chroma split copy of MilkDrop (cyan/magenta) — drawn from the live butterchurn canvas
+ try{sx.globalCompositeOperation='source-over';sx.drawImage(mv,0,0,sm.width,sm.height);var off=(3+6*(a.level||0)+(glitch?10:0))*(w/800);[[t1,'#ff00d0'],[t2,'#00f0ff']].forEach(function(z){var c=z[0].getContext('2d');z[0].width=sm.width;z[0].height=sm.height;c.drawImage(sm,0,0);c.globalCompositeOperation='multiply';c.fillStyle=z[1];c.fillRect(0,0,sm.width,sm.height);c.globalCompositeOperation='source-over'});x.globalCompositeOperation='lighter';x.globalAlpha=.28;x.drawImage(t1,off,0,w,h);x.drawImage(t2,-off,0,w,h);x.globalAlpha=1}catch(e){}
+ x.globalCompositeOperation='source-over';x.globalAlpha=1;
+ // kaleidoscope pulse rings on beat
+ x.save();x.translate(w/2,h/2);x.globalCompositeOperation='lighter';ring=ring.filter(function(r){return r.r<Math.max(w,h)});ring.forEach(function(r){r.r+=Math.max(w,h)*.02;var n=8;for(var i=0;i<n;i++){x.rotate(Math.PI*2/n);x.strokeStyle='hsla('+((r.h+i*45)%360)+',100%,60%,'+(.5*(1-r.r/Math.max(w,h)))+')';x.lineWidth=3;x.beginPath();x.moveTo(r.r*.3,0);x.lineTo(r.r,r.r*.25);x.lineTo(r.r*.8,-r.r*.2);x.stroke()}});x.restore();
+ // scanlines + glitch bars
+ x.globalCompositeOperation='source-over';x.fillStyle='rgba(0,0,0,.18)';for(var y=(t/25)%3;y<h;y+=3)x.fillRect(0,y,w,1);
+ if(glitch>0){glitch--;for(var g=0;g<3;g++){var gy=Math.random()*h;x.fillStyle=g%2?'rgba(0,255,255,.25)':'rgba(255,0,255,.25)';x.fillRect(0,gy,w,4+Math.random()*16)}}
+ // dragon + Leśny Duch appear occasionally (cycles ~40 s)
+ var ph=((t-t0)/1000)%40;if(dr)dr.style.opacity=(ph>8&&ph<24)?'1':'0';
+ var hv=$('hgV');if(hv&&ph>26&&ph<36){if(hv.paused)hv.play().catch(function(){});if(hv.readyState>=2){var hh=h*.45,ww=hh*hv.videoWidth/hv.videoHeight,fade=Math.min(1,(ph-26)/1.5,(36-ph)/1.5);x.save();x.globalAlpha=.55*fade*(.85+.15*Math.random());x.globalCompositeOperation='screen';x.drawImage(hv,w*.72-ww/2,h*.95-hh+Math.sin(t/600)*8,ww,hh);x.globalCompositeOperation='color';x.fillStyle='rgba(0,255,255,'+.8*fade+')';x.fillRect(w*.72-ww/2,h*.95-hh,ww,hh);x.restore()}}
+ X7Psy.frames++}
+requestAnimationFrame(loop);})();
 </script>
 </body></html>
