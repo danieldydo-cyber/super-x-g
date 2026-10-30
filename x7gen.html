@@ -5,7 +5,7 @@
 #vj{position:fixed;left:10px;bottom:10px;z-index:5;background:#000a;border:1px solid #7b2cff;border-radius:12px;padding:6px 10px;max-width:70vw}#info{position:fixed;right:10px;bottom:10px;z-index:5;opacity:.8;max-width:45vw;text-align:right}</style></head><body>
 <canvas id="mv"></canvas><canvas id="ov"></canvas>
 <div id="ui"><b>Super Genius X7 Generator X 🐲</b><a href="v77.html" style="color:#fc0">⬅ v77</a> <a href="ghost2.html" style="color:#f0d">👻 Ghost 2</a>
-<select id="mode"><option value="psyholo" selected>🌀 Psychodelik Hologram</option><option value="all">All x7</option><option value="pro8">PRO8 MilkDrop</option><option value="778">Mix Visuals 778</option><option value="2077">MilkDrop 2077</option><option value="cosmos">Cosmos</option><option value="custom">X7 Custom generated</option><option value="botvj">🤖 Bot VJ</option></select>
+<select id="mode"><option value="superx" selected>🎛 Super X Genius</option><option value="psyholo">🌀 Psychodelik Hologram</option><option value="all">All x7</option><option value="pro8">PRO8 MilkDrop</option><option value="778">Mix Visuals 778</option><option value="2077">MilkDrop 2077</option><option value="cosmos">Cosmos</option><option value="custom">X7 Custom generated</option><option value="botvj">🤖 Bot VJ</option></select>
 <button id="mic">🎤 Mic</button><button id="tab">🖥 Tab</button><button id="kali">📻 Kali</button>
 <button id="prev">◀</button><button id="next">▶ Next</button><button id="rnd">🎲 Random</button><button id="lock">🔓 Lock</button><button id="fs">⛶</button>
 Tempo<input id="tempo" type="range" min="2" max="30" value="10">Kolor<input id="hue" type="range" min="0" max="360" value="0">Speed<input id="spd" type="range" min="0.2" max="3" step="0.1" value="1">
@@ -27,7 +27,7 @@ function rng(s){return function(){s=(s*16807)%2147483647;return (s-1)/2147483646
 function mutate(seed){var r=rng(seed),src=P[base[Math.floor(r()*base.length)]],p=JSON.parse(JSON.stringify(src));p.baseVals=p.baseVals||{};var b=p.baseVals;
  ['zoom','rot','warp','decay','echo_zoom','wave_r','wave_g','wave_b','cx','cy','dx','dy'].forEach(function(k){if(typeof b[k]=='number')b[k]=b[k]*(0.8+r()*0.4)});b.wave_mode=Math.floor(r()*8);return p}
 for(var s=1;s<=77;s++){try{P['X7 Gen #'+s]=mutate(s*7777)}catch(e){}}
-var all=Object.keys(P),RE={psyholo:/./,pro8:/flexi|martin|geiss|rovastar|krash|eo\.|unchained|fluid|liquid/i,'778':/./,'2077':/neon|cyber|electr|digital|laser|grid|tech|matrix|glitch|shark|ocean|fish|aqua|deep|fire|explosion/i,cosmos:/alien|ufo|space|star|cosmic|galax|planet|nebula|orb|magellan|nova/i,custom:/^X7 Gen/};
+var all=Object.keys(P),RE={superx:/./,psyholo:/./,pro8:/flexi|martin|geiss|rovastar|krash|eo\.|unchained|fluid|liquid/i,'778':/./,'2077':/neon|cyber|electr|digital|laser|grid|tech|matrix|glitch|shark|ocean|fish|aqua|deep|fire|explosion/i,cosmos:/alien|ufo|space|star|cosmic|galax|planet|nebula|orb|magellan|nova/i,custom:/^X7 Gen/};
 function pack(m){if(m=='all'||m=='botvj')return all;var re=RE[m],l=all.filter(function(k){return re.test(k)});return l.length?l:all}
 var counts={};['pro8','778','2077','cosmos','custom','all'].forEach(function(m){counts[m]=pack(m).length});window.X7={presets:P,counts:counts,frames:0};
 // bot crew (simulated in-browser, names from agents hub / d7-agents)
@@ -42,7 +42,7 @@ var mv=$('mv'),ov=$('ov'),ox=ov.getContext('2d'),ac=null,viz=null,an=null,data=n
 function size(){var d=Math.min(devicePixelRatio||1,2),w=innerWidth,h=innerHeight;mv.width=w*d;mv.height=h*d;ov.width=w;ov.height=h;if(viz)viz.setRendererSize(w*d,h*d)}addEventListener('resize',size);
 function audio(){if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();an=ac.createAnalyser();an.fftSize=512;data=new Uint8Array(an.frequencyBinCount)}if(ac.state=='suspended')ac.resume();return ac}
 function initViz(){if(viz||!bc)return;audio();try{viz=bc.createVisualizer(ac,mv,{width:mv.width,height:mv.height,pixelRatio:1});size();next()}catch(e){$('info').textContent='WebGL niedostępny: '+e.message}}
-function conn(n){try{n.connect(an);viz&&viz.connectAudio(n);live=true}catch(e){}}
+function conn(n){try{n.connect(an);viz&&viz.connectAudio(n);live=true;(window.X7Src=window.X7Src||[]).push(n);window.X7Sub&&X7Sub.connect(n)}catch(e){}}
 $('mic').onclick=function(){audio();initViz();navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){conn(ac.createMediaStreamSource(s));$('info').textContent='🎤 mic'}).catch(function(){$('info').textContent='brak mic – beat fallback'})};
 $('tab').onclick=function(){audio();initViz();navigator.mediaDevices.getDisplayMedia({video:true,audio:true}).then(function(s){if(!s.getAudioTracks().length){$('info').textContent='brak audio karty';return}conn(ac.createMediaStreamSource(s));$('info').textContent='🖥 tab audio'}).catch(function(){})};
 $('kali').onclick=function(){audio();initViz();var el=new Audio();el.crossOrigin='anonymous';el.src='https://stream.radiokaliveronika.pl/stream';el.play().then(function(){try{var n=ac.createMediaElementSource(el);n.connect(ac.destination);conn(n);$('info').textContent='📻 Kali'}catch(e){$('info').textContent='📻 Kali (bez analizy – CORS), beat fallback'}}).catch(function(){$('info').textContent='📻 Kali niedostępne – beat fallback'})};
@@ -60,7 +60,7 @@ function level(){var bpmMs=60000/(60+(+$('tempo').value)*5),t=performance.now();
 window.__x7ac=audio();X7.connect=function(n){conn(n)};var beats=0;size();try{initViz()}catch(e){}
 (function loop(t){requestAnimationFrame(loop);var a=level();X7.a=a;X7.fd=live?data:null;if(a.beat){beats++;pulse=1}pulse*=0.9;
  if(viz){try{viz.render();X7.frames++}catch(e){}}
- var m=$('mode').value,every=+$('tempo').value*1000;if(!locked&&(t-lastSw>every||(a.beat&&beats%32==0&&t-lastSw>2000)))next();
+ var m=$('mode').value,every=+$('tempo').value*1000;if(!locked&&!window.X7NoAuto&&(t-lastSw>every||(a.beat&&beats%32==0&&t-lastSw>2000)))next();
  if(m=='botvj'&&$('rot').checked&&t-botT>every*3)takeBot((bi+1)%BOTS.length);
  var h=+$('hue').value;mv.style.filter=(h?'hue-rotate('+h+'deg) ':'')+'brightness('+(1+0.25*pulse)+')';
  ox.clearRect(0,0,ov.width,ov.height);if(window.GXCosmic&&($('alien').checked||$('shark').checked)&&(m=='cosmos'||m=='all'||m=='778'||m=='botvj'||$('shark').checked))try{GXCosmic.draw(ox,ov.width,ov.height,t,a,{shark:$('shark').checked,alien:$('alien').checked,speed:+$('spd').value})}catch(e){}
@@ -72,7 +72,7 @@ $('vj').textContent='🎧 Tryby: PRO8 '+counts.pro8+' · 778 '+counts['778']+' �
 #mixP{left:6px;width:min(420px,94vw)}#botP{left:50%;transform:translateX(-50%);width:min(380px,94vw)}#stP{right:6px;width:min(400px,94vw)}#stL div{padding:3px;border-bottom:1px solid #2a1050;cursor:pointer}#stL div:hover{background:#2a1050}
 #start{position:fixed;inset:0;z-index:9;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#000a;cursor:pointer}#start b{font-size:40px;padding:20px 40px;border:3px solid #ff2d55;border-radius:20px;background:#3a0a28}
 #ytw{position:fixed;right:6px;bottom:40px;width:200px;height:113px;z-index:4;opacity:.85}#ytw.min{width:2px;height:2px;opacity:0}</style>
-<div id="start"><b>▶ START</b><p>Radio Kali (YouTube) + MilkDrop X7 · pełny ekran</p></div>
+<div id="start"><b>▶ START</b><p>Radio Kali (YouTube) + MilkDrop X7 · pełny ekran</p><p style="color:#9ef">🎛 Super X Genius: start z radiem hip-hop/techno zsynchronizowanym z wizualizacjami · Kali YouTube: przycisk ▶ Kali w pasku</p></div>
 <div id="ytw"><div id="ytp"></div></div>
 <div class="pn" id="mixP"><h4>🎚 DJ mikser</h4>
 <div>Deck A: <select id="dA"></select> Vol <input type="range" id="vA" min="0" max="100" value="100"><div id="nA" style="color:#fc0"></div>EQ L<input type="range" id="lA" min="-24" max="12" value="0" style="width:60px">M<input type="range" id="mA" min="-24" max="12" value="0" style="width:60px">H<input type="range" id="hA" min="-24" max="12" value="0" style="width:60px">Filtr<input type="range" id="fA" min="-100" max="100" value="0" style="width:70px"></div>
@@ -85,7 +85,7 @@ $('vj').textContent='🎧 Tryby: PRO8 '+counts.pro8+' · 778 '+counts['778']+' �
 <div style="display:flex;gap:4px"><input id="hgIn" placeholder="Napisz do botów…" style="flex:1"><button type="button" id="hgSend" style="min-height:40px">➤</button></div>
 <small>Hologram z Twojego wideo (pętla). Mówi przez syntezę mowy przeglądarki; usta nie są zsynchronizowane z mową (animacja pulsuje z głosem).</small>
 <video id="hgV" muted loop playsinline preload="auto" style="display:none"><source src="img/holo/lesny-duch.webm" type="video/webm"><source src="img/holo/lesny-duch.mp4" type="video/mp4"></video></div></div>
-<div class="pn" id="stP"><h4>📻 Stacje hip-hop / techno</h4><select id="sG"><option value="">wszystkie</option><option>hiphop</option><option>rap</option><option>techno</option><option>house</option><option>trance</option></select><input id="sQ" placeholder="szukaj…" style="width:110px"> <button id="sNext">⏭ next</button> <label><input type="radio" name="sd" value="A" checked>A</label><label><input type="radio" name="sd" value="B">B</label>
+<div class="pn" id="stP"><h4>📻 Stacje hip-hop / techno</h4><select id="sG"><option value="">wszystkie</option><option value="fav">⭐ ulubione</option><option value="sync">🎚 tylko z prawdziwą synchronizacją</option><option>hiphop</option><option>rap</option><option>techno</option><option>house</option><option>trance</option></select><input id="sQ" placeholder="szukaj…" style="width:110px"> <button id="sNext">⏭ next</button> <label><input type="radio" name="sd" value="A" checked>A</label><label><input type="radio" name="sd" value="B">B</label>
 <br><input id="rbQ" placeholder="radio-browser live (tag/nazwa)" style="width:170px"><button id="rbGo">🔎 live</button><div id="sC"></div><div id="stL"></div></div>
 <script src="https://www.youtube.com/iframe_api" async></script>
 <script>
@@ -107,8 +107,8 @@ function apply(){var x=+$('xf').value/100,vol={A:+$('vA').value/100*Math.min(1,2
  ['A','B'].forEach(function(d){var k=decks[d];if(k.g)k.g.gain.value=vol[d],k.el.volume=1;else if(k.el)k.el.volume=vol[d];if(k.yt&&yt&&ytReady)try{yt.setVolume(Math.round(vol[d]*100))}catch(e){};eq(d)})}
 ['vA','vB','xf','lA','mA','hA','fA','lB','mB','hB','fB'].forEach(function(i){$(i).oninput=apply});
 $('dA').onchange=function(){setDeck('A',this.value)};$('dB').onchange=function(){setDeck('B',this.value)};
-function renderSt(){var g=$('sG').value,q=$('sQ').value.toLowerCase(),l=ST.map(function(s,i){return [s,i]}).filter(function(x){return(!g||x[0].genre==g)&&(!q||(x[0].name+' '+x[0].tags).toLowerCase().indexOf(q)>=0)});
- $('sC').textContent=l.length+' / '+ST.length+' zweryfikowanych stacji';$('stL').innerHTML=l.slice(0,300).map(function(x){return '<div data-i="'+x[1]+'">'+(x[0].cors?'🎚':'📻')+' '+x[0].name.replace(/</g,'')+' <small>'+x[0].genre+' '+x[0].country+' '+(x[0].bitrate||'')+'k</small></div>'}).join('');return l}
+function renderSt(){var g=$('sG').value,q=$('sQ').value.toLowerCase(),l=ST.map(function(s,i){return [s,i]}).filter(function(x){return(!g||x[0].genre==g||(g=='fav'&&window.X7Fav&&X7Fav.has(x[0].url))||(g=='sync'&&x[0].cors))&&(!q||(x[0].name+' '+x[0].tags).toLowerCase().indexOf(q)>=0)});
+ $('sC').textContent=l.length+' / '+ST.length+' zweryfikowanych stacji';$('stL').innerHTML=l.slice(0,300).map(function(x){return '<div data-i="'+x[1]+'"><span data-fav="'+x[1]+'" style="padding:0 8px;cursor:pointer">'+(window.X7Fav&&X7Fav.has(x[0].url)?'⭐':'☆')+'</span>'+(x[0].cors?'🎚':'📻')+' '+x[0].name.replace(/</g,'')+' <small>'+x[0].genre+' '+x[0].country+' '+(x[0].bitrate||'')+'k</small></div>'}).join('');return l}
 $('sG').onchange=renderSt;$('sQ').oninput=renderSt;function deckSel(){return document.querySelector('input[name=sd]:checked').value}
 function playSt(i){var d=deckSel();$('d'+d).value='st:'+i;setDeck(d,'st:'+i);$('xf').value=d=='A'?0:100;apply()}
 $('stL').onclick=function(e){var t=e.target.closest('[data-i]');if(t)playSt(+t.dataset.i)};
@@ -129,12 +129,12 @@ function act(){var r=$('bRole').value,bs=$('bot');if(r=='vj'||r=='all'){if(bs&&b
  if(r=='talk'||r=='all'){var off=OFF[Math.floor(Math.random()*OFF.length)];log(off);if(window.GXBrain&&GXBrain.engine&&GXBrain.ask){try{GXBrain.ask('Jako '+CREW[bI]+' skomentuj krótko set DJ i wizualizacje.',[],{}).then(function(x){var t=typeof x=='string'?x:(x&&(x.text||x.reply));if(t)log(String(t).slice(0,140))}).catch(function(){})}catch(e){}}}bT=performance.now()}
 $('bGo').onclick=function(){bI=+$('bSel').value;act()};$('bSel').onchange=function(){bI=+this.value};
 setInterval(function(){if($('bRot').checked&&$('botP').classList.contains('on')&&performance.now()-bT>20000){bI=(bI+1)%CREW.length;$('bSel').value=bI;act()}},2000);
-window.X7Mix={decks:decks,KALI_YT:KALI_YT,setDeck:setDeck,stations:function(){return ST.length}};
+window.X7Mix={decks:decks,KALI_YT:KALI_YT,setDeck:setDeck,list:function(){return ST},render:renderSt,stations:function(){return ST.length}};
 })();
 </script>
 
 <canvas id="gh" style="position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;mix-blend-mode:screen;z-index:1;opacity:.55"></canvas>
-<div class="pn" id="ghP" style="right:6px;top:auto;bottom:40px;width:min(320px,94vw)"><h4>👻 Ghost Psychedelic</h4>Intensywność <input type="range" id="ghI" min="0" max="100" value="35"><br>Punkty <input type="range" id="ghN" min="3" max="12" value="7"><span id="ghNv">7</span><br>Smugi <input type="range" id="ghT" min="0" max="98" value="72"><br>Scena <select id="ghS"></select><button id="ghNx">⏭ scena</button><label><input type="checkbox" id="ghA" checked> auto</label><div id="ghInfo" style="color:#9ef"></div><small>Faza: intro/build/drop/breakdown wg energii · adaptacyjna rozdzielczość, max ~45 fps</small></div>
+<div class="pn" id="ghP" style="right:6px;top:auto;bottom:40px;width:min(320px,94vw)"><h4>👻 Ghost Psychedelic</h4>Intensywność <input type="range" id="ghI" min="0" max="100" value="22"><br>Punkty <input type="range" id="ghN" min="3" max="12" value="7"><span id="ghNv">7</span><br>Smugi <input type="range" id="ghT" min="0" max="98" value="72"><br>Scena <select id="ghS"></select><button id="ghNx">⏭ scena</button><label><input type="checkbox" id="ghA" checked> auto</label><div id="ghInfo" style="color:#9ef"></div><small>Faza: intro/build/drop/breakdown wg energii · adaptacyjna rozdzielczość, max ~45 fps</small></div>
 <script>
 (function(){var $=function(i){return document.getElementById(i)},cv=$('gh'),gl=cv.getContext('webgl',{premultipliedAlpha:false,alpha:true});
 var b=document.createElement('button');b.textContent='👻 Ghost';b.onclick=function(){$('ghP').classList.toggle('on')};$('ui').appendChild(b);
@@ -358,7 +358,7 @@ function size(){var k=innerWidth<700?.5:.6;cv.width=Math.round(innerWidth*k);cv.
 function keys(){return Object.keys((window.X7&&X7.presets)||{})}
 function mix(bl){var k=keys();if(!k.length||!X7.load)return;X7.load(k[Math.floor(Math.random()*k.length)],bl);lastMix=performance.now()}
 window.X7Psy={mixes:0,frames:0};
-function loop(t){requestAnimationFrame(loop);var on=$('mode').value=='psyholo';var dr=$('dr');
+function loop(t){requestAnimationFrame(loop);var on=$('mode').value=='psyholo'&&!!($('phFx')&&$('phFx').checked);var dr=$('dr');
  if(!on){if(cv.style.display!='none'){cv.style.display='none';if(dr)dr.style.opacity=''}return}cv.style.display='block';if(t-last<1000/40)return;last=t;
  var a=(window.X7&&X7.a)||{level:.4,beat:false},locked=/Locked/.test(($('lock')||{}).textContent||'');if(a.beat){beats++;ring.push({r:0,h:(t/20)%360});if(Math.random()<.4)glitch=4}
  // rapid psychedelic preset mixing: blend two presets every 8 beats (or ~7 s), blend time 1.2-2.5 s
@@ -376,6 +376,41 @@ function loop(t){requestAnimationFrame(loop);var on=$('mode').value=='psyholo';v
  var ph=((t-t0)/1000)%40;if(dr)dr.style.opacity=(ph>8&&ph<24)?'1':'0';
  var hv=$('hgV');if(hv&&ph>26&&ph<36){if(hv.paused)hv.play().catch(function(){});if(hv.readyState>=2){var hh=h*.45,ww=hh*hv.videoWidth/hv.videoHeight,fade=Math.min(1,(ph-26)/1.5,(36-ph)/1.5);x.save();x.globalAlpha=.55*fade*(.85+.15*Math.random());x.globalCompositeOperation='screen';x.drawImage(hv,w*.72-ww/2,h*.95-hh+Math.sin(t/600)*8,ww,hh);x.globalCompositeOperation='color';x.fillStyle='rgba(0,255,255,'+.8*fade+')';x.fillRect(w*.72-ww/2,h*.95-hh,ww,hh);x.restore()}}
  X7Psy.frames++}
+requestAnimationFrame(loop);})();
+</script>
+
+<script>
+/* 🎛 Super X Genius (default): clean MilkDrop mixing all presets on beat phrases + multi-point MilkDrop spots, radio-synced */
+(function(){var $=function(i){return document.getElementById(i)},bc=window.butterchurn&&(butterchurn.default||butterchurn);
+// favorites
+var FV=JSON.parse(localStorage.getItem('x7_fav')||'[]');window.X7Fav={has:function(u){return FV.indexOf(u)>=0}};
+$('stL').addEventListener('click',function(e){var f=e.target.closest('[data-fav]');if(!f)return;e.stopPropagation();var s=X7Mix.list()[+f.dataset.fav];if(!s)return;var k=FV.indexOf(s.url);k>=0?FV.splice(k,1):FV.push(s.url);localStorage.setItem('x7_fav',JSON.stringify(FV));X7Mix.render()},true);
+// controls in 🌀 Wizualizacje window
+var box=document.createElement('div');box.innerHTML='<h4>🎛 Super X Genius</h4>Zmiana presetu co <select id="sxPh"><option>4</option><option selected>8</option><option>16</option></select> bitów · blend <input type="range" id="sxBl" min="1" max="6" step=".5" value="3" style="width:80px"> · punkty <input type="range" id="sxN" min="0" max="9" value="'+(innerWidth<700?3:4)+'" style="width:80px"><span id="sxNv"></span><br><label><input type="checkbox" id="sxCam"> 🐉/🌲 cameo (smok, Leśny Duch)</label> <label><input type="checkbox" id="phFx"> 🌀 hologram post-FX (tryb Psychodelik)</label><div id="sxInfo" style="color:#9ef"></div>';$('vizP').appendChild(box);
+var kb=document.createElement('button');kb.type='button';kb.id='kaliBtn';kb.textContent='▶ Kali YouTube';kb.style.background='#ff2d55';kb.onclick=function(){$('dA').value='yt:'+X7Mix.KALI_YT;X7Mix.setDeck('A','yt:'+X7Mix.KALI_YT);$('xf').value=0;$('xf').oninput()};$('ui').appendChild(kb);
+var rb=document.createElement('button');rb.type='button';rb.id='radioBtn';rb.textContent='📻 Radio sync';rb.onclick=function(){pickRadio(true)};$('ui').appendChild(rb);
+// multi-point MilkDrop spots
+var spots=[],ac=window.__x7ac;function keys(){return Object.keys(X7.presets||{})}
+function mk(i){var c=document.createElement('canvas');c.width=c.height=innerWidth<700?160:220;c.style.cssText='position:fixed;left:0;top:0;width:'+c.width+'px;height:'+c.height+'px;border-radius:50%;mix-blend-mode:screen;pointer-events:none;z-index:1;opacity:.8;-webkit-mask-image:radial-gradient(circle,#000 45%,transparent 70%);mask-image:radial-gradient(circle,#000 45%,transparent 70%)';document.body.appendChild(c);
+ var v=null;try{v=bc.createVisualizer(ac,c,{width:c.width,height:c.height,pixelRatio:1,textureRatio:1});(window.X7Src||[]).forEach(function(n){try{v.connectAudio(n)}catch(e){}});var k=keys();v.loadPreset(X7.presets[k[Math.floor(Math.random()*k.length)]],0)}catch(e){}return {c:c,v:v,band:i%3,ph:Math.random()*7}}
+window.X7Sub={connect:function(n){spots.forEach(function(s){try{s.v&&s.v.connectAudio(n)}catch(e){}})},get n(){return spots.length}};
+function sync(){var want=$('mode').value=='superx'?+$('sxN').value:0;while(spots.length<want){var s=mk(spots.length);if(!s.v){s.c.remove();break}spots.push(s)}while(spots.length>want){var o=spots.pop();try{o.c.remove()}catch(e){}}$('sxNv').textContent=' '+want}
+$('sxN').oninput=sync;
+// radio auto-pick (CORS hip-hop/techno) for real analyser sync
+var tried=0;function pickRadio(force){var L=X7Mix.list();if(!L||!L.length)return false;var c=L.map(function(s,i){return[s,i]}).filter(function(x){return x[0].cors&&/hiphop|rap|techno/.test(x[0].genre)});if(!c.length)return false;var p=c[Math.floor(Math.random()*c.length)];$('dB').value='st:'+p[1];X7Mix.setDeck('B','st:'+p[1]);$('xf').value=100;$('xf').oninput();tried++;
+ setTimeout(function(){var n=$('nB').textContent;if(/nie gra|⚠/.test(n)&&tried<6)pickRadio(true)},6000);return true}
+var started=false;function start(){if(started||$('mode').value!='superx')return;started=true;var go=function(){if(!pickRadio())setTimeout(go,800)};go()}
+$('start').addEventListener('click',start);document.addEventListener('pointerdown',function f(){start();document.removeEventListener('pointerdown',f)},true);
+// beat-phrase mixing of all presets + spot animation
+var beats=0,lastSw=0,last=0;window.X7SX={switches:0,get spots(){return spots.length},get beats(){return beats}};
+function loop(t){requestAnimationFrame(loop);var m=$('mode').value,sx=m=='superx';window.X7NoAuto=sx;if(!sx){if(spots.length)sync();return}if(spots.length!=+$('sxN').value)sync();
+ var dr=$('dr');if(dr)dr.style.opacity=$('sxCam').checked?'1':'0';if(t-last<1000/40)return;last=t;
+ var a=(window.X7&&X7.a)||{level:.3,beat:false},locked=/Locked/.test(($('lock')||{}).textContent||''),ph=+$('sxPh').value,bl=+$('sxBl').value,fd=X7.fd;
+ if(a.beat)beats++;if(!locked&&((a.beat&&beats%ph==0&&t-lastSw>1500)||t-lastSw>30000)){var k=keys();X7.load&&X7.load(k[Math.floor(Math.random()*k.length)],bl);lastSw=t;X7SX.switches++;
+  spots.forEach(function(s,i){if(s.v&&(beats/ph+i)%2<1){try{s.v.loadPreset(X7.presets[k[Math.floor(Math.random()*k.length)]],bl)}catch(e){}}})}
+ var B=[a.level||.3,.3,.3];if(fd&&fd.length){var f=function(x,y){var q=0;for(var i=x;i<y;i++)q+=fd[i];return q/(y-x)/255};B=[f(0,6),f(6,40),f(40,120)]}
+ var W=innerWidth,H=innerHeight,n=spots.length;spots.forEach(function(s,i){var tt=t*.00008*(1+i*.15)+s.ph,b=B[s.band],x=W*(.5+.38*Math.sin(tt*2+i*2.4)),y=H*(.52+.3*Math.cos(tt*1.6+i*1.7)),sc=.7+b*1.1;s.c.style.transform='translate('+(x-s.c.width/2)+'px,'+(y-s.c.height/2)+'px) scale('+sc.toFixed(3)+')';s.c.style.opacity=(.45+.5*b).toFixed(2);try{s.v&&s.v.render()}catch(e){}});
+ if(Math.floor(t/500)%2==0)$('sxInfo').textContent=(fd?'🎚 sync z audio':'🥁 beat fallback')+' · beaty '+beats+' · zmian '+X7SX.switches+' · punkty '+n+' · bas '+B[0].toFixed(2)}
 requestAnimationFrame(loop);})();
 </script>
 </body></html>
