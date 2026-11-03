@@ -53,3 +53,8 @@ requestAnimationFrame(loop);
 // ===== Funkcje menu entries =====
 function addFn(){var L=$('fnL');if(!L||L.querySelector('[data-mo]'))return;var d=document.createElement('div');d.setAttribute('data-mo',1);d.innerHTML='<h4 style="margin:8px 0 4px">✨ Nowe: AI chatboty + 7D Multi 7</h4>'+['💬 AI Chatboty (7 person)|aiP','✴️ 7D Multi 7 – 7 punktów|m7P','▶ Kali YouTube na start|#kaliBtn'].map(function(x){x=x.split('|');return '<button type="button" class="fnI" data-t="'+x[1]+'" style="min-height:44px;margin:2px">'+x[0]+'</button>'}).join('');L.appendChild(d)}addFn();setTimeout(addFn,600);
 })();
+/* deep-link: x7gen.html#open=<panelId> opens one window (used by v77/hiphopx X7 include) */
+(function(){var $=function(i){return document.getElementById(i)};
+function go(){var m=/open=([\w]+)/.exec(location.hash);if(!m)return;var id=m[1];if(id=='superx'){var s=$('mode');if(s){s.value='superx';s.onchange&&s.onchange();s.dispatchEvent(new Event('change'))}id='vizP'}if(id=='kali'){var k=$('kaliBtn');k&&k.click();return}var e=$(id);if(e)e.classList.add('on')}
+setTimeout(go,1500);addEventListener('hashchange',go);
+function addFn(){var L=$('fnL');if(!L||L.querySelector('[data-sx]'))return;var d=document.createElement('div');d.setAttribute('data-sx',1);d.innerHTML='<h4 style="margin:8px 0 4px">⭐ Wszystko w jednym</h4><button type="button" class="fnI" data-t="vizP" style="min-height:44px;margin:2px" onclick="var s=document.getElementById(\'mode\');s.value=\'superx\';s.dispatchEvent(new Event(\'change\'))">🎛 Super X Genius (tryb)</button><button type="button" class="fnI" data-t="blP" style="min-height:44px;margin:2px">💳 BLIK 730 377 357</button>';L.appendChild(d)}addFn();setTimeout(addFn,700)})();
