@@ -14,10 +14,10 @@ D.hooks.push(function(r){if(r.bt)pulse=1;pulse*=.85;var v=window.DDvf();mv.style
 // 4) 777 variations
 var MD=['auto','chill','techno','hiphop','fly'],FXC=[['czysty',0,0],['pulse',1,0],['drop-FX',0,1],['pulse+drop-FX',1,1]],VAR=[];
 function buildVar(){var K=D.keys().slice().sort();VAR=[];for(var i=0;VAR.length<777&&i<K.length*MD.length*FXC.length;i++){var k=K[i%K.length],m=MD[Math.floor(i/K.length)%MD.length],f=FXC[Math.floor(i/(K.length*MD.length))%FXC.length];VAR.push({k:k,m:m,f:f,n:'Wariacja #'+(VAR.length+1)+': '+k.slice(0,48)+' · '+m+' · '+f[0]})}
- $('v7C').textContent=K.length+' prawdziwych presetów MilkDrop · '+VAR.length+' wizualizacji = '+(VAR.length-Math.min(K.length,VAR.length))+' wariacji (preset × tryb × FX)';window.DD777={presets:K.length,total:VAR.length,variations:VAR.length-Math.min(K.length,VAR.length)};drawV()}
+ $('v7C').textContent=K.length+' prawdziwych presetów MilkDrop · '+VAR.length+' wizualizacji = '+(VAR.length-Math.min(K.length,VAR.length))+' wariacji (preset × tryb × FX)';window.DDvar=VAR;window.DD777={presets:K.length,total:VAR.length,variations:VAR.length-Math.min(K.length,VAR.length)};drawV()}
 function drawV(){var q=$('v7Q').value.toLowerCase();$('v7L').innerHTML=VAR.map(function(v,i){return[v,i]}).filter(function(x){return!q||x[0].n.toLowerCase().indexOf(q)>=0}).slice(0,150).map(function(x){return '<div data-v="'+x[1]+'">'+(x[1]<D.keys().length?'🌌 ':'🌈 ')+x[0].n.replace(/</g,'')+'</div>'}).join('')}
 function applyV(v){D.setMode(v.m);$('vfA').checked=!!v.f[1];$('afA').checked=!!v.f[2]||$('afA').checked;D.load(v.k,1.5);$('lk').checked=true;log('Wizualizacja: '+v.n)}
-$('v7Q').oninput=drawV;$('v7L').onclick=function(e){var d=e.target.closest('[data-v]');d&&applyV(VAR[+d.dataset.v])};$('v7R').onclick=function(){applyV(VAR[(Math.random()*VAR.length)|0])};
+window.DDapply=applyV;$('v7Q').oninput=drawV;$('v7L').onclick=function(e){var d=e.target.closest('[data-v]');d&&applyV(VAR[+d.dataset.v])};$('v7R').onclick=function(){applyV(VAR[(Math.random()*VAR.length)|0])};
 buildVar();var lastN=0;setInterval(function(){if(D.keys().length!=lastN){lastN=D.keys().length;buildVar()}},2000);
 // 5) agents: Auto-VJ
 var vjT=0,vjLvl='';window.DDvj=function(){return $('agVJ').checked&&!$('lk').checked&&!td.on};
@@ -36,3 +36,21 @@ D.hooks.push(function(r,t){if(!td.on)return;var d=au.duration||0,c=au.currentTim
  var ph=c<8?'intro':d&&d-c<10?'outro':E.b>.55?'drop':'build';if(ph!=phase){phase=ph;log('Reżyser: '+ph);if(ph=='intro'||ph=='outro'){D.setMode('fly');D.pick(false,4)}else D.setMode(ph=='drop'?'techno':'hiphop')}
  if(r.drop){D.pick(false,.4);dirT=t;log('Reżyser: cięcie na dropie')}else if(r.bt&&t-dirT>(ph=='drop'?2500:ph=='build'?6000:12000)){D.pick(false,ph=='drop'?.8:ph=='build'?2.5:6);dirT=t}});
 window.DDTd=td;})();
+/* ⏺▶ Record & Play + 🌈 Psychedelic Dream generator */
+(function(){var $=function(i){return document.getElementById(i)},D=window.DDI;if(!D)return;var au=D.au,ac=D.ac,rp={on:false,n:0,last:0};window.DDrp=rp;
+var _vj=window.DDvj;window.DDvj=function(){return!rp.on&&_vj()};
+// psychedelic generated params per beat
+var ph={hue:0,hv:0,z:1,sat:1.5,on:false};var _vf=window.DDvf;window.DDvf=function(){var psy=$('md').value=='psy';if(!psy)return _vf();var E=D.E;ph.hue=(ph.hue+ph.hv+E.h*6)%360;return{f:'hue-rotate('+(ph.hue|0)+'deg) saturate('+(ph.sat+E.b).toFixed(2)+') contrast('+(1.05+E.m*.3).toFixed(2)+')',z:ph.z}};
+D.hooks.push(function(r){if($('md').value!='psy'){if(ph.on){ph.on=false;$('mv').style.filter='';$('mv').style.transform=''}return}ph.on=true;if(r.bt){ph.hv=1+Math.random()*5;ph.z=1+Math.random()*.08+D.E.b*.05;ph.sat=1.4+Math.random()*.8}else ph.z=1+(ph.z-1)*.92;var v=window.DDvf();$('mv').style.filter=v.f;$('mv').style.transform='scale('+v.z.toFixed(3)+')'});
+// variations list (from 777 builder)
+function V(){return window.DD777&&window.DDvar?DDvar:null}
+D.hooks.push(function(r,t){if(!rp.on||D.E==null)return;var every=$('md').value=='psy'?4:D.E.lt>.5?4:8;if((r.drop||(r.bt&&++rp.n%every==0))&&t-rp.last>1200){rp.last=t;var L=window.DDvar||[];if(L.length){var v=L[(Math.random()*L.length)|0];if(rp.keepMode){D.load(v.k,r.drop?.4:$('md').value=='psy'?.9:2)}else window.DDapply(v)}else D.pick(false);rp.count=(rp.count||0)+1}});
+function fs(){var d=document.documentElement;try{if(!document.fullscreenElement&&d.requestFullscreen)d.requestFullscreen().catch(function(){})}catch(e){}}
+function source(){if(au.src&&au.src!=location.href){return au.play()}var first=[].slice.call(document.querySelectorAll('#rL [data-r]')).filter(function(x){return x.textContent.indexOf('⏺')==0})[0];if(first){first.click();return new Promise(function(ok,no){var t=setTimeout(function(){au.paused?no(new Error('radio nie gra')):ok()},5000);au.addEventListener('playing',function f(){clearTimeout(t);au.removeEventListener('playing',f);ok()})})}$('fi').click();return Promise.reject(new Error('wybierz MP3'))}
+function start(){if(rp.on)return stop();ac.resume();fs();document.querySelectorAll('.pn.on').forEach(function(p){p.classList.remove('on')});$('lk').checked=false;rp.keepMode=$('md').value=='psy';var b=$('rpB');b.textContent='⏳';
+ source().then(function(){rp.on=true;rp.n=0;rp.count=0;$('lk').checked=true;if(!D.recOn)D.rec();b.textContent='⏹ Stop';$('st').textContent='⏺▶ Record & Play · 777 losowych wizualizacji'}).catch(function(e){b.innerHTML='⏺▶ Record &amp; Play';$('st').textContent='⚠ '+e.message+' – potem dotknij ⏺▶ ponownie'})}
+function stop(){rp.on=false;$('lk').checked=false;if(D.recOn)D.rec();$('rpB').innerHTML='⏺▶ Record &amp; Play'}
+$('rpB').onclick=start;$('fi').addEventListener('change',function(){if(rp.wantAfterPick){rp.wantAfterPick=false;setTimeout(start,600)}});
+$('rpAuto').checked=localStorage.dd_auto==1;$('rpAuto').onchange=function(){localStorage.dd_auto=this.checked?1:0};
+var go=$('go');if(go&&localStorage.dd_auto==1){go.querySelector('p').innerHTML+='<br><b style="font-size:16px;border:0;padding:0">⚡ Auto Record &amp; Play – dotknij, aby zacząć</b>';go.addEventListener('click',function(){setTimeout(start,300)})}
+if(innerWidth<700||/Android|iPhone/.test(navigator.userAgent))$('rr').value='720';window.DDRP={start:start,stop:stop,get on(){return rp.on},get count(){return rp.count||0}};})();
