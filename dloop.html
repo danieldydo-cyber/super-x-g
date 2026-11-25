@@ -55,12 +55,21 @@ label.kn input{width:72px}
 a{color:var(--c)}
 .bank btn,.hwb{min-width:90px}
 #ytbox{width:100%;min-height:200px;border:0;border-radius:8px;background:#000}
+button.spm{background:linear-gradient(90deg,#ff2bd644,#00e5ff33,#ffe60033);border-color:var(--y);font-weight:800;box-shadow:0 0 12px #ffe60055}
+button.spm.on{background:linear-gradient(90deg,#ff2bd688,#00e5ff66);border-color:var(--m)}
+#spmLayer{position:fixed;inset:0;z-index:90;background:#000;display:none;flex-direction:column}
+#spmLayer.on{display:flex}
+#spmCanvas{flex:1;width:100%;height:100%;background:#000;display:block}
+#spmBar{position:absolute;top:0;left:0;right:0;z-index:91;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 12px;background:#07070fee;border-bottom:1px solid #00e5ff55}
+#spmBar b{background:linear-gradient(90deg,var(--c),var(--m),var(--y));-webkit-background-clip:text;background-clip:text;color:transparent;font-size:16px}
+
 </style>
 </head>
 <body>
 <header>
   <div><div class="logo">DLoop X D DJ</div><div class="sub">D7 DJ Studio · 7 Core · DJ DaX · Kraków</div></div>
   <button class="big" id="playBtn" data-act="playToggle">▶ Play</button>
+  <button class="big spm" id="spmBtn" data-act="spmToggle">✨ Super Power Magic</button>
   <label>BPM <input id="bpm" type="number" min="60" max="200" value="128" style="width:64px"></label>
   <button data-act="tap">Tap</button>
   <button data-act="sync">⟲ Sync</button>
@@ -73,6 +82,7 @@ a{color:var(--c)}
 <nav>
   <button data-act="open" data-w="mixer">🎚 Mixer 28</button>
   <button data-act="open" data-w="core">🧬 7 Core</button>
+  <button data-act="open" data-w="spm">✨ Super Power Magic</button>
   <button data-act="open" data-w="style">🎨 Style</button>
   <button data-act="open" data-w="rhythm">🥁 Rhythmic Magic Beat</button>
   <button data-act="open" data-w="inst">🎹 Instrumenty</button>
@@ -86,6 +96,7 @@ a{color:var(--c)}
   <button data-act="open" data-w="clip">🎬 Video + Long Set</button>
   <button data-act="open" data-w="load">📁 MP3 / YouTube Music</button>
   <button data-act="open" data-w="samples">📦 Sample</button>
+  <a href="downloads/D7-DJ-Studio.apk" download="D7-DJ-Studio.apk"><button type="button">📲 Pobierz APK D7 DJ Studio</button></a>
   <button data-act="open" data-w="blik">💛 BLIK</button>
   <button data-act="open" data-w="info">ℹ Info</button>
 </nav>
@@ -99,6 +110,16 @@ a{color:var(--c)}
 <footer>DLoop X D DJ · D7 DJ Studio · DJ DaX · dźwięki z własnego TikToka <a href="https://www.tiktok.com/@daxdj27" target="_blank" rel="noopener">@daxdj27</a> (Suno Pro) + synteza Web Audio · wsparcie tylko BLIK 730 377 357 · bez płatnego AI</footer>
 <div id="ov"></div>
 <div id="wins"></div>
+<div id="spmLayer">
+  <canvas id="spmCanvas" width="1280" height="720"></canvas>
+  <div id="spmBar">
+    <b>✨ Super Power Magic</b>
+    <span id="spmStat" class="muted">—</span>
+    <button data-act="spmStop" class="big">■ Stop</button>
+    <button data-act="rec" id="spmRec">⏺ WAV</button>
+    <button data-act="spmFs">⛶</button>
+  </div>
+</div>
 <div id="toast"></div>
 <script>
 
@@ -148,8 +169,9 @@ let hoodOn=false,scootOn=false,prodOn=false;
 let seq={k:[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],s:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1],h:[1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,0],p:[0,0,1,0,0,0,0,1,0,0,1,0,0,1,0,0],swing:0.08,on:false,kit:'roland'};
 let voice={on:false,mode:'robot',mic:null,nodes:null};
 let avMode=0,avRec=null,holoRaf=0,megaTimer=null,schedId=0;
+let spmOn=false,spmSecTimer=null,spmBarCount=0,spmStyleI=0;
 const instOn={bass:0,lead:0,pad:0,pluck:0,arp:0,stab:0,keys:0};
-window.__DLOOP={ready:false,loaded:0,errors:[],playing:false};
+window.__DLOOP={ready:false,loaded:0,errors:[],playing:false,spm:false};
 
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast._);toast._=setTimeout(()=>t.style.display='none',2400)}
 function report(e){console.error(e);window.__DLOOP.errors.push(String(e&&e.message||e))}
@@ -371,7 +393,7 @@ function maxWin(el){
 }
 
 defWin('mixer','🎚 Mixer 28 · sample / loop / FX','<p class="muted">28 kanałów jest na stronie głównej — tu ten sam mikser w oknie (pełny ekran ⛶). Na kanał: filtr, delay, reverb, bitcrush, mute/solo, pan, fader.</p><div class="mixer" id="mix2"></div>',()=>{const a=$('#mix'),b=$('#mix2'); if(a&&b) b.innerHTML=a.innerHTML});
-defWin('core','🧬 7 Core · generatory DLoop X D DJ', `<p class="muted">Siedem rdzeni D7 DJ Studio. Działają z Twoimi samplami i syntezą Web Audio (bez płatnego AI).</p><div class="cards">${CORE.map(c=>`<div class="card"><b>${c.e} ${c.n}</b><div class="muted">${c.d}</div><div class="row"><button data-act="open" data-w="${c.id}">▶ Otwórz</button></div></div>`).join('')}</div>`);
+defWin('core','🧬 7 Core · generatory DLoop X D DJ', `<p class="muted">Siedem rdzeni D7 DJ Studio. Działają z Twoimi samplami i syntezą Web Audio (bez płatnego AI).</p><div class="cards">${CORE.map(c=>`<div class="card"><b>${c.e} ${c.n}</b><div class="muted">${c.d}</div><div class="row"><button data-act="open" data-w="${c.id}">▶ Otwórz</button></div></div>`).join('')}</div><div class="card"><b>✨ Super Power Magic</b><div class="muted">Jeden przycisk: wszystkie 7 Core naraz, nieskończony ewoluujący set z Twoich 162 pętli, auto-styl, FX dropy, holo na pełny ekran, losowe voice hity, zapis WAV.</div><div class="row"><button class="big spm" data-act="spmToggle">▶ Odpal Super Power Magic</button></div></div>`);
 defWin('style','🎨 Style Core', `<p class="muted">Ustawia BPM, ładuje pętle w danym stylu na 8 pierwszych kanałów i odpala je od następnego taktu.</p><div class="cards">${STYLES.map(s=>`<div class="card"><b>${s.n}</b><div class="muted">${s.bpm} BPM</div><div class="row"><button data-act="styleSet" data-s="${s.id}">⚡ Generuj zestaw</button></div></div>`).join('')}</div>`);
 defWin('rhythm','🥁 Rhythmic Magic Beat', `
   <p class="muted">16 kroków zsynchronizowanych z BPM. Kit: synteza w stylu sprzętowym albo Twoje one-shoty.</p>
@@ -449,6 +471,13 @@ defWin('load','📁 Load MP3 + YouTube Music', `
     <iframe id="ytbox" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
   </div>`);
 defWin('samples','📦 Bank sampli DJ DaX', `<p class="muted" id="smpHead">—</p><div class="row">Filtr <select id="smpStyle"><option value="">wszystkie style</option></select> <input id="smpQ" placeholder="szukaj"></div><div class="cards" id="smpList"></div>`, uiSamples);
+defWin('spm','✨ Super Power Magic · 7 Core naraz', `
+  <p class="muted">Jeden przycisk odpala wszystkie 7 Core razem: Style, Rhythmic Magic Beat, Instrumenty, Magic Loops, Mega Mix, FX + Hood Remix i losowe hity Voice 7. Set ewoluuje w nieskończoność z Twoich 162 pętli (auto zmiana stylu, FX sweep/drop, holograficzne wizuale na pełny ekran, zsynchronizowane z bitem). Stop i zapis mastera do WAV.</p>
+  <div class="row"><button class="big spm" data-act="spmToggle" id="spmWinBtn">▶ Odpal Super Power Magic</button>
+  <button data-act="spmStop">■ Stop</button>
+  <button data-act="rec">⏺ Nagraj WAV</button></div>
+  <p class="muted">Esc albo ■ Stop kończy tryb. ⛶ — pełny ekran wizuali.</p>
+  <div class="card"><b>📲 Aplikacja Android</b><div class="row"><a href="downloads/D7-DJ-Studio.apk" download="D7-DJ-Studio.apk"><button type="button">Pobierz APK D7 DJ Studio</button></a></div><p class="muted">Darmowy APK, podpis debug/lokalny. DLoop i sample są w paczce (offline). Super DJ Loops też jest w paczce; YouTube Music wymaga internetu.</p></div>`);
 defWin('blik','💛 Wsparcie BLIK', `<p>Jedyna forma wsparcia DJ DaX:</p><p class="blik">BLIK na telefon<br>730 377 357</p><p class="muted">Aplikacja jest darmowa. Nie ma tu żadnych innych płatności.</p>`);
 defWin('info','ℹ Info i uczciwe granice', `
   <ul>
@@ -459,6 +488,8 @@ defWin('info','ℹ Info i uczciwe granice', `
     <li>YouTube Music: tylko otwarcie lub osadzenie odtwarzacza, bez pobierania.</li>
     <li>Voice 7 działa na mikrofonie albo lokalnym MP3.</li>
     <li>Eksport: nagranie master do WAV; klip wideo to WebM z canvas + audio.</li>
+    <li>Super Power Magic: wszystkie 7 Core naraz, ewoluujący set, holo fullscreen, voice hity, zapis WAV. Esc zatrzymuje ten tryb.</li>
+    <li>APK D7 DJ Studio (Android) — darmowy, do pobrania z tej strony. Sample są w paczce (gra offline). YouTube Music wymaga sieci.</li>
     <li>Jedno okno naraz · ✕ · ⛶ · Esc. Wsparcie: tylko BLIK 730 377 357.</li>
   </ul>
   <p class="muted" id="infoStats">—</p>`, ()=>{
@@ -547,11 +578,13 @@ function schedule(){
     return;
   }
   const bt=beat();
+  if(!Number.isFinite(bt)||bt<=0) return;
+  if(!Number.isFinite(schedule._next)) schedule._next=now();
   while(schedule._next<horizon){
     const t=schedule._next;
     const elapsed=t-(t0||t);
-    const step=Math.floor((elapsed/bt)+0.0001)%16;
-    const sw=(step%2===1)?seq.swing*bt:0;
+    const step=((Math.floor((elapsed/bt)+0.0001)%16)+16)%16;
+    const sw=(step%2===1)?(Number(seq.swing)||0)*bt:0;
     const st=t+sw;
     if(seq.on){
       if(seq.k[step]) drum('k',st);
@@ -578,12 +611,13 @@ function startSched(){
   if(schedId) return;
   if(!t0) t0=now();
   playing=true;
-  schedule._next=now();
+  schedule._next=Math.max(now(), Number(t0)||now());
   schedId=setInterval(schedule, 25);
   const b=$('#playBtn'); if(b){b.textContent='■ Stop'; b.classList.add('on')}
   window.__DLOOP.playing=true;
 }
 function stopAll(){
+  if(spmOn){ spmOn=false; window.__DLOOP.spm=false; if(spmSecTimer){clearTimeout(spmSecTimer);spmSecTimer=null;} showSpmUI(false); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
   playing=false; seq.on=false; hoodOn=scootOn=prodOn=false;
   magOn=magOn.map(()=>0); fxOn=fxOn.map(()=>0);
   Object.keys(instOn).forEach(k=>instOn[k]=0);
@@ -592,7 +626,9 @@ function stopAll(){
   if(megaTimer){clearTimeout(megaTimer); megaTimer=null}
   if(schedId){clearInterval(schedId); schedId=0}
   const b=$('#playBtn'); if(b){b.textContent='▶ Play'; b.classList.remove('on')}
-  window.__DLOOP.playing=false;
+  const sb=$('#spmBtn'); if(sb){sb.classList.remove('on'); sb.textContent='✨ Super Power Magic'}
+  const wb=$('#spmWinBtn'); if(wb) wb.classList.remove('on');
+  window.__DLOOP.playing=false; window.__DLOOP.spm=false;
   uiMix(); uiSeq();
   ['hoodBtn','scootBtn','prodBtn','seqBtn'].forEach(id=>{const e=$('#'+id); if(e) e.classList.remove('on')});
 }
@@ -605,7 +641,12 @@ function noiseBuf(){
   return noiseBuf._;
 }
 function envGain(t, a, d, v){
-  const g=ctx.createGain(); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(v, t+a); g.gain.exponentialRampToValueAtTime(0.0001, t+a+d); return g;
+  const g=ctx.createGain();
+  const tt=Number.isFinite(t)?t:now();
+  const aa=Math.max(0.001, Number.isFinite(a)?a:0.01);
+  const dd=Math.max(0.001, Number.isFinite(d)?d:0.1);
+  const vv=Math.max(0.0001, Number.isFinite(v)?v:0.2);
+  g.gain.setValueAtTime(0.0001,tt); g.gain.exponentialRampToValueAtTime(vv, tt+aa); g.gain.exponentialRampToValueAtTime(0.0001, tt+aa+dd); return g;
 }
 function drum(kind,t,vel=1){
   if(seq.kit==='samples'){ playShot(kind,t,vel); return; }
@@ -651,7 +692,7 @@ async function playShot(kind,t,vel){
 }
 
 const SCALE=[0,3,5,7,10,12,15,17]; /* min pent */
-function midi(n){return 440*Math.pow(2,(n-69)/12)}
+function midi(n){n=Number(n); if(!Number.isFinite(n)) n=60; return 440*Math.pow(2,(n-69)/12)}
 function osc(type,freq,t,dur,v,dest,filt){
   const o=ctx.createOscillator(); o.type=type; o.frequency.setValueAtTime(freq,t);
   const g=envGain(t,0.01,dur,v);
@@ -956,7 +997,7 @@ async function recToggle(){
 }
 
 /* ===== visuals ===== */
-function holoCanvas(){ return $('#holo') || $('#holo2') }
+function holoCanvas(){ return (spmOn && $('#spmCanvas')) || $('#holo') || $('#holo2') || $('#spmCanvas') }
 function startHolo(){
   const c=holoCanvas(); if(!c) return;
   const g=c.getContext('2d');
@@ -1052,6 +1093,138 @@ function ytId(u){
   }catch(e){ return '' }
 }
 
+/* ===== Super Power Magic ===== */
+function showSpmUI(on){
+  const el=$('#spmLayer'); if(!el) return;
+  el.classList.toggle('on', !!on);
+  if(on){ sizeSpmCanvas(); startHolo(); }
+}
+function sizeSpmCanvas(){
+  const c=$('#spmCanvas'); if(!c) return;
+  const d=Math.max(1, window.devicePixelRatio||1);
+  c.width=Math.floor((window.innerWidth||1280)*d);
+  c.height=Math.floor((window.innerHeight||720)*d);
+}
+window.addEventListener('resize',()=>{ if(spmOn){ sizeSpmCanvas(); startHolo(); } });
+
+async function spmStart(){
+  if(spmOn) return;
+  await initAudio();
+  await preloadSome();
+  const loops=manifest.loops||[];
+  for(const l of loops.slice(0,32)){ if(!bufs[l.file]) decodePath(l.file).catch(()=>{}); }
+  spmOn=true; window.__DLOOP.spm=true; spmBarCount=0;
+  closeWin();
+  showSpmUI(true);
+  const btn=$('#spmBtn'); if(btn){ btn.classList.add('on'); btn.textContent='■ Stop Magic'; }
+  const wb=$('#spmWinBtn'); if(wb) wb.classList.add('on');
+  const el=$('#spmLayer');
+  if(el && el.requestFullscreen) el.requestFullscreen().catch(()=>{});
+  await spmBoot();
+  startSched();
+  startHolo();
+  spmArm();
+  toast('✨ Super Power Magic ON');
+}
+async function spmBoot(){
+  const s=STYLES[spmStyleI % STYLES.length];
+  try{ await styleSet(s.id); }catch(e){ report(e); }
+  seq.on=true; seqMagic(); seq.kit=['roland','akai','novation','nova','samples'][spmStyleI%5];
+  instOn.bass=1; instOn.pad=1; instOn.arp=1; instOn.pluck=1; instOn.stab=0; instOn.lead=0; instOn.keys=0;
+  magOn=magOn.map(()=>true);
+  fxOn=[0,0,0,0,1,0,0];
+  hoodOn=false; scootOn=false; prodOn=false;
+  uiSeq();
+  const st=$('#spmStat'); if(st) st.textContent='start · '+s.n+' · 7 Core ON';
+}
+function spmArm(){
+  if(spmSecTimer) clearTimeout(spmSecTimer);
+  const ms=()=>Math.max(4000, Math.round(8*bar()*1000));
+  const tick=()=>{
+    if(!spmOn) return;
+    spmEvolve();
+    spmSecTimer=setTimeout(tick, ms());
+  };
+  spmSecTimer=setTimeout(tick, ms());
+}
+function spmEvolve(){
+  if(!spmOn) return;
+  spmBarCount++;
+  const phase=spmBarCount%8;
+  avMode=(avMode+1)%AVMODES.length;
+  startHolo(); uiAvBtns();
+  if(phase===0){
+    spmStyleI++;
+    const s=STYLES[spmStyleI%STYLES.length];
+    styleSet(s.id).catch(report);
+    seqMagic();
+    seq.kit=['roland','akai','novation','nova','samples'][spmStyleI%5];
+    toast('SPM styl: '+s.n);
+  } else if(phase===1){
+    fxOn[0]=1; fxOn[2]=1; fxOn[6]=1; hoodOn=false;
+    toast('SPM FX sweep');
+  } else if(phase===2){
+    fxOn[0]=0; fxOn[2]=0; fxOn[1]=1; hoodOn=true;
+    toast('SPM drop · Hood');
+  } else if(phase===3){
+    hoodOn=false; fxOn[1]=0;
+    ch.forEach((c,i)=>{ if(i>3) stopSrc(c); });
+    instOn.lead=1; instOn.pad=1; instOn.bass=1;
+    spmVoiceHit();
+  } else if(phase===4){
+    magOn=magOn.map(()=>true);
+    instOn.arp=1; instOn.pluck=1;
+    const loops=manifest.loops||[];
+    if(loops.length){
+      const pick=[...loops].sort(()=>Math.random()-0.5).slice(0,6);
+      Promise.all(pick.map((l,i)=>assignLoop(i,l))).then(()=>{
+        if(!spmOn) return;
+        const t=nextQ(1); pick.forEach((_,i)=>startCh(ch[i],t));
+      }).catch(report);
+    }
+  } else if(phase===5){
+    if(Math.random()<0.5){ scootOn=true; prodOn=false; setBpm(150); toast('SPM Scooter-style'); }
+    else { prodOn=true; scootOn=false; setBpm(135); toast('SPM Prodigy-style'); }
+  } else if(phase===6){
+    scootOn=false; prodOn=false; fxOn[4]=1; fxOn[3]=1;
+    spmVoiceHit();
+  } else {
+    hoodOn=false; scootOn=false; prodOn=false; fxOn=[0,0,0,0,1,1,0];
+    instOn.stab=1;
+  }
+  const st=$('#spmStat');
+  if(st) st.textContent='sekcja '+spmBarCount+' · '+(STYLES[spmStyleI%STYLES.length].n)+' · '+AVMODES[avMode]+' · 7 Core';
+}
+async function spmVoiceHit(){
+  if(!ctx) return;
+  const shots=manifest.oneshots||[], loops=manifest.loops||[];
+  const mode=VOICES[Math.floor(Math.random()*VOICES.length)].id;
+  try{
+    let b=null, srcMeta=null;
+    if(shots.length){ srcMeta=shots[Math.floor(Math.random()*shots.length)]; b=await decodePath(srcMeta.file); }
+    else if(loops.length){ srcMeta=loops[Math.floor(Math.random()*loops.length)]; b=await decodePath(srcMeta.file); }
+    if(!b||!spmOn) return;
+    const s=ctx.createBufferSource(); s.buffer=b;
+    if(mode==='high') s.playbackRate.value=1.28;
+    if(mode==='deep') s.playbackRate.value=0.74;
+    if(mode==='alien') s.playbackRate.value=1.12;
+    voiceChain(s, mode);
+    const dur=Math.min(2.4, Math.max(0.4, b.duration||1.2));
+    s.start();
+    try{ s.stop(now()+dur); }catch(e){}
+    toast('Voice hit · '+mode);
+  }catch(e){ report(e); }
+}
+function spmStop(){
+  if(!spmOn && !$('#spmLayer')?.classList.contains('on')) { /* still ensure UI off */ showSpmUI(false); return; }
+  spmOn=false; window.__DLOOP.spm=false;
+  if(spmSecTimer){ clearTimeout(spmSecTimer); spmSecTimer=null; }
+  showSpmUI(false);
+  if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+  stopAll();
+  toast('Super Power Magic OFF');
+}
+
 /* ===== actions ===== */
 const ACT={
   open:e=>openW(e.target.closest('[data-w]').dataset.w),
@@ -1128,7 +1301,10 @@ const ACT={
     s.connect(g); g.connect(master); s.start(); setTimeout(()=>{try{s.stop()}catch(e){}}, 4000);
   },
   clipStart:()=>startClip(20),
-  clipStop:()=>stopClip()
+  clipStop:()=>stopClip(),
+  spmToggle:()=>{ if(spmOn) spmStop(); else spmStart(); },
+  spmStop:()=>spmStop(),
+  spmFs:()=>{ const el=$('#spmLayer'); if(!el) return; if(!document.fullscreenElement && el.requestFullscreen) el.requestFullscreen().catch(()=>{}); else if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
 };
 
 async function preloadSome(){
@@ -1197,7 +1373,7 @@ document.addEventListener('change',e=>{
   if(e.target.id==='mp3File'&&e.target.files[0]){ /* wait for button or auto */ }
 });
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ closeWin(); return; }
+  if(e.key==='Escape'){ if(spmOn){ spmStop(); return; } closeWin(); return; }
   if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
   if(e.key===' '){ e.preventDefault(); ACT.playToggle(); }
 });

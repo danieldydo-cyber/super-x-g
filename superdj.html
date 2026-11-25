@@ -87,6 +87,7 @@ body.remote header,body.remote nav,body.remote main,body.remote footer{display:n
  <button data-act="open" data-w="video">🎬 Wideo 4K</button>
  <button data-act="open" data-w="export">⬇ Pobierz / eksport</button>
  <button data-act="open" data-w="dloop">🌀 DLoop X D DJ</button>
+ <a href="downloads/D7-DJ-Studio.apk" download="D7-DJ-Studio.apk"><button type="button">📲 Pobierz APK D7 DJ Studio</button></a>
  <button data-act="open" data-w="blik">💛 BLIK</button>
  <button data-act="open" data-w="info">ℹ Info</button>
 </nav>
@@ -506,7 +507,7 @@ function dl(blob,name){const a=document.createElement('a');a.href=URL.createObje
 async function loopWav(L){toast('Renderuję WAV…');const b=await renderLoops([L],L.len*4*2);dl(wav(b),`superdj-${(L.name||'loop').replace(/\W+/g,'_')}-${S.bpm}bpm.wav`);return b}
 const dlJSON=(o,n)=>dl(new Blob([JSON.stringify(o,null,1)],{type:'application/json'}),n);
 /* blik & info */
-defWin('dloop','🌀 DLoop X D DJ · D7 DJ Studio',`<p class="muted">Nowa aplikacja: Mixer 28 sample/loop FX, 7 Core (Style, Rhythmic Magic Beat, Instrumenty, Magic Loops, Mega Mix / Tracks, FX + Hood Remix, Voice 7), banki Akai/Roland/Novation/Nova, presety Scooter-style i Prodigy-style (synteza, nie cudze sample), 7 sekcji AV holo, klip + long set, Load MP3 i pole YouTube Music (tylko otwarcie/osadzenie). Dźwięki z TikTok @daxdj27.</p><div class="row"><a href="dloop.html"><button class="big">▶ Otwórz DLoop X D DJ</button></a></div>`);
+defWin('dloop','🌀 DLoop X D DJ · D7 DJ Studio',`<p class="muted">Nowa aplikacja: Mixer 28 sample/loop FX, 7 Core (Style, Rhythmic Magic Beat, Instrumenty, Magic Loops, Mega Mix / Tracks, FX + Hood Remix, Voice 7), banki Akai/Roland/Novation/Nova, presety Scooter-style i Prodigy-style (synteza, nie cudze sample), 7 sekcji AV holo, klip + long set, Load MP3 i pole YouTube Music (tylko otwarcie/osadzenie). Dźwięki z TikTok @daxdj27.</p><div class="row"><a href="dloop.html"><button class="big">▶ Otwórz DLoop X D DJ</button></a></div><div class="row"><a href="downloads/D7-DJ-Studio.apk" download="D7-DJ-Studio.apk"><button type="button">📲 Pobierz APK D7 DJ Studio</button></a></div>`);
 defWin('blik','💛 Wsparcie BLIK',`<p>Jedyna forma wsparcia DJ DaX:</p><p class="blik">BLIK na telefon<br>730 377 357</p><p class="muted">Aplikacja jest darmowa. Nie ma tu żadnych innych płatności.</p>`);
 defWin('info','ℹ Info i uczciwe granice',`<ul><li>Cały dźwięk to prawdziwa synteza Web Audio (oscylatory, szum, filtry) — generatory są algorytmiczne/proceduralne; „AI/SI” to tylko nazwa.</li><li>777 agentów = presety konfiguracji, które uruchamiają akcje w aplikacji. Nie są żywymi AI, nie uczą się z internetu ani dark webu, nie kopiują się.</li><li>7 botów naprawczych = rutyny self-check działające co 2 s.</li><li>MIDI: działa w Chrome/Edge bez sterowników dla urządzeń class-compliant; strona nie może instalować sterowników.</li><li>Pilot: ta sama przeglądarka/urządzenie na żywo; telefon → komputer przez sieć wymaga relay (jeszcze nie ma).</li><li>Działa offline po wczytaniu. Ustawienia w localStorage, filmy w IndexedDB (tylko na tym urządzeniu).</li><li>Skróty: Spacja = play/stop, 1–8 i Q–I = pady, Esc = zamknij okno.</li></ul>`);
 /* ---------- ACTIONS ---------- */
