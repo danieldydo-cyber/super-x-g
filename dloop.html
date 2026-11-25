@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>DLoop X D DJ · D7 DJ Studio · DJ DaX</title>
+<meta name="theme-color" content="#07070f">
+<link rel="icon" href="favicon.png">
+<style>
+:root{--bg:#07070f;--p:#11111f;--p2:#1a1a2e;--c:#00e5ff;--m:#ff2bd6;--y:#ffe600;--g:#39ff88;--r:#ff4d4d;--t:#e8e8ff;--d:#8a8ab0}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--t);font:13px/1.35 system-ui,Segoe UI,Roboto,sans-serif}
+button,select,input,textarea{font:inherit;color:var(--t);background:var(--p2);border:1px solid #2c2c4a;border-radius:7px;padding:5px 8px}
+button{cursor:pointer}button:hover{border-color:var(--c)}button.on{background:linear-gradient(90deg,#00e5ff33,#ff2bd633);border-color:var(--m);box-shadow:0 0 8px #ff2bd666}
+button.big{padding:9px 14px;font-weight:700}
+input[type=range]{padding:0;accent-color:var(--m)}
+header{position:sticky;top:0;z-index:70;background:#07070fee;border-bottom:1px solid #22224a;padding:8px 10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.logo{font-weight:900;font-size:18px;letter-spacing:.4px;background:linear-gradient(90deg,var(--c),var(--m),var(--y));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--d);font-size:11px}
+#scope{height:36px;width:200px;background:#000;border-radius:6px;border:1px solid #22224a}
+nav{position:relative;z-index:70;display:flex;flex-wrap:wrap;gap:6px;padding:8px 10px;border-bottom:1px solid #1a1a35;background:#07070f}
+nav button{background:#141428}
+nav a button{width:100%}
+main{padding:10px}
+.muted{color:var(--d);font-size:12px}
+.tag{display:inline-block;font-size:11px;padding:1px 6px;border-radius:9px;background:#22224a;color:var(--y)}
+.row{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin:4px 0}
+#ov{position:fixed;inset:0;background:#000a;z-index:50;display:none}
+.win{position:fixed;z-index:60;left:50%;top:50%;transform:translate(-50%,-50%);width:min(1100px,96vw);max-height:90vh;display:none;flex-direction:column;background:var(--p);border:1px solid var(--c);border-radius:12px;box-shadow:0 0 30px #00e5ff44}
+.win.open{display:flex}.win.max{width:100vw;height:100vh;max-height:100vh;border-radius:0;left:0;top:0;transform:none}
+.wh{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid #23234a;background:var(--p2);border-radius:12px 12px 0 0}
+.win.max .wh{border-radius:0}
+.wh b{font-size:15px}.wh span{display:flex;gap:6px}
+.wb{padding:10px;overflow:auto;flex:1}
+.card{background:var(--p2);border:1px solid #2a2a4d;border-radius:9px;padding:8px;margin:6px 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.mixer{display:flex;gap:5px;overflow-x:auto;padding-bottom:8px}
+.strip{min-width:86px;max-width:96px;background:var(--p2);border:1px solid #2a2a4d;border-radius:8px;padding:6px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px}
+.strip .nm{display:block;width:100%;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700;font-size:10px}
+.strip.on{border-color:var(--m);box-shadow:0 0 10px #ff2bd644}
+.strip .fader{writing-mode:bt-lr;writing-mode:vertical-lr;direction:rtl;height:90px;width:22px}
+footer{padding:10px;color:var(--d);font-size:12px;border-top:1px solid #1a1a35}
+#toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#11111fee;border:1px solid var(--c);padding:8px 14px;border-radius:8px;z-index:80;display:none}
+.blik{font-size:22px;font-weight:800;letter-spacing:2px;color:var(--y)}
+#holo{width:100%;height:360px;background:#000;border-radius:8px;border:1px solid #00e5ff44;display:block}
+.pads{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.pad{aspect-ratio:1;border-radius:8px;background:#141432;border:1px solid #2a2a4d;font-weight:700;font-size:11px}
+.pad.on,.pad:active{background:linear-gradient(180deg,#ff2bd655,#00e5ff44);border-color:var(--c)}
+.seq{display:grid;grid-template-columns:repeat(16,1fr);gap:3px}
+.step{height:26px;border-radius:4px;background:#0c0c18;border:1px solid #2a2a4d;padding:0}
+.step.on{background:var(--m);border-color:var(--y)}
+.step.bar{border-left:2px solid var(--c)}
+label.kn{display:flex;flex-direction:column;align-items:center;font-size:10px;color:var(--d);gap:1px}
+label.kn input{width:72px}
+a{color:var(--c)}
+.bank btn,.hwb{min-width:90px}
+#ytbox{width:100%;min-height:200px;border:0;border-radius:8px;background:#000}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="logo">DLoop X D DJ</div><div class="sub">D7 DJ Studio · 7 Core · DJ DaX · Kraków</div></div>
+  <button class="big" id="playBtn" data-act="playToggle">▶ Play</button>
+  <label>BPM <input id="bpm" type="number" min="60" max="200" value="128" style="width:64px"></label>
+  <button data-act="tap">Tap</button>
+  <button data-act="sync">⟲ Sync</button>
+  <label>Master <input id="mvol" type="range" min="0" max="1" step="0.01" value="0.8"></label>
+  <button data-act="rec" id="recBtn">⏺ WAV</button>
+  <canvas id="scope" width="400" height="72"></canvas>
+  <span id="stat" class="muted">audio: off</span>
+  <a href="superdj.html" style="margin-left:auto"><button>⬅ Super DJ Loops</button></a>
+</header>
+<nav>
+  <button data-act="open" data-w="mixer">🎚 Mixer 28</button>
+  <button data-act="open" data-w="core">🧬 7 Core</button>
+  <button data-act="open" data-w="style">🎨 Style</button>
+  <button data-act="open" data-w="rhythm">🥁 Rhythmic Magic Beat</button>
+  <button data-act="open" data-w="inst">🎹 Instrumenty</button>
+  <button data-act="open" data-w="magic">✨ Magic Loops</button>
+  <button data-act="open" data-w="mega">🎛 Mega Mix / Set</button>
+  <button data-act="open" data-w="fx">💥 FX + Hood Remix</button>
+  <button data-act="open" data-w="voice">🎤 Voice 7</button>
+  <button data-act="open" data-w="hw">🎛️ Akai / Roland / Novation / Nova</button>
+  <button data-act="open" data-w="rave">🚀 Scooter / Prodigy</button>
+  <button data-act="open" data-w="av">👁 7 AV Holo</button>
+  <button data-act="open" data-w="clip">🎬 Video + Long Set</button>
+  <button data-act="open" data-w="load">📁 MP3 / YouTube Music</button>
+  <button data-act="open" data-w="samples">📦 Sample</button>
+  <button data-act="open" data-w="blik">💛 BLIK</button>
+  <button data-act="open" data-w="info">ℹ Info</button>
+</nav>
+<main>
+  <div class="row"><b>Mixer 28 · sample / loop / FX</b><span class="muted" id="loadInfo">— wczytywanie sampli z TikTok @daxdj27…</span>
+    <button data-act="allStop">■ Stop kanałów</button>
+    <button data-act="randCh">🎲 Losuj 8 pętli</button>
+  </div>
+  <div class="mixer" id="mix"></div>
+</main>
+<footer>DLoop X D DJ · D7 DJ Studio · DJ DaX · dźwięki z własnego TikToka <a href="https://www.tiktok.com/@daxdj27" target="_blank" rel="noopener">@daxdj27</a> (Suno Pro) + synteza Web Audio · wsparcie tylko BLIK 730 377 357 · bez płatnego AI</footer>
+<div id="ov"></div>
+<div id="wins"></div>
+<div id="toast"></div>
+<script>
+
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const CHN=28;
+const STYLES=[
+  {id:'techno',n:'Techno / Minimal',bpm:128,q:'techno|minimal|hypnotic|t78|acid'},
+  {id:'trance',n:'Trance',bpm:138,q:'trance|wolf'},
+  {id:'house',n:'House',bpm:124,q:'house'},
+  {id:'trap',n:'Trap / Breaks',bpm:140,q:'trap|break'},
+  {id:'jungle',n:'Jungle / D&B',bpm:174,q:'jungle|drum bass|drum and bass'},
+  {id:'hiphop',n:'Hip-Hop / Rap',bpm:96,q:'hip ?hop|rap'},
+  {id:'dark',n:'Dark / Hood',bpm:130,q:'dark|devil|diabel|hood|wolf'},
+  {id:'krakow',n:'Kraków / KRK',bpm:128,q:'krak|cracovia|wis|krk'},
+  {id:'birthday',n:'Maria 19 Birthday',bpm:128,q:'birth|maria|marysia|marja'}
+];
+const CORE=[
+  {id:'style',e:'🎨',n:'Style Core',d:'Gatunki i presety stylu z Twoich pętli + BPM'},
+  {id:'rhythm',e:'🥁',n:'Rhythmic Magic Beat',d:'16 kroków, swing, magic beat z sampli i syntezy'},
+  {id:'inst',e:'🎹',n:'Instrument Core',d:'7 instrumentów + banki sprzętowe'},
+  {id:'magic',e:'✨',n:'Magic Loops Core',d:'7 pętli-chopów z Twoich utworów + warstwy synth'},
+  {id:'mega',e:'🎛',n:'Tracks / Mega Mix / Mega Set',d:'Generator setu i długiego miksu, eksport WAV'},
+  {id:'fx',e:'💥',n:'FX + Hood Remix Core',d:'7 pętli FX, Hood Black Banger remix'},
+  {id:'voice',e:'🎤',n:'Voice Core',d:'7 voice changerów: mikrofon albo MP3'}
+];
+const VOICES=[
+  {id:'high',n:'1. Chipmunk',d:'wysoki pitch'},
+  {id:'deep',n:'2. Głęboki',d:'niski pitch'},
+  {id:'robot',n:'3. Robot',d:'ring + kwantyzacja'},
+  {id:'phone',n:'4. Telefon',d:'pasmo 300–3200 Hz'},
+  {id:'whisper',n:'5. Szept kosmos',d:'high-pass + szum'},
+  {id:'alien',n:'6. Alien',d:'pitch + delay + ring'},
+  {id:'mega',n:'7. Megafon',d:'zniekształcenie + tremolo'}
+];
+const AVMODES=['Holo tunel','Plazma','Beat orby','Pierścienie FFT','Siatka neon','Hood city','Kosmos X'];
+const HW={akai:'Akai',roland:'Roland',novation:'Novation',nova:'Nova'};
+
+let ctx,master,limiter,analyser,rev,revG,del,delFb,delG,crushM,pcmNode,pcmChunks,pcmOn=false;
+let playing=false,bpm=128,t0=0,tapTs=[],openWin=null,manifest={loops:[],oneshots:[],pending_or_failed:[],suno_music_tags:[]};
+const bufs={}; // path -> AudioBuffer
+const ch=[]; // 28 channels
+let userBuf=null,userName='';
+let recOn=false;
+let magOn=new Array(7).fill(false);
+let fxOn=new Array(7).fill(false);
+let hoodOn=false,scootOn=false,prodOn=false;
+let seq={k:[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],s:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1],h:[1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,0],p:[0,0,1,0,0,0,0,1,0,0,1,0,0,1,0,0],swing:0.08,on:false,kit:'roland'};
+let voice={on:false,mode:'robot',mic:null,nodes:null};
+let avMode=0,avRec=null,holoRaf=0,megaTimer=null,schedId=0;
+const instOn={bass:0,lead:0,pad:0,pluck:0,arp:0,stab:0,keys:0};
+window.__DLOOP={ready:false,loaded:0,errors:[],playing:false};
+
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast._);toast._=setTimeout(()=>t.style.display='none',2400)}
+function report(e){console.error(e);window.__DLOOP.errors.push(String(e&&e.message||e))}
+function beat(){return 60/bpm}
+function bar(){return beat()*4}
+function now(){return ctx?ctx.currentTime:0}
+function nextQ(div=4,look=0.06){
+  if(!ctx) return 0;
+  const q=beat()*(4/div), t=now()+look;
+  if(!playing||!t0) return t;
+  const el=t-t0;
+  return t0+Math.ceil(el/q)*q;
+}
+function setBpm(v){
+  v=Math.max(60,Math.min(200,+v||128));
+  bpm=v; const el=$('#bpm'); if(el&&el.value!=v) el.value=v;
+  if(del) del.delayTime.setTargetAtTime(beat()*0.375, now(), 0.02);
+  ch.forEach(c=>{ if(c.src&&c.meta&&c.meta.bpm){ try{c.src.playbackRate.value=bpm/(c.meta.bpm||bpm)}catch(e){} } });
+}
+
+async function initAudio(){
+  if(ctx){ if(ctx.state==='suspended') await ctx.resume(); return ctx; }
+  ctx=new (window.AudioContext||window.webkitAudioContext)();
+  master=ctx.createGain(); master.gain.value=+$('#mvol').value||0.8;
+  limiter=ctx.createDynamicsCompressor();
+  limiter.threshold.value=-1.2; limiter.knee.value=0; limiter.ratio.value=20; limiter.attack.value=0.003; limiter.release.value=0.12;
+  analyser=ctx.createAnalyser(); analyser.fftSize=2048; analyser.smoothingTimeConstant=0.7;
+  rev=ctx.createConvolver(); rev.buffer=makeIR(1.8);
+  revG=ctx.createGain(); revG.gain.value=0.5;
+  del=ctx.createDelay(1.5); del.delayTime.value=beat()*0.375;
+  delFb=ctx.createGain(); delFb.gain.value=0.38;
+  delG=ctx.createGain(); delG.gain.value=0.55;
+  del.connect(delFb); delFb.connect(del); del.connect(delG);
+  rev.connect(revG);
+  master.connect(limiter); limiter.connect(analyser); analyser.connect(ctx.destination);
+  delG.connect(limiter); revG.connect(limiter);
+  /* PCM tap for WAV */
+  const mute=ctx.createGain(); mute.gain.value=0;
+  pcmNode=ctx.createScriptProcessor(4096,2,2);
+  limiter.connect(pcmNode); pcmNode.connect(mute); mute.connect(ctx.destination);
+  pcmNode.onaudioprocess=e=>{
+    if(!pcmOn) return;
+    const l=e.inputBuffer.getChannelData(0).slice();
+    const r=e.inputBuffer.numberOfChannels>1?e.inputBuffer.getChannelData(1).slice():l.slice();
+    pcmChunks.push([l,r]);
+  };
+  ch.forEach(buildChGraph);
+  $('#stat').textContent='audio: on · '+ctx.sampleRate+' Hz';
+  if(ctx.state==='suspended') await ctx.resume();
+  return ctx;
+}
+function makeIR(sec){
+  const n=Math.floor(ctx.sampleRate*sec), b=ctx.createBuffer(2,n,ctx.sampleRate);
+  for(let c=0;c<2;c++){const d=b.getChannelData(c); for(let i=0;i<n;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/n, 2.4);}
+  return b;
+}
+function makeCrush(bits){
+  const n=2048,c=Math.pow(2,bits),curve=new Float32Array(n);
+  for(let i=0;i<n;i++){const x=i/(n-1)*2-1; curve[i]=Math.round(x*c)/c}
+  const ws=ctx.createWaveShaper(); ws.curve=curve; ws.oversample='2x'; return ws;
+}
+
+function makeCh(i){
+  return {id:i,name:'Ch '+(i+1),meta:null,buf:null,vol:0.85,pan:0,mute:0,solo:0,cut:0.85,delay:0,reverb:0.05,crush:0,on:false,src:null,nodes:null};
+}
+for(let i=0;i<CHN;i++) ch.push(makeCh(i));
+
+function buildChGraph(c){
+  if(!ctx) return;
+  const filter=ctx.createBiquadFilter(); filter.type='lowpass'; filter.frequency.value=hzFromCut(c.cut); filter.Q.value=0.7;
+  const g=ctx.createGain(); g.gain.value=c.vol;
+  const pan=ctx.createStereoPanner(); pan.pan.value=c.pan;
+  const mute=ctx.createGain(); mute.gain.value=1;
+  const crush=makeCrush(5); const crushG=ctx.createGain(); crushG.gain.value=0; const dry=ctx.createGain(); dry.gain.value=1;
+  const dSend=ctx.createGain(); dSend.gain.value=c.delay;
+  const rSend=ctx.createGain(); rSend.gain.value=c.reverb;
+  const cSend=ctx.createGain(); cSend.gain.value=c.crush;
+  const splitter=ctx.createGain();
+  filter.connect(g); g.connect(pan); pan.connect(mute);
+  mute.connect(dry); dry.connect(splitter);
+  mute.connect(cSend); cSend.connect(crush); crush.connect(crushG); crushG.connect(splitter);
+  splitter.connect(master);
+  mute.connect(dSend); dSend.connect(del);
+  mute.connect(rSend); rSend.connect(rev);
+  c.nodes={filter,g,pan,mute,dry,crush,crushG,dSend,rSend,cSend,splitter};
+  applyMuteSolo();
+}
+function hzFromCut(x){return 200*Math.pow(80, Math.max(0,Math.min(1,x)))}
+function applyMuteSolo(){
+  const any=ch.some(c=>c.solo);
+  ch.forEach(c=>{
+    if(!c.nodes) return;
+    const on=(!c.mute && (!any||c.solo)) ? 1 : 0;
+    c.nodes.mute.gain.setTargetAtTime(on, now(), 0.01);
+  });
+}
+function applyChFX(c){
+  const n=c.nodes; if(!n) return;
+  n.filter.frequency.setTargetAtTime(hzFromCut(c.cut), now(), 0.02);
+  n.g.gain.setTargetAtTime(c.vol, now(), 0.02);
+  n.pan.pan.setTargetAtTime(c.pan, now(), 0.02);
+  n.dSend.gain.setTargetAtTime(c.delay, now(), 0.02);
+  n.rSend.gain.setTargetAtTime(c.reverb, now(), 0.02);
+  n.cSend.gain.setTargetAtTime(c.crush, now(), 0.02);
+  n.crushG.gain.setTargetAtTime(c.crush, now(), 0.02);
+  n.dry.gain.setTargetAtTime(1-c.crush*0.6, now(), 0.02);
+}
+
+function stopSrc(c){
+  if(c.src){try{c.src.stop()}catch(e){} try{c.src.disconnect()}catch(e){} c.src=null;}
+  c.on=false;
+}
+function startCh(c, when){
+  if(!c.buf||!c.nodes) return;
+  stopSrc(c);
+  const s=ctx.createBufferSource();
+  s.buffer=c.buf; s.loop=true;
+  const native=c.meta&&c.meta.bpm?c.meta.bpm:bpm;
+  s.playbackRate.value=bpm/native;
+  s.connect(c.nodes.filter);
+  s.start(when||now());
+  c.src=s; c.on=true;
+}
+function toggleCh(i, force){
+  const c=ch[i];
+  const want=force==null?!c.on:!!force;
+  if(!want){stopSrc(c); uiMix(); return}
+  initAudio().then(()=>{
+    if(!c.buf){ toast('Brak sampla na kanale '+(i+1)); return; }
+    const t=nextQ(1);
+    startCh(c,t); uiMix();
+  });
+}
+
+async function decodePath(path){
+  if(bufs[path]) return bufs[path];
+  const r=await fetch('dloop/samples/'+path,{cache:'force-cache'});
+  if(!r.ok) throw new Error('HTTP '+r.status+' '+path);
+  const ab=await r.arrayBuffer();
+  const b=await (ctx||await initAudio()).decodeAudioData(ab.slice(0));
+  bufs[path]=b; return b;
+}
+async function assignLoop(i, meta){
+  const c=ch[i];
+  c.meta=meta; c.name=meta.name||('Ch '+(i+1));
+  try{
+    c.buf=await decodePath(meta.file);
+    window.__DLOOP.loaded++;
+    if(c.on) startCh(c, nextQ(1));
+  }catch(e){ report(e); c.buf=null; }
+  uiMix();
+}
+
+async function loadManifest(){
+  try{
+    const r=await fetch('dloop/samples/manifest.json',{cache:'no-store'});
+    if(!r.ok) throw new Error('manifest '+r.status);
+    manifest=await r.json();
+    const loops=manifest.loops||[];
+    const featured=loops.filter(x=>x.featured);
+    const rest=loops.filter(x=>!x.featured);
+    const order=featured.concat(rest);
+    $('#loadInfo').textContent=`Załadowano ${loops.length} pętli · ${(manifest.oneshots||[]).length} one-shotów · pominięte/oczekujące: ${(manifest.pending_or_failed||[]).length}`;
+    await initAudio();
+    for(let i=0;i<CHN;i++){
+      if(order[i]) await assignLoop(i, order[i]);
+    }
+    window.__DLOOP.ready=true;
+    window.__DLOOP.loops=loops.length;
+    uiSamples();
+  }catch(e){
+    report(e);
+    $('#loadInfo').textContent='Brak manifestu sampli — działają generatory syntezowane (Web Audio).';
+    window.__DLOOP.ready=true;
+  }
+}
+
+/* ===== mixer UI ===== */
+function uiMix(){
+  const el=$('#mix'); if(!el) return;
+  el.innerHTML=ch.map((c,i)=>`<div class="strip ${c.on?'on':''}" data-i="${i}">
+    <span class="nm" title="${esc(c.name)}">${esc(short(c.name,16))}</span>
+    <span class="muted">${c.meta?Math.round(c.meta.bpm||0)+' BPM':(c.buf?'MP3':'—')}</span>
+    <button data-act="chPlay" data-i="${i}" class="${c.on?'on':''}">${c.on?'■':'▶'}</button>
+    <input class="fader" type="range" min="0" max="1.2" step="0.01" value="${c.vol}" data-ch="vol" data-i="${i}">
+    <label class="kn">pan <input type="range" min="-1" max="1" step="0.01" value="${c.pan}" data-ch="pan" data-i="${i}"></label>
+    <div class="row"><button data-act="chMute" data-i="${i}" class="${c.mute?'on':''}">M</button><button data-act="chSolo" data-i="${i}" class="${c.solo?'on':''}">S</button></div>
+    <label class="kn">filtr <input type="range" min="0" max="1" step="0.01" value="${c.cut}" data-ch="cut" data-i="${i}"></label>
+    <label class="kn">delay <input type="range" min="0" max="1" step="0.01" value="${c.delay}" data-ch="delay" data-i="${i}"></label>
+    <label class="kn">reverb <input type="range" min="0" max="1" step="0.01" value="${c.reverb}" data-ch="reverb" data-i="${i}"></label>
+    <label class="kn">crush <input type="range" min="0" max="1" step="0.01" value="${c.crush}" data-ch="crush" data-i="${i}"></label>
+  </div>`).join('');
+}
+function short(s,n){s=s||''; return s.length>n?s.slice(0,n-1)+'…':s}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+/* ===== windows ===== */
+const WIN={};
+function defWin(id,title,html,onOpen){WIN[id]={title,html,onOpen}}
+function buildWins(){
+  $('#wins').innerHTML=Object.entries(WIN).map(([id,w])=>`<div class="win" id="w-${id}" role="dialog"><div class="wh"><b>${w.title}</b><span><button data-act="max" title="Pełny ekran">⛶</button><button data-act="close" title="Zamknij (Esc)">✕</button></span></div><div class="wb">${w.html}</div></div>`).join('');
+}
+function closeWin(){
+  $$('.win.open').forEach(w=>w.classList.remove('open','max'));
+  $('#ov').style.display='none';
+  if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+  openWin=null;
+}
+function openW(id){
+  closeWin();
+  const el=$('#w-'+id); if(!el) return;
+  el.classList.add('open'); $('#ov').style.display='block'; openWin=id;
+  try{WIN[id]&&WIN[id].onOpen&&WIN[id].onOpen()}catch(e){report(e)}
+}
+function maxWin(el){
+  el.classList.toggle('max');
+  if(el.classList.contains('max')&&el.requestFullscreen) el.requestFullscreen().catch(()=>{});
+  else if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+}
+
+defWin('mixer','🎚 Mixer 28 · sample / loop / FX','<p class="muted">28 kanałów jest na stronie głównej — tu ten sam mikser w oknie (pełny ekran ⛶). Na kanał: filtr, delay, reverb, bitcrush, mute/solo, pan, fader.</p><div class="mixer" id="mix2"></div>',()=>{const a=$('#mix'),b=$('#mix2'); if(a&&b) b.innerHTML=a.innerHTML});
+defWin('core','🧬 7 Core · generatory DLoop X D DJ', `<p class="muted">Siedem rdzeni D7 DJ Studio. Działają z Twoimi samplami i syntezą Web Audio (bez płatnego AI).</p><div class="cards">${CORE.map(c=>`<div class="card"><b>${c.e} ${c.n}</b><div class="muted">${c.d}</div><div class="row"><button data-act="open" data-w="${c.id}">▶ Otwórz</button></div></div>`).join('')}</div>`);
+defWin('style','🎨 Style Core', `<p class="muted">Ustawia BPM, ładuje pętle w danym stylu na 8 pierwszych kanałów i odpala je od następnego taktu.</p><div class="cards">${STYLES.map(s=>`<div class="card"><b>${s.n}</b><div class="muted">${s.bpm} BPM</div><div class="row"><button data-act="styleSet" data-s="${s.id}">⚡ Generuj zestaw</button></div></div>`).join('')}</div>`);
+defWin('rhythm','🥁 Rhythmic Magic Beat', `
+  <p class="muted">16 kroków zsynchronizowanych z BPM. Kit: synteza w stylu sprzętowym albo Twoje one-shoty.</p>
+  <div class="row">Kit <select id="kit"><option value="roland">Roland-style</option><option value="akai">Akai-style</option><option value="novation">Novation-style</option><option value="nova">Nova-style</option><option value="samples">One-shoty DaX</option></select>
+  Swing <input id="swing" type="range" min="0" max="0.4" step="0.01" value="0.08">
+  <button data-act="seqToggle" id="seqBtn">▶ Graj rytm</button>
+  <button data-act="seqMagic">✨ Magic Beat</button>
+  <button data-act="seqClear">Wyczyść</button></div>
+  <div id="seqUI"></div>`, uiSeq);
+defWin('inst','🎹 Instrument Core', `
+  <p class="muted">7 instrumentów syntezowanych, zsynchronizowanych z BPM. To brzmienia proceduralne, nie gotowe banki fabryczne.</p>
+  <div class="cards">${[['bass','Bass'],['lead','Lead'],['pad','Pad'],['pluck','Pluck'],['arp','Arp'],['stab','Stab'],['keys','Keys']].map(([k,n])=>`<div class="card"><b>${n}</b><div class="row"><button data-act="instToggle" data-k="${k}" id="inst-${k}">▶ Graj</button></div></div>`).join('')}</div>
+  <div class="card"><b>Banki sprzętowe (synteza „w stylu”)</b><div class="row"><button data-act="open" data-w="hw">🎛️ Akai / Roland / Novation / Nova</button></div></div>`);
+defWin('magic','✨ Magic Loops Core', `<p class="muted">7 pętli: Twoje sample tnie na bicie i dokłada warstwę synth. Start na następnym takcie.</p><div class="cards">${[...Array(7)].map((_,i)=>`<div class="card"><b>Magic ${i+1}</b><div class="muted">chop + synth</div><div class="row"><button data-act="magToggle" data-i="${i}" id="mag-${i}">▶ Graj</button></div></div>`).join('')}</div><div class="row"><button data-act="magAll">✨ Magic wszystkie</button><button data-act="magStop">■ Stop</button></div>`);
+defWin('mega','🎛 Mega Mix / Mega Set / Tracks Generator', `
+  <p class="muted">Układa intro → groove → drop → break → outro z Twoich pętli i generatorów. Długi set można nagrać do WAV.</p>
+  <div class="row">Długość
+    <select id="megaLen"><option value="32">32 takty (~1 min)</option><option value="64">64 takty</option><option value="128" selected>128 taktów (~4 min @128)</option><option value="256">256 taktów (długi set)</option></select>
+    <button data-act="megaStart" class="big">▶ Generuj i graj Mega Mix</button>
+    <button data-act="megaStop">■ Stop setu</button>
+    <button data-act="rec">⏺ Nagraj WAV</button>
+  </div>
+  <div class="card" id="megaLog" class="muted">—</div>`);
+defWin('fx','💥 FX + Hood Remix Core', `
+  <p class="muted">7 pętli FX (synteza) i tryb Hood Black Banger: cięższe 808, chop, pół-tempo, mroczniejszy filtr.</p>
+  <div class="cards">${['Rise','Impact','Noise sweep','Reverse','Kosmos X','Stab','Riser 2'].map((n,i)=>`<div class="card"><b>${i+1}. ${n}</b><div class="row"><button data-act="fxToggle" data-i="${i}" id="fxb-${i}">▶</button></div></div>`).join('')}</div>
+  <div class="row"><button data-act="hood" id="hoodBtn" class="big">🕶 Hood Remix</button></div>`);
+defWin('voice','🎤 Voice Core · 7 voice changerów', `
+  <p class="muted">Działa na mikrofonie albo wczytanym MP3. Czysty Web Audio (pitch / formant / robot / filtr). Nagraj efekt do WAV.</p>
+  <div class="row"><button data-act="mic" id="micBtn">🎙 Mikrofon</button>
+    <label>MP3 <input type="file" id="voiceFile" accept="audio/mpeg,audio/*,.mp3"></label>
+    <button data-act="voicePlay">▶ MP3 przez voice</button>
+    <button data-act="voiceStop">■ Stop voice</button></div>
+  <div class="cards">${VOICES.map(v=>`<div class="card"><b>${v.n}</b><div class="muted">${v.d}</div><div class="row"><button data-act="voiceMode" data-m="${v.id}" id="vm-${v.id}">Wybierz</button></div></div>`).join('')}</div>
+  <p class="muted" id="voiceStat">preset: robot · źródło: —</p>`);
+defWin('hw','🎛️ Hardware-style · Akai / Roland / Novation / Nova', `
+  <p class="muted">Zestawy brzmień syntezowanych, nazwane w stylu sprzętu. To nie są oficjalne banki ani zrzuty ROM — tylko własne presety Web Audio.</p>
+  <div class="cards">
+    <div class="card"><b>Akai-style</b><div class="muted">MPC: krótki punch, crunch, pady one-shot</div><div class="row"><button data-act="hwKit" data-k="akai">▶ Kit perkusyjny</button><button data-act="hwDemo" data-k="akai">🎹 Demo chromatyczne</button></div></div>
+    <div class="card"><b>Roland-style</b><div class="muted">808/909-inspired: sine kick, snare, hats (algorytmy)</div><div class="row"><button data-act="hwKit" data-k="roland">▶ Kit perkusyjny</button><button data-act="hwDemo" data-k="roland">🎹 Tom / cowbell</button></div></div>
+    <div class="card"><b>Novation-style</b><div class="muted">Acid bass, rezonans, sekwencja 16 kroków</div><div class="row"><button data-act="hwKit" data-k="novation">▶ Acid line</button></div></div>
+    <div class="card"><b>Nova-style</b><div class="muted">Supersaw pad / lead, jasne warstwy</div><div class="row"><button data-act="hwKit" data-k="nova">▶ Pad + lead</button></div></div>
+  </div>`);
+defWin('rave','🚀 Scooter-style / Prodigy-style (presety pętli)', `
+  <p class="muted"><b>Uczciwie:</b> to synteza inspirowana stylistyką (happy-hardcore / breakbeat-electro), nie cudze sample i nie kopie utworów.</p>
+  <div class="cards">
+    <div class="card"><b>Scooter-style</b><div class="muted">~150 BPM, gated saw, rave stab, szybki kick</div><div class="row"><button data-act="scoot" id="scootBtn">▶ Graj preset</button></div></div>
+    <div class="card"><b>Prodigy-style</b><div class="muted">~135 BPM, breakbeat, brudny bas, stabs</div><div class="row"><button data-act="prod" id="prodBtn">▶ Graj preset</button></div></div>
+  </div>`);
+defWin('av','👁 7 sekcji audio-wizualnych · holograficzne', `
+  <p class="muted">Wizuale generowane w przeglądarce z analityki dźwięku. Wybierz jedną z 7 sekcji. ⛶ na pełny ekran.</p>
+  <div class="row">${AVMODES.map((n,i)=>`<button data-act="avMode" data-i="${i}" id="av-${i}">${i+1}. ${n}</button>`).join('')}</div>
+  <canvas id="holo" width="1280" height="720"></canvas>`, ()=>{uiAvBtns(); startHolo()});
+defWin('clip','🎬 Special video clip + Long Set generator', `
+  <p class="muted">Klip: nagrywa holograficzny obraz + dźwięk do pliku WebM (MediaRecorder). Long set odpala Mega Mix i wizuale.</p>
+  <div class="row">
+    <button data-act="clipStart" class="big">🎬 Nagraj klip 20 s</button>
+    <button data-act="clipStop">■ Stop klipu</button>
+    <button data-act="longSet" class="big">🌌 Generuj Long Set + holo</button>
+  </div>
+  <canvas id="holo2" width="960" height="540" style="width:100%;background:#000;border-radius:8px;margin-top:8px"></canvas>
+  <p class="muted" id="clipStat">—</p>`, ()=>{startHolo()});
+defWin('load','📁 Load MP3 + YouTube Music', `
+  <div class="card"><b>Wczytaj MP3 (lokalny plik)</b>
+    <div class="row"><input type="file" id="mp3File" accept="audio/mpeg,audio/*,.mp3,.wav,.ogg,.m4a">
+    <select id="mp3Ch">${ch.map((_,i)=>`<option value="${i}">Kanał ${i+1}</option>`).join('')}</select>
+    <button data-act="loadMp3">＋ Na kanał jako pętla</button></div>
+    <p class="muted" id="mp3Stat">plik zostaje tylko w tej przeglądarce</p>
+  </div>
+  <div class="card"><b>YouTube Music / YouTube</b>
+    <p class="muted">Tylko otwarcie albo osadzenie odtwarzacza — aplikacja nie pobiera ani nie kopiuje dźwięku z YouTube.</p>
+    <div class="row"><input id="ytUrl" placeholder="wklej link YouTube albo YouTube Music" style="flex:1">
+    <button data-act="ytOpen">↗ Otwórz</button>
+    <button data-act="ytEmbed">▶ Osadź</button></div>
+    <iframe id="ytbox" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>`);
+defWin('samples','📦 Bank sampli DJ DaX', `<p class="muted" id="smpHead">—</p><div class="row">Filtr <select id="smpStyle"><option value="">wszystkie style</option></select> <input id="smpQ" placeholder="szukaj"></div><div class="cards" id="smpList"></div>`, uiSamples);
+defWin('blik','💛 Wsparcie BLIK', `<p>Jedyna forma wsparcia DJ DaX:</p><p class="blik">BLIK na telefon<br>730 377 357</p><p class="muted">Aplikacja jest darmowa. Nie ma tu żadnych innych płatności.</p>`);
+defWin('info','ℹ Info i uczciwe granice', `
+  <ul>
+    <li>DLoop X D DJ / D7 DJ Studio — darmowa aplikacja przeglądarkowa (Web Audio). Bez płatnego AI, bez APK w tej wersji.</li>
+    <li>Sample pochodzą z publicznego TikToka <a href="https://www.tiktok.com/@daxdj27" target="_blank" rel="noopener">@daxdj27</a> (DJ DaX). Daniel potwierdził, że utwory są jego (Suno Pro). Pętle to wycinki 2/4/8 taktów.</li>
+    <li>Gdzie TikTok w polu music pokazał inną etykietę, i tak zaimportowaliśmy plik, bo to Twoje utwory.</li>
+    <li>7 Core, Scooter-style, Prodigy-style i banki Akai/Roland/Novation/Nova to synteza / presety inspirowane stylistyką — nie oficjalne banki i nie cudze sample.</li>
+    <li>YouTube Music: tylko otwarcie lub osadzenie odtwarzacza, bez pobierania.</li>
+    <li>Voice 7 działa na mikrofonie albo lokalnym MP3.</li>
+    <li>Eksport: nagranie master do WAV; klip wideo to WebM z canvas + audio.</li>
+    <li>Jedno okno naraz · ✕ · ⛶ · Esc. Wsparcie: tylko BLIK 730 377 357.</li>
+  </ul>
+  <p class="muted" id="infoStats">—</p>`, ()=>{
+    const p=manifest.pending_or_failed||[], tags=manifest.suno_music_tags||[];
+    $('#infoStats').innerHTML=`Zaimportowane pętle: <b>${(manifest.loops||[]).length}</b> · one-shoty: <b>${(manifest.oneshots||[]).length}</b> · utwory z inną etykietą music (Suno, wzięte): <b>${tags.length}</b> · jeszcze nieobrobione/brak pliku: <b>${p.length}</b>`;
+  });
+
+function uiSeq(){
+  const el=$('#seqUI'); if(!el) return;
+  const rows=[['k','Kick'],['s','Snare'],['h','Hat'],['p','Perc']];
+  el.innerHTML=rows.map(([k,n])=>`<div class="row"><span style="width:50px">${n}</span><div class="seq">${seq[k].map((v,i)=>`<button class="step ${v?'on':''} ${i%4===0?'bar':''}" data-act="step" data-r="${k}" data-i="${i}"></button>`).join('')}</div></div>`).join('');
+  const b=$('#seqBtn'); if(b) b.className=seq.on?'on':'', b.textContent=seq.on?'■ Stop rytm':'▶ Graj rytm';
+  const k=$('#kit'); if(k) k.value=seq.kit;
+}
+function uiSamples(){
+  const list=$('#smpList'); if(!list) return;
+  const loops=manifest.loops||[];
+  const st=$('#smpStyle');
+  if(st && st.options.length<2){
+    const styles=[...new Set(loops.map(l=>l.style).filter(Boolean))].sort();
+    styles.forEach(s=>{const o=document.createElement('option'); o.value=s; o.textContent=s; st.append(o)});
+  }
+  const q=(($('#smpQ')||{}).value||'').toLowerCase();
+  const fs=(($('#smpStyle')||{}).value)||'';
+  const show=loops.filter(l=>(!fs||l.style===fs)&&(!q||(l.name||'').toLowerCase().includes(q)));
+  if($('#smpHead')) $('#smpHead').textContent=show.length+' / '+loops.length+' pętli';
+  list.innerHTML=show.map(l=>`<div class="card"><b>${esc(l.name)}</b><div class="muted">${l.bpm} BPM · ${l.bars} takty · ${l.style||''} ${l.featured?'· featured':''}</div>
+    <div class="row"><select data-asg="${l.id}">${ch.map((c,i)=>`<option value="${i}">Ch ${i+1}</option>`).join('')}</select>
+    <button data-act="asg" data-id="${l.id}">Na kanał</button>
+    <button data-act="preview" data-id="${l.id}">▶ Preview</button></div></div>`).join('')||'<p class="muted">Brak sampli — poczekaj na obróbkę albo odśwież.</p>';
+}
+function uiAvBtns(){ AVMODES.forEach((_,i)=>{const b=$('#av-'+i); if(b) b.className=avMode===i?'on':''}) }
+
+/* ===== generators ===== */
+function styleLoops(id){
+  const s=STYLES.find(x=>x.id===id); if(!s) return [];
+  const re=new RegExp(s.q,'i');
+  const loops=manifest.loops||[];
+  let hit=loops.filter(l=>re.test((l.name||'')+' '+(l.style||'')));
+  if(hit.length<4) hit=hit.concat(loops.filter(l=>l.style===s.id||l.style==='techno'));
+  if(!hit.length) hit=loops.slice();
+  /* unique, max 8 */
+  const u=[], seen=new Set();
+  for(const l of hit){ if(!seen.has(l.id)){seen.add(l.id); u.push(l)} }
+  return u.slice(0,8);
+}
+async function styleSet(id){
+  await initAudio();
+  const s=STYLES.find(x=>x.id===id);
+  if(s) setBpm(s.bpm);
+  const pack=styleLoops(id);
+  if(!pack.length){ toast('Brak pętli tego stylu — gram syntezę'); startFallbackStyle(id); return; }
+  ch.forEach((c,i)=>{ if(i>=8) stopSrc(c); });
+  for(let i=0;i<pack.length && i<8;i++) await assignLoop(i, pack[i]);
+  const t=nextQ(1);
+  for(let i=0;i<pack.length && i<8;i++) startCh(ch[i], t);
+  playing=true; $('#playBtn').textContent='■ Stop'; $('#playBtn').classList.add('on');
+  if(!t0) t0=t;
+  startSched(); uiMix(); toast('Style: '+(s?s.n:id));
+}
+function startFallbackStyle(id){
+  seq.on=true; seq.kit=id==='jungle'?'novation':id==='trap'?'akai':'roland';
+  if(id==='trance') setBpm(138);
+  if(id==='jungle') setBpm(174);
+  if(id==='hiphop') setBpm(96);
+  instOn.bass=1; instOn.pad=id==='trance'||id==='house'?1:0;
+  startSched(); toast('Style synth fallback');
+}
+
+function seqMagic(){
+  const dens=0.3+Math.random()*0.4;
+  seq.k=Array.from({length:16},(_,i)=> i%4===0?1:(Math.random()<dens*0.2?1:0));
+  seq.s=Array.from({length:16},(_,i)=> i%8===4?1:(Math.random()<0.12?1:0));
+  seq.h=Array.from({length:16},(_,i)=> i%2===0?1:(Math.random()<0.4?1:0));
+  seq.p=Array.from({length:16},()=> Math.random()<0.22?1:0);
+  uiSeq();
+}
+
+/* drums / instruments scheduled on clock */
+function schedule(){
+  if(!ctx) return;
+  const horizon=now()+0.25;
+  schedule._next=schedule._next||now();
+  if(!playing && !seq.on && !Object.values(instOn).some(Boolean) && !magOn.some(Boolean) && !fxOn.some(Boolean) && !hoodOn && !scootOn && !prodOn){
+    schedule._next=now();
+    return;
+  }
+  const bt=beat();
+  while(schedule._next<horizon){
+    const t=schedule._next;
+    const elapsed=t-(t0||t);
+    const step=Math.floor((elapsed/bt)+0.0001)%16;
+    const sw=(step%2===1)?seq.swing*bt:0;
+    const st=t+sw;
+    if(seq.on){
+      if(seq.k[step]) drum('k',st);
+      if(seq.s[step]) drum('s',st);
+      if(seq.h[step]) drum('h',st,0.5);
+      if(seq.p[step]) drum('p',st,0.6);
+    }
+    if(instOn.bass) synthBass(st, step);
+    if(instOn.lead) synthLead(st, step);
+    if(instOn.pad && step%16===0) synthPad(st, bar()*4);
+    if(instOn.pluck && step%2===0) synthPluck(st, step);
+    if(instOn.arp) synthArp(st, step);
+    if(instOn.stab && step%4===0) synthStab(st, step);
+    if(instOn.keys && (step%4===0||step%4===2)) synthKeys(st, step);
+    if(hoodOn) hoodTick(st, step);
+    if(scootOn) scootTick(st, step);
+    if(prodOn) prodTick(st, step);
+    magOn.forEach((on,i)=>{ if(on) magTick(i,st,step) });
+    fxOn.forEach((on,i)=>{ if(on) fxTick(i,st,step) });
+    schedule._next+=bt;
+  }
+}
+function startSched(){
+  if(schedId) return;
+  if(!t0) t0=now();
+  playing=true;
+  schedule._next=now();
+  schedId=setInterval(schedule, 25);
+  const b=$('#playBtn'); if(b){b.textContent='■ Stop'; b.classList.add('on')}
+  window.__DLOOP.playing=true;
+}
+function stopAll(){
+  playing=false; seq.on=false; hoodOn=scootOn=prodOn=false;
+  magOn=magOn.map(()=>0); fxOn=fxOn.map(()=>0);
+  Object.keys(instOn).forEach(k=>instOn[k]=0);
+  ch.forEach(stopSrc);
+  stopVoice();
+  if(megaTimer){clearTimeout(megaTimer); megaTimer=null}
+  if(schedId){clearInterval(schedId); schedId=0}
+  const b=$('#playBtn'); if(b){b.textContent='▶ Play'; b.classList.remove('on')}
+  window.__DLOOP.playing=false;
+  uiMix(); uiSeq();
+  ['hoodBtn','scootBtn','prodBtn','seqBtn'].forEach(id=>{const e=$('#'+id); if(e) e.classList.remove('on')});
+}
+
+function outBus(){return master}
+
+/* --- drum synth --- */
+function noiseBuf(){
+  if(!noiseBuf._){const n=ctx.sampleRate*1.5,b=ctx.createBuffer(1,n,ctx.sampleRate),d=b.getChannelData(0); for(let i=0;i<n;i++) d[i]=Math.random()*2-1; noiseBuf._=b}
+  return noiseBuf._;
+}
+function envGain(t, a, d, v){
+  const g=ctx.createGain(); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(v, t+a); g.gain.exponentialRampToValueAtTime(0.0001, t+a+d); return g;
+}
+function drum(kind,t,vel=1){
+  if(seq.kit==='samples'){ playShot(kind,t,vel); return; }
+  if(kind==='k'){
+    const o=ctx.createOscillator(); o.type='sine';
+    const g=envGain(t,0.001, seq.kit==='akai'?0.28:0.45, 0.95*vel);
+    o.frequency.setValueAtTime(seq.kit==='nova'?180:130,t);
+    o.frequency.exponentialRampToValueAtTime(36, t+0.12);
+    const click=ctx.createOscillator(); click.type='square'; click.frequency.value=80;
+    const cg=envGain(t,0.001,0.03,0.2*vel);
+    o.connect(g); g.connect(outBus()); o.start(t); o.stop(t+0.5);
+    click.connect(cg); cg.connect(outBus()); click.start(t); click.stop(t+0.04);
+    if(seq.kit==='akai'){ const cr=makeCrush(5); g.connect(cr); cr.connect(outBus()); }
+  } else if(kind==='s'){
+    const src=ctx.createBufferSource(); src.buffer=noiseBuf();
+    const bp=ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=seq.kit==='roland'?1800:1400; bp.Q.value=0.8;
+    const g=envGain(t,0.001,0.18,0.55*vel);
+    src.connect(bp); bp.connect(g); g.connect(outBus()); src.start(t); src.stop(t+0.25);
+    const o=ctx.createOscillator(); o.type='triangle'; o.frequency.value=180;
+    const og=envGain(t,0.001,0.12,0.25*vel); o.connect(og); og.connect(outBus()); o.start(t); o.stop(t+0.15);
+  } else if(kind==='h'){
+    const src=ctx.createBufferSource(); src.buffer=noiseBuf();
+    const hp=ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=7000;
+    const g=envGain(t,0.001, seq.kit==='nova'?0.12:0.04, 0.22*vel);
+    src.connect(hp); hp.connect(g); g.connect(outBus()); src.start(t); src.stop(t+0.15);
+  } else {
+    const src=ctx.createBufferSource(); src.buffer=noiseBuf();
+    const bp=ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=2400+Math.random()*2000; bp.Q.value=4;
+    const g=envGain(t,0.001,0.08,0.3*vel);
+    src.connect(bp); bp.connect(g); g.connect(outBus()); src.start(t); src.stop(t+0.12);
+  }
+}
+async function playShot(kind,t,vel){
+  const list=manifest.oneshots||[];
+  if(!list.length){ seq.kit='roland'; drum(kind,t,vel); return; }
+  const pick=list[(kind==='k'?0:kind==='s'?1:kind==='h'?2:3) % list.length];
+  try{
+    const b=await decodePath(pick.file);
+    const s=ctx.createBufferSource(); s.buffer=b;
+    const g=ctx.createGain(); g.gain.value=0.8*vel;
+    s.connect(g); g.connect(outBus()); s.start(t);
+  }catch(e){}
+}
+
+const SCALE=[0,3,5,7,10,12,15,17]; /* min pent */
+function midi(n){return 440*Math.pow(2,(n-69)/12)}
+function osc(type,freq,t,dur,v,dest,filt){
+  const o=ctx.createOscillator(); o.type=type; o.frequency.setValueAtTime(freq,t);
+  const g=envGain(t,0.01,dur,v);
+  if(filt){o.connect(filt); filt.connect(g)} else o.connect(g);
+  g.connect(dest||outBus()); o.start(t); o.stop(t+dur+0.05); return o;
+}
+function synthBass(t,step){
+  const n=36+SCALE[step%5];
+  const f=ctx.createBiquadFilter(); f.type='lowpass'; f.frequency.setValueAtTime(400,t); f.frequency.exponentialRampToValueAtTime(120,t+0.2); f.Q.value=6;
+  osc('sawtooth', midi(n), t, 0.28, 0.28, outBus(), f);
+}
+function synthLead(t,step){
+  if(step%2) return;
+  osc('square', midi(60+SCALE[(step/2)%SCALE.length]), t, 0.18, 0.12);
+}
+function synthPad(t,dur){
+  [0,7,12].forEach((off,i)=>{
+    const o=ctx.createOscillator(); o.type='sawtooth'; o.frequency.value=midi(48+off)+(i-1)*4;
+    const g=ctx.createGain(); g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(0.05,t+0.4); g.gain.linearRampToValueAtTime(0.0001,t+dur);
+    const f=ctx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=1200;
+    o.connect(f); f.connect(g); g.connect(rev); o.start(t); o.stop(t+dur+0.1);
+  });
+}
+function synthPluck(t,step){ osc('triangle', midi(55+SCALE[step%SCALE.length]), t, 0.15, 0.14) }
+function synthArp(t,step){ osc('square', midi(72+SCALE[step%SCALE.length]), t, 0.1, 0.08) }
+function synthStab(t,step){
+  [0,3,7].forEach(off=>osc('sawtooth', midi(52+off+SCALE[Math.floor(step/4)%3]), t, 0.2, 0.08));
+}
+function synthKeys(t,step){ osc('sine', midi(64+SCALE[step%5]), t, 0.25, 0.1) }
+
+/* magic chops */
+const magState=[];
+function magTick(i,t,step){
+  if(step% (i%2?2:4) ) return;
+  const loops=manifest.loops||[];
+  const meta=loops[(i*3+step)%Math.max(1,loops.length)];
+  if(meta&&bufs[meta.file]){
+    const b=bufs[meta.file];
+    const s=ctx.createBufferSource(); s.buffer=b;
+    const off=(step%8)*0.12 % Math.max(0.01,b.duration-0.12);
+    s.playbackRate.value=1+(i-3)*0.03;
+    const g=envGain(t,0.005,0.22+i*0.02,0.35);
+    s.connect(g); g.connect(outBus());
+    try{s.start(t, off, 0.24+i*0.02)}catch(e){s.start(t)}
+  } else {
+    osc(i%2?'sawtooth':'square', midi(48+i*5+SCALE[step%5]), t, 0.2, 0.12);
+  }
+}
+
+function fxTick(i,t,step){
+  if(i===0 && step===0){ /* rise over a bar */
+    const src=ctx.createBufferSource(); src.buffer=noiseBuf();
+    const f=ctx.createBiquadFilter(); f.type='bandpass'; f.Q.value=8;
+    f.frequency.setValueAtTime(400,t); f.frequency.exponentialRampToValueAtTime(8000,t+bar());
+    const g=envGain(t, bar()*0.8, bar()*0.2, 0.2);
+    src.connect(f); f.connect(g); g.connect(rev); src.start(t); src.stop(t+bar());
+  } else if(i===1 && step%8===0){ /* impact */
+    drum('k',t,1); drum('s',t,0.8);
+    const o=ctx.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(80,t); o.frequency.exponentialRampToValueAtTime(30,t+0.4);
+    const g=envGain(t,0.001,0.4,0.6); o.connect(g); g.connect(outBus()); o.start(t); o.stop(t+0.45);
+  } else if(i===2 && step%4===0){
+    const src=ctx.createBufferSource(); src.buffer=noiseBuf();
+    const f=ctx.createBiquadFilter(); f.type='highpass'; f.frequency.setValueAtTime(2000,t); f.frequency.linearRampToValueAtTime(8000,t+beat());
+    const g=envGain(t,0.01,beat()*0.9,0.15); src.connect(f); f.connect(g); g.connect(outBus()); src.start(t); src.stop(t+beat());
+  } else if(i===3 && step===0){ /* reverse-like swell */
+    const o=ctx.createOscillator(); o.type='sawtooth'; o.frequency.value=midi(40);
+    const g=ctx.createGain(); g.gain.setValueAtTime(0.001,t); g.gain.exponentialRampToValueAtTime(0.2,t+bar()-0.05); g.gain.exponentialRampToValueAtTime(0.001,t+bar());
+    o.connect(g); g.connect(rev); o.start(t); o.stop(t+bar());
+  } else if(i===4){ /* cosmos drone every bar */
+    if(step%16===0){
+      const o=ctx.createOscillator(); o.type='sine'; o.frequency.value=55+(i);
+      const o2=ctx.createOscillator(); o2.type='sine'; o2.frequency.value=55*1.5;
+      const g=envGain(t,0.4, bar()*3, 0.07);
+      o.connect(g); o2.connect(g); g.connect(rev); o.start(t); o2.start(t); o.stop(t+bar()*4); o2.stop(t+bar()*4);
+    }
+  } else if(i===5 && step%8===0){
+    synthStab(t, step);
+  } else if(i===6 && step===8){
+    fxTick(0,t,0);
+  }
+}
+
+function hoodTick(t,step){
+  /* half-time 808 + chops */
+  if(step%8===0) drum('k',t,1);
+  if(step%16===8) drum('s',t,0.7);
+  if(step%2===0) drum('h',t,0.25);
+  if(step%8===0){
+    const o=ctx.createOscillator(); o.type='sine';
+    o.frequency.setValueAtTime(48,t); o.frequency.exponentialRampToValueAtTime(28,t+0.5);
+    const g=envGain(t,0.001,0.6,0.7); o.connect(g); g.connect(outBus()); o.start(t); o.stop(t+0.7);
+  }
+  if(step%4===0) magTick(2,t,step);
+}
+
+function scootTick(t,step){
+  if(step%4===0) drum('k',t,1);
+  if(step===4||step===12) drum('s',t,0.8);
+  drum('h',t,0.3);
+  /* gated hoover-like (original saw stack, not a preset dump) */
+  if(true){
+    const f0=midi(52+SCALE[Math.floor(step/2)%4]);
+    [0,0.12,-0.12].forEach(det=>{
+      const o=ctx.createOscillator(); o.type='sawtooth'; o.frequency.value=f0+det;
+      const g=ctx.createGain(); g.gain.setValueAtTime(0.07,t); g.gain.setValueAtTime(0.07,t+beat()*0.35); g.gain.setValueAtTime(0.0001,t+beat()*0.38);
+      const f=ctx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=2200; f.Q.value=4;
+      o.connect(f); f.connect(g); g.connect(outBus()); o.start(t); o.stop(t+beat());
+    });
+  }
+}
+function prodTick(t,step){
+  /* breakbeat-ish */
+  const kpat=[1,0,0,1,0,0,1,0,0,1,0,0,1,0,1,0];
+  const spat=[0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0];
+  if(kpat[step]) drum('k',t,1);
+  if(spat[step]) drum('s',t,0.85);
+  if(step%2) drum('h',t,0.28);
+  if(step%8===0){
+    const o=ctx.createOscillator(); o.type='square';
+    o.frequency.setValueAtTime(midi(31),t);
+    const f=ctx.createBiquadFilter(); f.type='lowpass'; f.Q.value=10; f.frequency.setValueAtTime(900,t); f.frequency.exponentialRampToValueAtTime(200,t+0.25);
+    const g=envGain(t,0.005,0.28,0.3); const sh=makeCrush(5);
+    o.connect(f); f.connect(sh); sh.connect(g); g.connect(outBus()); o.start(t); o.stop(t+0.3);
+  }
+  if(step%8===4) synthStab(t,step);
+}
+
+function hwDemo(k){
+  initAudio().then(()=>{
+    seq.kit=k; seq.on=true; startSched();
+    if(k==='novation'){ instOn.bass=1; setBpm(132); }
+    if(k==='nova'){ instOn.pad=1; instOn.lead=1; }
+    if(k==='akai'){ setBpm(96); }
+    if(k==='roland'){ setBpm(128); }
+    toast('Kit: '+HW[k]);
+  });
+}
+
+/* ===== voice ===== */
+function voiceChain(srcNode, mode){
+  const out=ctx.createGain(); out.gain.value=1.1;
+  let n=srcNode;
+  const bp=ctx.createBiquadFilter();
+  const bp2=ctx.createBiquadFilter();
+  const ws=ctx.createWaveShaper();
+  const dely=ctx.createDelay(0.4); const fb=ctx.createGain();
+  const osc=ctx.createOscillator(); const oscG=ctx.createGain();
+  const ng=ctx.createGain();
+  if(mode==='high'||mode==='deep'||mode==='alien'){
+    /* cheap delay-based pitch (graf) */
+    const p=mode==='deep'?0.72: mode==='high'?1.35:1.18;
+    const d=ctx.createDelay(0.08);
+    /* playback-rate like via periodic delay modulation */
+    const lfo=ctx.createOscillator(); lfo.frequency.value=40*p;
+    const lg=ctx.createGain(); lg.gain.value=0.002+Math.abs(p-1)*0.004;
+    lfo.connect(lg); lg.connect(d.delayTime); d.delayTime.value=0.03;
+    n.connect(d); n=d; lfo.start();
+    if(mode==='deep'){ bp.type='lowpass'; bp.frequency.value=900; d.connect(bp); n=bp; }
+    if(mode==='high'){ bp.type='highpass'; bp.frequency.value=250; d.connect(bp); n=bp; }
+  }
+  if(mode==='robot'||mode==='alien'){
+    osc.frequency.value=mode==='alien'?55:42; oscG.gain.value=0.7;
+    const ring=ctx.createGain();
+    n.connect(ring); osc.connect(oscG); oscG.connect(ring.gain);
+    ring.gain.value=0.4; n=ring; osc.start();
+    const cr=makeCrush(4); n.connect(cr); n=cr;
+  }
+  if(mode==='phone'){
+    bp.type='bandpass'; bp.frequency.value=900; bp.Q.value=0.7;
+    bp2.type='highpass'; bp2.frequency.value=300;
+    n.connect(bp2); bp2.connect(bp); n=bp;
+  }
+  if(mode==='whisper'){
+    bp.type='highpass'; bp.frequency.value=1200;
+    const ns=ctx.createBufferSource(); ns.buffer=noiseBuf(); ns.loop=true;
+    const nsg=ctx.createGain(); nsg.gain.value=0.08; ns.connect(nsg);
+    n.connect(bp); bp.connect(out); nsg.connect(out); ns.start();
+    n=null; /* already connected */
+    voice._extra=ns;
+  }
+  if(mode==='mega'){
+    const curve=new Float32Array(256);
+    for(let i=0;i<256;i++){const x=i/128-1; curve[i]=Math.tanh(x*3)}
+    ws.curve=curve;
+    bp.type='bandpass'; bp.frequency.value=1400; bp.Q.value=0.8;
+    const tr=ctx.createOscillator(); tr.frequency.value=18; const trg=ctx.createGain(); trg.gain.value=0.15;
+    const mg=ctx.createGain(); mg.gain.value=0.9;
+    tr.connect(trg); trg.connect(mg.gain); tr.start();
+    n.connect(ws); ws.connect(bp); bp.connect(mg); n=mg;
+  }
+  if(mode==='alien'){
+    dely.delayTime.value=0.16; fb.gain.value=0.35; n.connect(dely); dely.connect(fb); fb.connect(dely); dely.connect(out);
+  }
+  if(n) n.connect(out);
+  out.connect(master);
+  return {out, osc};
+}
+async function startMic(){
+  await initAudio();
+  stopVoice();
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    const src=ctx.createMediaStreamSource(stream);
+    voice.mic=stream;
+    voice.nodes=voiceChain(src, voice.mode);
+    voice.on=true; voice.src='mic';
+    $('#voiceStat') && ($('#voiceStat').textContent='preset: '+voice.mode+' · źródło: mikrofon');
+    toast('Mikrofon + '+voice.mode);
+  }catch(e){ toast('Brak dostępu do mikrofonu'); report(e) }
+}
+function stopVoice(){
+  if(voice.mic){ voice.mic.getTracks().forEach(t=>t.stop()); voice.mic=null; }
+  if(voice._bufSrc){try{voice._bufSrc.stop()}catch(e){} voice._bufSrc=null}
+  if(voice._extra){try{voice._extra.stop()}catch(e){} voice._extra=null}
+  voice.on=false;
+}
+async function voiceFromBuf(){
+  await initAudio();
+  if(!userBuf){ toast('Najpierw wczytaj MP3'); return; }
+  stopVoice();
+  const s=ctx.createBufferSource(); s.buffer=userBuf; s.loop=true;
+  if(voice.mode==='high') s.playbackRate.value=1.25;
+  if(voice.mode==='deep') s.playbackRate.value=0.75;
+  if(voice.mode==='alien') s.playbackRate.value=1.12;
+  voice.nodes=voiceChain(s, voice.mode);
+  s.start(); voice._bufSrc=s; voice.on=true; voice.src='mp3';
+  $('#voiceStat') && ($('#voiceStat').textContent='preset: '+voice.mode+' · źródło: '+userName);
+}
+
+/* ===== mega / long set ===== */
+async function megaStart(bars){
+  await initAudio();
+  const loops=manifest.loops||[];
+  bars=+bars||128;
+  const log=$('#megaLog');
+  const plan=[];
+  const secs=['intro','groove','drop','break','groove','drop','outro'];
+  let left=bars, i=0;
+  secs.forEach((name,ix)=>{
+    const n=Math.max(8, Math.round(bars*(ix===2||ix===5?0.2:ix===3?0.1:0.14)/8)*8);
+    const use=Math.min(n,left); left-=use;
+    if(use>0) plan.push({name,bars:use,loop:loops[(i++)%Math.max(1,loops.length)]});
+  });
+  if(log) log.textContent=plan.map(p=>`${p.name}: ${p.bars} taktów${p.loop?' · '+(p.loop.name||''):''}`).join('  →  ');
+  /* start engine */
+  seq.on=true; seqMagic(); instOn.bass=1; instOn.pad=1;
+  const first=loops.filter(l=>l.featured).concat(loops).slice(0,6);
+  for(let i=0;i<first.length && i<6;i++) await assignLoop(i, first[i]);
+  const t=nextQ(1); t0=t; first.forEach((_,i)=>startCh(ch[i], t));
+  startSched();
+  /* section changes */
+  let acc=0;
+  plan.forEach(p=>{
+    const ms=p.bars*bar()*1000;
+    const when=acc; acc+=ms;
+    setTimeout(()=>{
+      if(!playing) return;
+      if(p.name==='drop'){ hoodOn=true; fxOn[1]=1; fxOn[0]=1; }
+      else if(p.name==='break'){ hoodOn=false; ch.forEach((c,i)=>{if(i>2)stopSrc(c)}); instOn.pad=1; }
+      else if(p.name==='outro'){ fxOn[4]=1; hoodOn=false; }
+      else { hoodOn=false; fxOn[1]=0; }
+      toast('Mega: '+p.name);
+    }, when);
+  });
+  megaTimer=setTimeout(()=>{ toast('Koniec Mega Setu'); }, acc+500);
+  toast('Mega Mix '+bars+' taktów');
+}
+
+/* ===== WAV rec ===== */
+function wavFromChunks(chunks,sr){
+  const n=chunks.reduce((a,c)=>a+c[0].length,0);
+  const buf=new ArrayBuffer(44+n*4);
+  const v=new DataView(buf);
+  const w=(o,s)=>{for(let i=0;i<s.length;i++) v.setUint8(o+i,s.charCodeAt(i))};
+  w(0,'RIFF'); v.setUint32(4,36+n*4,true); w(8,'WAVE'); w(12,'fmt ');
+  v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,2,true);
+  v.setUint32(24,sr,true); v.setUint32(28,sr*4,true); v.setUint16(32,4,true); v.setUint16(34,16,true);
+  w(36,'data'); v.setUint32(40,n*4,true);
+  let off=44;
+  for(const [l,r] of chunks){
+    for(let i=0;i<l.length;i++){
+      const L=Math.max(-1,Math.min(1,l[i])), R=Math.max(-1,Math.min(1,r[i]||l[i]));
+      v.setInt16(off, L*32767, true); v.setInt16(off+2, R*32767, true); off+=4;
+    }
+  }
+  return new Blob([buf],{type:'audio/wav'});
+}
+function dl(blob,name){const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.append(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),5000)}
+async function recToggle(){
+  await initAudio();
+  if(recOn){
+    recOn=false; pcmOn=false;
+    const blob=wavFromChunks(pcmChunks, ctx.sampleRate);
+    dl(blob, 'DLoop_XD_DJ_DaX_mix.wav');
+    $('#recBtn').textContent='⏺ WAV'; $('#recBtn').classList.remove('on');
+    toast('Zapisano WAV');
+  }else{
+    pcmChunks=[]; pcmOn=true; recOn=true;
+    $('#recBtn').textContent='■ Stop WAV'; $('#recBtn').classList.add('on');
+    toast('Nagrywam master…');
+  }
+}
+
+/* ===== visuals ===== */
+function holoCanvas(){ return $('#holo') || $('#holo2') }
+function startHolo(){
+  const c=holoCanvas(); if(!c) return;
+  const g=c.getContext('2d');
+  cancelAnimationFrame(holoRaf);
+  const timeD=new Uint8Array(analyser?analyser.fftSize:2048);
+  const freq=new Uint8Array(analyser?analyser.frequencyBinCount:1024);
+  const draw=()=>{
+    holoRaf=requestAnimationFrame(draw);
+    const w=c.width,h=c.height;
+    if(analyser){ analyser.getByteTimeDomainData(timeD); analyser.getByteFrequencyData(freq); }
+    g.fillStyle='rgba(0,0,0,0.18)'; g.fillRect(0,0,w,h);
+    const t=performance.now()/1000;
+    const bass=freq[2]||0, mid=freq[20]||0, hi=freq[80]||0;
+    const cx=w/2, cy=h/2;
+    if(avMode===0){ /* tunnel */
+      for(let i=16;i>=1;i--){
+        const r=(i*28 + (t*80+bass)%28);
+        g.strokeStyle=`hsla(${180+i*8+mid/4},100%,${50+hi/8}%,0.7)`;
+        g.lineWidth=2; g.beginPath(); g.ellipse(cx,cy,r*(w/900),r*(h/900)*0.7, t*0.2,0,Math.PI*2); g.stroke();
+      }
+    } else if(avMode===1){ /* plasma */
+      const img=g.getImageData(0,0, w/4, h/4);
+      /* cheap bars */
+      for(let x=0;x<w;x+=8){
+        const v=freq[Math.floor(x/w*freq.length)]||0;
+        g.fillStyle=`hsla(${120+v},100%,50%,0.45)`;
+        g.fillRect(x, h/2-v, 6, v*2);
+      }
+    } else if(avMode===2){ /* orbs */
+      for(let i=0;i<24;i++){
+        const a=t*(0.4+i*0.02)+i, rad=80+bass*0.8+i*6;
+        g.fillStyle=`hsla(${300+i*10},100%,60%,0.5)`;
+        g.beginPath(); g.arc(cx+Math.cos(a)*rad, cy+Math.sin(a)*rad*0.6, 6+ (freq[i*3]||0)/20, 0, Math.PI*2); g.fill();
+      }
+    } else if(avMode===3){ /* rings fft */
+      g.strokeStyle='#00e5ff'; g.beginPath();
+      for(let i=0;i<freq.length;i+=4){
+        const a=i/freq.length*Math.PI*2, r=70+(freq[i]||0)*0.9;
+        const x=cx+Math.cos(a+t)*r, y=cy+Math.sin(a+t)*r*0.7;
+        i===0?g.moveTo(x,y):g.lineTo(x,y);
+      }
+      g.closePath(); g.stroke();
+    } else if(avMode===4){ /* neon grid */
+      g.strokeStyle='rgba(0,229,255,0.35)';
+      const p= (t*40)%40;
+      for(let y=0;y<h;y+=40){ g.beginPath(); g.moveTo(0,y+p); g.lineTo(w,y+p); g.stroke(); }
+      for(let x=0;x<w;x+=40){ g.beginPath(); g.moveTo(x,0); g.lineTo(x+(bass-128),h); g.stroke(); }
+      g.strokeStyle='#ff2bd6'; g.beginPath();
+      for(let i=0;i<timeD.length;i++){ const x=i/timeD.length*w, y=h/2+((timeD[i]-128)/128)*h*0.3; i?g.lineTo(x,y):g.moveTo(x,y)} g.stroke();
+    } else if(avMode===5){ /* hood city */
+      g.fillStyle='#050510'; g.fillRect(0,0,w,h);
+      for(let i=0;i<40;i++){
+        const bh=40+(freq[i+5]||0)*1.4, x=i*(w/40);
+        g.fillStyle=`hsl(${280+i},80%,${30+(freq[i]||0)/8}%)`;
+        g.fillRect(x, h-bh, w/42, bh);
+      }
+      g.fillStyle='#ffe600'; g.beginPath(); g.arc(w*0.8, h*0.2, 18, 0, Math.PI*2); g.fill();
+    } else { /* cosmos */
+      g.fillStyle='#020010'; g.fillRect(0,0,w,h);
+      for(let i=0;i<80;i++){
+        const x=((i*97 + t*30*(i%3+1))%w), y=((i*53 + t*20)%h);
+        g.fillStyle=`rgba(200,230,255,${0.4+(freq[i]||0)/400})`;
+        g.fillRect(x,y,2,2);
+      }
+      g.strokeStyle='#00e5ff'; g.beginPath();
+      for(let i=0;i<timeD.length;i+=2){ const x=i/timeD.length*w, y=h*0.6+((timeD[i]-128)/128)*h*0.25; i?g.lineTo(x,y):g.moveTo(x,y)} g.stroke();
+      g.strokeStyle='#ff2bd6'; g.beginPath();
+      for(let i=0;i<timeD.length;i+=2){ const x=i/timeD.length*w, y=h*0.6+((timeD[i]-128)/128)*-h*0.2; i?g.lineTo(x,y):g.moveTo(x,y)} g.stroke();
+    }
+  };
+  draw();
+}
+function startScope(){
+  const c=$('#scope'); if(!c) return;
+  const g=c.getContext('2d'); const d=new Uint8Array(2048);
+  const loop=()=>{
+    requestAnimationFrame(loop);
+    g.fillStyle='#000'; g.fillRect(0,0,c.width,c.height);
+    if(!analyser) return;
+    analyser.getByteTimeDomainData(d);
+    g.strokeStyle='#00e5ff'; g.beginPath();
+    for(let i=0;i<d.length;i++){ const x=i/d.length*c.width, y=c.height/2+((d[i]-128)/128)*c.height*0.45; i?g.lineTo(x,y):g.moveTo(x,y)} g.stroke();
+  };
+  loop();
+}
+
+function ytId(u){
+  if(!u) return '';
+  try{
+    const x=new URL(u);
+    if(x.hostname.includes('youtu.be')) return x.pathname.slice(1).split('/')[0];
+    return x.searchParams.get('v')||'';
+  }catch(e){ return '' }
+}
+
+/* ===== actions ===== */
+const ACT={
+  open:e=>openW(e.target.closest('[data-w]').dataset.w),
+  close:()=>closeWin(),
+  max:e=>maxWin(e.target.closest('.win')),
+  playToggle:async()=>{
+    await initAudio();
+    if(playing){ stopAll(); }
+    else {
+      const t=nextQ(1); t0=t;
+      const any=ch.filter(c=>c.buf);
+      if(any.length){ any.slice(0,4).forEach(c=>startCh(c,t)); }
+      else { seq.on=true; instOn.bass=1; }
+      startSched(); uiMix();
+    }
+  },
+  tap:()=>{
+    const t=performance.now(); tapTs.push(t); tapTs=tapTs.filter(x=>t-x<3000);
+    if(tapTs.length>=3){ const dt=(tapTs[tapTs.length-1]-tapTs[0])/(tapTs.length-1); setBpm(Math.round(60000/dt)); toast('BPM '+bpm) }
+  },
+  sync:()=>{ const t=nextQ(1); ch.forEach(c=>{ if(c.on&&c.buf) startCh(c,t) }); toast('Sync') },
+  rec:()=>recToggle(),
+  allStop:()=>{ ch.forEach(stopSrc); uiMix(); },
+  randCh:async()=>{
+    await initAudio();
+    const loops=manifest.loops||[]; if(!loops.length){toast('Brak sampli'); return}
+    const pick=[...loops].sort(()=>Math.random()-0.5).slice(0,8);
+    for(let i=0;i<pick.length;i++) await assignLoop(i,pick[i]);
+    const t=nextQ(1); pick.forEach((_,i)=>startCh(ch[i],t)); startSched(); uiMix();
+  },
+  chPlay:e=>toggleCh(+e.target.dataset.i),
+  chMute:e=>{const c=ch[+e.target.dataset.i]; c.mute=!c.mute; applyMuteSolo(); uiMix();},
+  chSolo:e=>{const c=ch[+e.target.dataset.i]; c.solo=!c.solo; applyMuteSolo(); uiMix();},
+  styleSet:e=>styleSet(e.target.dataset.s),
+  seqToggle:async()=>{ await initAudio(); seq.on=!seq.on; if(seq.on) startSched(); uiSeq(); },
+  seqMagic:()=>{ seqMagic(); if(!seq.on){seq.on=true; initAudio().then(startSched)} uiSeq(); },
+  seqClear:()=>{ seq.k=new Array(16).fill(0); seq.s=new Array(16).fill(0); seq.h=new Array(16).fill(0); seq.p=new Array(16).fill(0); uiSeq(); },
+  step:e=>{ const r=e.target.dataset.r,i=+e.target.dataset.i; seq[r][i]=seq[r][i]?0:1; uiSeq(); },
+  instToggle:e=>{ const k=e.target.dataset.k; instOn[k]=instOn[k]?0:1; e.target.classList.toggle('on',!!instOn[k]); initAudio().then(startSched); },
+  magToggle:e=>{ const i=+e.target.dataset.i; magOn[i]=!magOn[i]; e.target.classList.toggle('on',!!magOn[i]); initAudio().then(()=>{ preloadSome(); startSched(); }); },
+  magAll:()=>{ magOn=magOn.map(()=>true); $$('[id^=mag-]').forEach(b=>b.classList.add('on')); initAudio().then(()=>{preloadSome(); startSched()}); },
+  magStop:()=>{ magOn=magOn.map(()=>false); $$('[id^=mag-]').forEach(b=>b.classList.remove('on')); },
+  fxToggle:e=>{ const i=+e.target.dataset.i; fxOn[i]=!fxOn[i]; e.target.classList.toggle('on',!!fxOn[i]); initAudio().then(startSched); },
+  hood:async()=>{ await initAudio(); hoodOn=!hoodOn; setBpm(130); seq.on=true; $('#hoodBtn')&&$('#hoodBtn').classList.toggle('on',hoodOn); startSched(); toast(hoodOn?'Hood Remix ON':'Hood OFF'); },
+  scoot:async()=>{ await initAudio(); scootOn=!scootOn; if(scootOn){ setBpm(150); seq.on=false; } $('#scootBtn')&&$('#scootBtn').classList.toggle('on',scootOn); startSched(); },
+  prod:async()=>{ await initAudio(); prodOn=!prodOn; if(prodOn){ setBpm(135); seq.on=false; } $('#prodBtn')&&$('#prodBtn').classList.toggle('on',prodOn); startSched(); },
+  hwKit:e=>{ seq.kit=e.target.dataset.k; seq.on=true; initAudio().then(startSched); toast('Kit '+e.target.dataset.k); },
+  hwDemo:e=>hwDemo(e.target.dataset.k),
+  megaStart:()=>megaStart(($('#megaLen')||{}).value||128),
+  megaStop:()=>{ if(megaTimer){clearTimeout(megaTimer); megaTimer=null} hoodOn=false; toast('Set stop'); },
+  longSet:async()=>{ avMode=6; openW('av'); await megaStart(256); startHolo(); toast('Long Set + holo'); },
+  avMode:e=>{ avMode=+e.target.dataset.i; uiAvBtns(); startHolo(); },
+  mic:()=>startMic(),
+  voiceMode:e=>{ voice.mode=e.target.dataset.m; $$('[id^=vm-]').forEach(b=>b.classList.toggle('on',b.dataset.m===voice.mode)); if(voice.src==='mic') startMic(); else if(voice.src==='mp3') voiceFromBuf(); $('#voiceStat')&&($('#voiceStat').textContent='preset: '+voice.mode); },
+  voicePlay:()=>voiceFromBuf(),
+  voiceStop:()=>stopVoice(),
+  loadMp3:()=>doLoadMp3(),
+  ytOpen:()=>{ const u=($('#ytUrl')||{}).value||''; if(!u) return toast('Wklej link'); window.open(u,'_blank','noopener'); },
+  ytEmbed:()=>{
+    const u=($('#ytUrl')||{}).value||''; const id=ytId(u);
+    if(!id){ toast('Nie da się osadzić — otwieram link'); if(u) window.open(u,'_blank','noopener'); return; }
+    const box=$('#ytbox'); if(box) box.src='https://www.youtube-nocookie.com/embed/'+id;
+  },
+  asg:e=>{
+    const id=e.target.dataset.id; const l=(manifest.loops||[]).find(x=>x.id===id);
+    const sel=e.target.parentElement.querySelector('select');
+    if(l) assignLoop(+(sel&&sel.value||0), l).then(()=>toast('Kanał zaktualizowany'));
+  },
+  preview:async e=>{
+    await initAudio();
+    const l=(manifest.loops||[]).find(x=>x.id===e.target.dataset.id); if(!l) return;
+    const b=await decodePath(l.file);
+    const s=ctx.createBufferSource(); s.buffer=b; const g=ctx.createGain(); g.gain.value=0.7;
+    s.connect(g); g.connect(master); s.start(); setTimeout(()=>{try{s.stop()}catch(e){}}, 4000);
+  },
+  clipStart:()=>startClip(20),
+  clipStop:()=>stopClip()
+};
+
+async function preloadSome(){
+  const loops=manifest.loops||[];
+  for(const l of loops.slice(0,16)){ if(!bufs[l.file]) decodePath(l.file).catch(()=>{}); }
+}
+
+async function doLoadMp3(){
+  const inp=$('#mp3File'); if(!inp||!inp.files||!inp.files[0]){ toast('Wybierz plik MP3'); return; }
+  await initAudio();
+  const f=inp.files[0];
+  try{
+    const ab=await f.arrayBuffer();
+    userBuf=await ctx.decodeAudioData(ab.slice(0));
+    userName=f.name;
+    const i=+$('#mp3Ch').value||0;
+    ch[i].buf=userBuf; ch[i].meta={name:f.name,bpm:bpm,bars:8}; ch[i].name=f.name;
+    $('#mp3Stat').textContent='wczytano '+f.name+' · '+(userBuf.duration||0).toFixed(1)+'s → kanał '+(i+1);
+    uiMix(); toast('MP3 na kanale '+(i+1));
+  }catch(e){ toast('Nie udało się odczytać pliku'); report(e); }
+}
+
+async function startClip(sec){
+  await initAudio();
+  startHolo();
+  const c=holoCanvas(); if(!c){ toast('Otwórz najpierw AV albo to okno'); openW('av'); return; }
+  const stream=c.captureStream(30);
+  const dest=ctx.createMediaStreamDestination();
+  limiter.connect(dest);
+  dest.stream.getAudioTracks().forEach(tr=>stream.addTrack(tr));
+  const rec=new MediaRecorder(stream, {mimeType: MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')?'video/webm;codecs=vp9,opus':'video/webm'});
+  const chunks=[];
+  rec.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data) };
+  rec.onstop=()=>{ const blob=new Blob(chunks,{type:'video/webm'}); dl(blob,'DLoop_XD_DJ_DaX_clip.webm'); $('#clipStat')&&($('#clipStat').textContent='zapisano klip WebM'); toast('Klip zapisany'); };
+  rec.start(); avRec=rec;
+  if(!playing) ACT.playToggle();
+  $('#clipStat')&&($('#clipStat').textContent='nagrywanie klipu…');
+  avRec._t=setTimeout(()=>stopClip(), (sec||20)*1000);
+}
+function stopClip(){
+  if(avRec&&avRec._t) clearTimeout(avRec._t);
+  if(avRec&&avRec.state==='recording') avRec.stop();
+  avRec=null;
+}
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]'); if(!b) return;
+  const fn=ACT[b.dataset.act]; if(fn) { e.preventDefault(); fn(e); }
+});
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.id==='bpm') setBpm(+t.value);
+  if(t.id==='mvol'&&master) master.gain.value=+t.value;
+  if(t.id==='swing') seq.swing=+t.value;
+  if(t.id==='kit') seq.kit=t.value;
+  if(t.id==='smpQ'||t.id==='smpStyle') uiSamples();
+  if(t.dataset.ch){ const c=ch[+t.dataset.i]; if(!c) return; c[t.dataset.ch]=+t.value; applyChFX(c); }
+});
+document.addEventListener('change',e=>{
+  if(e.target.id==='voiceFile'&&e.target.files[0]){
+    const f=e.target.files[0];
+    initAudio().then(async()=>{
+      try{ userBuf=await ctx.decodeAudioData((await f.arrayBuffer()).slice(0)); userName=f.name; toast('Voice MP3: '+f.name);}catch(err){toast('Błąd pliku');}
+    });
+  }
+  if(e.target.id==='mp3File'&&e.target.files[0]){ /* wait for button or auto */ }
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ closeWin(); return; }
+  if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
+  if(e.key===' '){ e.preventDefault(); ACT.playToggle(); }
+});
+$('#ov').addEventListener('click', closeWin);
+
+buildWins();
+uiMix();
+startScope();
+loadManifest();
+$('#bpm').addEventListener('change',()=>setBpm(+$('#bpm').value));
+</script>
+</body>
+</html>
