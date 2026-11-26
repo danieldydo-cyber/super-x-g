@@ -1,4 +1,4 @@
-D7 DJ Studio / DLoop X D DJ — DJ DaX · Kraków · 1.3.1
+D7 DJ Studio / DLoop X D DJ — DJ DaX · Kraków · 1.3.2
 
 ADRESY NA ŻYWO
 Aplikacja:     https://danieldydo-cyber.github.io/super-x-g/dloop.html
@@ -8,18 +8,21 @@ Rozszerzenie:  https://danieldydo-cyber.github.io/super-x-g/downloads/d7-dj-stud
 (stare Super DJ Loops, nietknięte: https://danieldydo-cyber.github.io/super-x-g/downloads/super-dj-loops-extension.zip)
 Windows (exe, za duży na GitHub Pages): folder Drive „D7 DJ Studio / Windows”
 
-NOWOŚĆ 1.3.1 — Engine G DJ Sound
-- Na Play gra tylko 1 ścieżka (kanał 1); reszta uzbrojona, Ty dopinasz.
-- G DJ Sound Multitool na pierwszej stronie: fadery 8/28, master, FX, generatory, crossfader, BPM/sync.
-- Ambient G (120 BPM) jako domyślna scena. Miękki łańcuch: HP 30 Hz, ping-pong delay, długi reverb, limiter −1 dBTP.
-- Pętle przycięte do dokładnej długości taktów, start na granicy taktu.
+NOWOŚĆ 1.3.2 — Studio Rec + płynniejszy dźwięk
+- Scheduler w Web Workerze, latencyHint playback, cache sampli, auto-jakość wizuali, pauza ukrytych okien.
+- Nagrywanie setu 7 / 14 / 21 / 27 / 37 / 47 / 57 / 67 / 77 min (albo własny czas). Auto DJ lub Mega Mix z intro i outro, timer, auto-stop.
+- Audio w kawałkach (MediaRecorder Opus/WebM albo WAV) do IndexedDB — 77 min nie musi mieścić się w RAM.
+- Studio + wizualizacje: WebM (VP9/VP8 + Opus), 720p lub 1080p, 30/60 fps, ten sam zakres czasu.
+- „Nagraj offline szybciej”: OfflineAudioContext, tylko audio, max 21 min (dłuższe = na żywo, przez pamięć).
+- Super bass (sub + saturacja + mono poniżej 120 Hz), super snare (body + szum + transient + krótki room), Mega Mix DJ Remix.
+- Na Play nadal tylko 1 ścieżka na start. Telefony mogą uciąć bardzo długi film (pamięć / kodek / czas).
 
 INSTALACJA — WEB
 1. Rozpakuj ZIP. Uruchom: python3 -m http.server 8765
 2. Otwórz http://127.0.0.1:8765/dloop.html
 
 INSTALACJA — ANDROID
-Pobierz D7-DJ-Studio.apk (1.3.1). Kopia 1.3.0 zostaje jako D7-DJ-Studio-v1.3.0.apk.
+Pobierz D7-DJ-Studio.apk (1.3.2). Kopia 1.3.1 zostaje jako D7-DJ-Studio-v1.3.1.apk.
 Pakiet com.danieldydo.d7djstudio, podpis debug (nie Sklep Play).
 
 INSTALACJA — WINDOWS
