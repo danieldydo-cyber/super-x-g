@@ -66,6 +66,10 @@ body.remote header,body.remote nav,body.remote main,body.remote footer{display:n
 #pwaInstall{display:none}
 #pwaInstall.show{display:inline-block}
 
+
+nav .nav-g{display:flex;flex-wrap:wrap;gap:5px;align-items:center;padding:4px 6px;border:1px solid #2a2a55;border-radius:8px;background:#0c0c18cc}
+nav .nav-g>i{font-style:normal;font-size:10px;color:#8a8ab0;margin-right:4px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+
 </style>
 </head>
 <body>
@@ -81,22 +85,34 @@ body.remote header,body.remote nav,body.remote main,body.remote footer{display:n
  <span id="stat" class="muted">audio: off</span>
 </header>
 <nav>
- <button data-act="open" data-w="mixer">🎚 Mikser</button>
- <button data-act="open" data-w="magic">✨ Sound Magic</button>
- <button data-act="open" data-w="genres">🎛 7 generatorów gatunków</button>
- <button data-act="open" data-w="maria">👑 Maria Magic GoD 7</button>
- <button data-act="open" data-w="pads">🥁 Pady Akai</button>
- <button data-act="open" data-w="midi">🎹 MIDI</button>
- <button data-act="open" data-w="remote">📱 Pilot</button>
- <button data-act="open" data-w="bot">🤖 DJ Bot</button>
- <button data-act="open" data-w="agents">🐉 777 agentów</button>
- <button data-act="open" data-w="fix">🛠 7 botów naprawczych</button>
- <button data-act="open" data-w="video">🎬 Wideo 4K</button>
- <button data-act="open" data-w="export">⬇ Pobierz / eksport</button>
- <button data-act="open" data-w="dloop">🌀 DLoop X D DJ</button>
- <a href="downloads/D7-DJ-Studio.apk" download="D7-DJ-Studio.apk"><button type="button">📲 Pobierz APK D7 DJ Studio</button></a>
- <button data-act="open" data-w="blik">💛 BLIK</button>
- <button data-act="open" data-w="info">ℹ Info</button>
+ <div class="nav-g" data-g="studio"><i>Studio</i>
+  <button data-act="open" data-w="mixer">🎚 Mikser</button>
+  <button data-act="open" data-w="magic">✨ Sound Magic</button>
+  <button data-act="open" data-w="genres">🎛 7 generatorów gatunków</button>
+  <button data-act="open" data-w="maria">👑 Maria Magic GoD 7</button>
+  <button data-act="open" data-w="pads">🥁 Pady Akai</button>
+ </div>
+ <div class="nav-g" data-g="sterowanie"><i>Sterowanie</i>
+  <button data-act="open" data-w="midi">🎹 MIDI</button>
+  <button data-act="open" data-w="remote">📱 Pilot</button>
+  <button data-act="open" data-w="export">⬇ Pobierz / eksport</button>
+ </div>
+ <div class="nav-g" data-g="boty"><i>Boty / Auto</i>
+  <button data-act="open" data-w="bot">🤖 DJ Bot</button>
+  <button data-act="open" data-w="agents">🐉 777 agentów</button>
+  <button data-act="open" data-w="fix">🛠 7 botów naprawczych</button>
+ </div>
+ <div class="nav-g" data-g="wiz"><i>Wizual</i>
+  <button data-act="open" data-w="video">🎬 Wideo 4K</button>
+ </div>
+ <div class="nav-g" data-g="apps"><i>Aplikacje</i>
+  <button data-act="open" data-w="dloop">🌀 DLoop X D DJ</button>
+  <a href="downloads/D7-DJ-Studio.apk" download="D7-DJ-Studio.apk"><button type="button">📲 Pobierz APK D7 DJ Studio</button></a>
+ </div>
+ <div class="nav-g" data-g="system"><i>System</i>
+  <button data-act="open" data-w="blik">💛 BLIK</button>
+  <button data-act="open" data-w="info">ℹ Info</button>
+ </div>
 </nav>
 <div id="installRow">
   <b>Pobierz / zainstaluj</b>

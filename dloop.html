@@ -138,6 +138,14 @@ button.spm.on{background:linear-gradient(90deg,#ff2bd688,#00e5ff66);border-color
 .vs-win-avs{display:flex;gap:16px;align-items:center;justify-content:center;margin:12px 0}
 .vs-card{border-color:#ffe60066}
 
+
+nav .nav-g, #g7Launch .g7-g, .g7-modes-groups .g7-g{display:flex;flex-wrap:wrap;gap:5px;align-items:center;padding:4px 6px;border:1px solid #2a2a55;border-radius:8px;background:#0c0c18cc}
+nav .nav-g>i, #g7Launch .g7-g>i, .g7-modes-groups .g7-g>i{font-style:normal;font-size:10px;color:#8a8ab0;margin-right:4px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+#mgsBox{margin-top:10px}
+#mgsBox .gx-modes{margin-top:6px}
+#brainUI .brain-row label{display:flex;gap:6px;align-items:center;font-size:12px}
+#brainUI input[type=range]{width:90px}
+
 </style>
 </head>
 <body>
@@ -156,28 +164,40 @@ button.spm.on{background:linear-gradient(90deg,#ff2bd688,#00e5ff66);border-color
   <a href="superdj.html" style="margin-left:auto"><button>⬅ Super DJ Loops</button></a>
 </header>
 <nav>
-  <button data-act="open" data-w="promaxx">⚡ Pro Maxx G7</button>
-  <button data-act="open" data-w="boty">🤖 Boty / Auto</button>
-  <button data-act="open" data-w="mixer">🎚 Mixer 28</button>
-  <button data-act="open" data-w="core">🧬 7 Core</button>
-  <button data-act="open" data-w="spm">✨ Super Power Magic</button>
-  <button data-act="open" data-w="gcosmos">🌌 G Studio Cosmos</button>
-  <button data-act="open" data-w="style">🎨 Style</button>
-  <button data-act="open" data-w="rhythm">🥁 Rhythmic Magic Beat</button>
-  <button data-act="open" data-w="inst">🎹 Instrumenty</button>
-  <button data-act="open" data-w="magic">✨ Magic Loops</button>
-  <button data-act="open" data-w="mega">🎛 Mega Mix / Set</button>
-  <button data-act="open" data-w="fx">💥 FX + Hood Remix</button>
-  <button data-act="open" data-w="voice">🎤 Voice 7</button>
-  <button data-act="open" data-w="hw">🎛️ Akai / Roland / Novation / Nova</button>
-  <button data-act="open" data-w="rave">🚀 Scooter / Prodigy</button>
-  <button data-act="open" data-w="av">👁 7 AV Holo</button>
-  <button data-act="open" data-w="clip">🎬 Video + Long Set</button>
-  <button data-act="open" data-w="load">📁 MP3 / YouTube Music</button>
-  <button data-act="open" data-w="samples">📦 Sample</button>
-  <a href="downloads/D7-DJ-Studio.apk" download="D7-DJ-Studio.apk"><button type="button">📲 Pobierz APK D7 DJ Studio</button></a>
-  <button data-act="open" data-w="blik">💛 BLIK</button>
-  <button data-act="open" data-w="info">ℹ Info</button>
+  <div class="nav-g" data-g="hub"><i>Hub</i>
+    <button data-act="open" data-w="promaxx">⚡ Pro Maxx G7</button>
+  </div>
+  <div class="nav-g" data-g="boty"><i>Boty / Auto</i>
+    <button data-act="open" data-w="boty">🤖 Boty / Auto</button>
+  </div>
+  <div class="nav-g" data-g="studio"><i>Studio</i>
+    <button data-act="open" data-w="mixer">🎚 Mixer 28</button>
+    <button data-act="open" data-w="core">🧬 7 Core</button>
+    <button data-act="open" data-w="style">🎨 Style</button>
+    <button data-act="open" data-w="rhythm">🥁 Rhythmic Magic Beat</button>
+    <button data-act="open" data-w="inst">🎹 Instrumenty</button>
+    <button data-act="open" data-w="magic">✨ Magic Loops</button>
+    <button data-act="open" data-w="mega">🎛 Mega Mix / Set</button>
+    <button data-act="open" data-w="fx">💥 FX + Hood Remix</button>
+    <button data-act="open" data-w="voice">🎤 Voice 7</button>
+    <button data-act="open" data-w="samples">📦 Sample</button>
+    <button data-act="open" data-w="load">📁 MP3 / YouTube Music</button>
+  </div>
+  <div class="nav-g" data-g="wiz"><i>Wizual</i>
+    <button data-act="open" data-w="spm">✨ Super Power Magic</button>
+    <button data-act="open" data-w="gcosmos">🌌 G Studio Cosmos</button>
+    <button data-act="open" data-w="av">👁 7 AV Holo</button>
+    <button data-act="open" data-w="clip">🎬 Video + Long Set</button>
+  </div>
+  <div class="nav-g" data-g="sprzet"><i>Sprzęt</i>
+    <button data-act="open" data-w="hw">🎛️ Akai / Roland / Novation / Nova</button>
+    <button data-act="open" data-w="rave">🚀 Scooter / Prodigy</button>
+  </div>
+  <div class="nav-g" data-g="system"><i>System</i>
+    <a href="downloads/D7-DJ-Studio.apk" download="D7-DJ-Studio.apk"><button type="button">📲 Pobierz APK D7 DJ Studio</button></a>
+    <button data-act="open" data-w="blik">💛 BLIK</button>
+    <button data-act="open" data-w="info">ℹ Info</button>
+  </div>
 </nav>
 <div id="g7Launch"></div>
 <div id="installRow">
@@ -377,7 +397,7 @@ function buildChGraph(c){
   filter.connect(g); g.connect(pan); pan.connect(mute);
   mute.connect(dry); dry.connect(splitter);
   mute.connect(cSend); cSend.connect(crush); crush.connect(crushG); crushG.connect(splitter);
-  splitter.connect(master);
+  splitter.connect((typeof musicBus!=='undefined'&&musicBus)||master);
   mute.connect(dSend); dSend.connect(del);
   mute.connect(rSend); rSend.connect(rev);
   c.nodes={filter,g,pan,mute,dry,crush,crushG,dSend,rSend,cSend,splitter};
@@ -624,7 +644,9 @@ defWin('info','ℹ Info i uczciwe granice', `
     <li>Endless viz: Psychotronic Tunnel i Magic Stars Life (WebGL, beat-sync, pełny ekran).</li>
     <li>Pro Maxx G7: launcher wszystkich trybów (Mixer 28, 7 Core, Super Power Magic, G Studio Cosmos 77, GX FX, Grok DJ, E.T. Cosmos Set, Rasta DJ, Voice 7, Load MP3), 7 scen one-tap, presety w localStorage, Web MIDI learn (przyjazny Roland MC-707), auto-jakość shaderów na telefonach, Tap BPM i globalny Master Sync.</li>
     <li>Pobierz / zainstaluj: APK Android, aplikacja Windows (Electron, D7-DJ-Studio.exe), paczka Web, nowe rozszerzenie Chrome MV3 „D7 DJ Studio”, PWA (dodaj do ekranu głównego). Stare rozszerzenie Super DJ Loops zostaje nietknięte.</li>
-    <li>Boty / Auto: Grok DJ i Super Sound DJ (osobne auto-DJ, bez płatnego AI) oraz Versus — tury co 16 taktów, różne style, tablica wyników, energia tłumu, awatary i ekran zwycięzcy.</li>
+    <li>Boty / Auto: Grok DJ i Super Sound DJ (osobne auto-DJ, bez płatnego AI), Versus (tury co 16 taktów) oraz Auto DJ — autonomiczny set (intro, build, peak, break, outro) z doborem po tonacji.</li>
+    <li>Mega Grok Space: 21 dodatkowych wizuali WebGL (kosmos, wormhole, supernova, pulsary…) ponad istniejące 77 GX FX.</li>
+    <li>Mózg rytmu: swing, humanize, akcenty, sidechain na kick, sub, automatyczne fille i dobór pętli po tonacji.</li>
     <li>Jedno okno naraz · ✕ · ⛶ · Esc. Wsparcie: tylko BLIK 730 377 357.</li>
   </ul>
   <p class="muted" id="infoStats">—</p>`, ()=>{
@@ -669,7 +691,7 @@ function styleLoops(id){
   /* unique, max 8 */
   const u=[], seen=new Set();
   for(const l of hit){ if(!seen.has(l.id)){seen.add(l.id); u.push(l)} }
-  return u.slice(0,8);
+  return (typeof pickKeyAware==='function')?pickKeyAware(u,8):u.slice(0,8);
 }
 async function styleSet(id){
   await initAudio();
@@ -708,7 +730,7 @@ function schedule(){
   if(!ctx) return;
   const horizon=now()+0.25;
   schedule._next=schedule._next||now();
-  if(!playing && !seq.on && !Object.values(instOn).some(Boolean) && !magOn.some(Boolean) && !fxOn.some(Boolean) && !hoodOn && !scootOn && !prodOn && !(typeof vsOn!=='undefined' && vsOn) && !(typeof ssOn!=='undefined' && ssOn)){
+  if(!playing && !seq.on && !Object.values(instOn).some(Boolean) && !magOn.some(Boolean) && !fxOn.some(Boolean) && !hoodOn && !scootOn && !prodOn && !(typeof vsOn!=='undefined' && vsOn) && !(typeof ssOn!=='undefined' && ssOn) && !(typeof adjOn!=='undefined' && adjOn)){
     schedule._next=now();
     return;
   }
@@ -719,14 +741,17 @@ function schedule(){
     const t=schedule._next;
     const elapsed=t-(t0||t);
     const step=((Math.floor((elapsed/bt)+0.0001)%16)+16)%16;
+    schedule._step=step;
     const sw=(step%2===1)?(Number(seq.swing)||0)*bt:0;
-    const st=t+sw;
+    const st=(typeof brainTime==='function')?brainTime(t+sw, step):t+sw;
     if(seq.on){
-      if(seq.k[step]) drum('k',st);
-      if(seq.s[step]) drum('s',st);
+      if(seq.k[step]) drum('k',st,1);
+      if(seq.s[step]) drum('s',st,1);
       if(seq.h[step]) drum('h',st,0.5);
       if(seq.p[step]) drum('p',st,0.6);
     }
+    if(typeof brainTick==='function') brainTick(st, step);
+    if(typeof adjOn!=='undefined' && adjOn && typeof adjTick==='function') adjTick(st, step);
     if(instOn.bass) synthBass(st, step);
     if(instOn.lead) synthLead(st, step);
     if(instOn.pad && step%16===0) synthPad(st, bar()*4);
@@ -771,6 +796,7 @@ function stopAll(){
   if(typeof rastaOn!=='undefined' && rastaOn && typeof rastaStop==='function') rastaStop();
   if(typeof vsOn!=='undefined' && vsOn && typeof vsStop==='function') vsStop();
   if(typeof ssOn!=='undefined' && ssOn && typeof ssDjStop==='function') ssDjStop();
+  if(typeof adjOn!=='undefined' && adjOn && typeof autoDjStop==='function') autoDjStop();
   window.__DLOOP.playing=false; window.__DLOOP.spm=false;
   uiMix(); uiSeq();
   ['hoodBtn','scootBtn','prodBtn','seqBtn'].forEach(id=>{const e=$('#'+id); if(e) e.classList.remove('on')});
@@ -1394,7 +1420,7 @@ const ACT={
   randCh:async()=>{
     await initAudio();
     const loops=manifest.loops||[]; if(!loops.length){toast('Brak sampli'); return}
-    const pick=[...loops].sort(()=>Math.random()-0.5).slice(0,8);
+    const pick=(typeof pickKeyAware==='function')?pickKeyAware(loops,8):[...loops].sort(()=>Math.random()-0.5).slice(0,8);
     for(let i=0;i<pick.length;i++) await assignLoop(i,pick[i]);
     const t=nextQ(1); pick.forEach((_,i)=>startCh(ch[i],t)); startSched(); uiMix();
   },
@@ -1448,7 +1474,7 @@ const ACT={
   g77:e=>g77Trig(+e.target.dataset.i).then(()=>{ const b=e.target; if(b) b.classList.toggle('on', g77Hold.has(+b.dataset.i)); }).catch(report),
   g77Stop:()=>g77StopAll(),
   g77cat:e=>{ uiGCosmos.cat=e.target.dataset.c; uiGCosmos(); },
-  gxMode:e=>{ gxEndless=null; gxStart(+e.target.dataset.i); $$('[id^=gxm-]').forEach(b=>b.classList.toggle('on', +b.dataset.i===gxMode)); const st=$('#gxStat'); if(st) st.textContent='GX '+(gxMode+1)+'/77'; },
+  gxMode:e=>{ gxEndless=null; gxStart(+e.target.dataset.i); $$('[id^=gxm-]').forEach(b=>b.classList.toggle('on', +b.dataset.i===gxMode)); const st=$('#gxStat'); if(st) st.textContent=gxMode>=77?('Mega Grok Space '+(gxMode-76)+'/21'):('GX '+(gxMode+1)+'/'+(typeof gxVisCount==='function'?gxVisCount():77)); },
   gxEndless:e=>{ initAudio().then(()=>{ gxEndless=e.target.dataset.k; gxStart(gxEndless==='tunnel'?0:25, 0); gxFullscreen(); toast(gxEndless==='tunnel'?'Psychotronic Tunnel':'Magic Stars Life'); }); },
   gxFs:()=>gxFullscreen(),
   gxStop:()=>{ gxEndless=null; cancelAnimationFrame(gxRaf); gxRaf=0; gxStopLayer(); },
@@ -1477,7 +1503,12 @@ const ACT={
   ssDjStop:()=>ssDjStop(),
   vsStart:()=>vsStart().catch(report),
   vsStop:()=>vsStop(),
-  vsWinClose:()=>vsWinClose()
+  vsWinClose:()=>vsWinClose(),
+  autoDj:()=>{ if(adjOn) autoDjStop(); else autoDjStart().catch(report); },
+  autoDjStop:()=>autoDjStop(),
+  brAcc:()=>{ brain.accents=brain.accents?0:1; uiBrain(); },
+  brFills:()=>{ brain.fills=brain.fills?0:1; uiBrain(); },
+  brKey:()=>{ brain.keyAware=brain.keyAware?0:1; uiBrain(); }
 };
 
 async function preloadSome(){
@@ -1546,7 +1577,7 @@ document.addEventListener('change',e=>{
   if(e.target.id==='mp3File'&&e.target.files[0]){ /* wait for button or auto */ }
 });
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ if(spmOn){ spmStop(); return; } if(typeof gxFs!=='undefined' && gxFs){ gxExitFs(); return; } if(typeof vsWinOn!=='undefined' && vsWinOn){ vsWinClose(); return; } if(typeof vsOn!=='undefined' && vsOn){ vsStop(); return; } closeWin(); return; }
+  if(e.key==='Escape'){ if(spmOn){ spmStop(); return; } if(typeof gxFs!=='undefined' && gxFs){ gxExitFs(); return; } if(typeof vsWinOn!=='undefined' && vsWinOn){ vsWinClose(); return; } if(typeof vsOn!=='undefined' && vsOn){ vsStop(); return; } if(typeof adjOn!=='undefined' && adjOn){ autoDjStop(); return; } closeWin(); return; }
   if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
   if(e.key===' '){ e.preventDefault(); ACT.playToggle(); }
 });
@@ -2412,7 +2443,7 @@ function grokAnnounce(msg){
 async function grokLoadDeck(deck, fade){
   if(!grokOn) return;
   const loops=manifest.loops||[]; if(!loops.length) return;
-  const scored=loops.map(l=>({l, s: 1/(1+Math.abs((l.bpm||bpm)-bpm))+Math.random()*0.3})).sort((a,b)=>b.s-a.s);
+  const scored=loops.map(l=>({l, s: 1/(1+Math.abs((l.bpm||bpm)-bpm))+Math.random()*0.3+(typeof keyScore==='function'?keyScore(l):0)})).sort((a,b)=>b.s-a.s);
   const pick=scored.slice(0,4).map(x=>x.l);
   const start=deck*8;
   const when=nextQ(1);
@@ -2458,7 +2489,7 @@ function grokPlan(){
     if(Math.random()<0.45) g77Trig(Math.floor(Math.random()*25)).catch(report);
     if(Math.random()<0.3) g77Trig(40+Math.floor(Math.random()*26)).catch(report);
     if(Math.random()<0.25) g77Trig(66+Math.floor(Math.random()*8)).catch(report);
-    gxMode=(gxMode+1+Math.floor(Math.random()*3))%77;
+    gxMode=(gxMode+1+Math.floor(Math.random()*3))%(typeof gxVisCount==='function'?gxVisCount():77);
     gxStart(gxMode,0);
     grokDeck=next;
     grokPlan();
@@ -2652,19 +2683,31 @@ let g7Scene=-1, g7qScale=1, g7qMode='auto', g7Fps=60, g7FpsWin=[], g7Learn=null,
 let g7Map=g7LoadStore().map||{};
 
 const G7_LAUNCH=[
-  {k:'mixer',n:'🎚 Mixer 28',go(){ openW('mixer'); }},
-  {k:'core',n:'🧬 7 Core',go(){ openW('core'); }},
-  {k:'spm',n:'✨ Super Power Magic',go(){ openW('spm'); }},
-  {k:'gcosmos',n:'🌌 G Studio Cosmos 77',go(){ openW('gcosmos'); }},
-  {k:'gx',n:'👁 GX FX visuals',go(){ openW('gcosmos'); if(typeof gxStart==='function') gxStart(typeof gxMode==='number'?gxMode:0, 0); }},
-  {k:'grok',n:'🤖 Grok DJ',go(){ openW('gcosmos'); if(typeof grokDjStart==='function' && !grokOn) grokDjStart(); }},
-  {k:'et',n:'👽 E.T. Cosmos Set',go(){ openW('gcosmos'); }},
-  {k:'rasta',n:'🇯🇲 Rasta DJ',go(){ openW('gcosmos'); }},
-  {k:'voice',n:'🎤 Voice 7',go(){ openW('voice'); }},
-  {k:'load',n:'📁 Load MP3',go(){ openW('load'); }},
-  {k:'boty',n:'🤖 Boty / Auto',go(){ openW('boty'); }},
-  {k:'versus',n:'⚔️ Versus',go(){ openW('boty'); if(typeof vsStart==='function' && !vsOn) vsStart(); }}
+  {k:'mixer',g:'studio',n:'🎚 Mixer 28',go(){ openW('mixer'); }},
+  {k:'core',g:'studio',n:'🧬 7 Core',go(){ openW('core'); }},
+  {k:'voice',g:'studio',n:'🎤 Voice 7',go(){ openW('voice'); }},
+  {k:'load',g:'studio',n:'📁 Load MP3',go(){ openW('load'); }},
+  {k:'spm',g:'wiz',n:'✨ Super Power Magic',go(){ openW('spm'); }},
+  {k:'gcosmos',g:'wiz',n:'🌌 G Studio Cosmos 77',go(){ openW('gcosmos'); }},
+  {k:'gx',g:'wiz',n:'👁 GX FX visuals',go(){ openW('gcosmos'); if(typeof gxStart==='function') gxStart(typeof gxMode==='number'?gxMode:0, 0); }},
+  {k:'mgs',g:'wiz',n:'🌌 Mega Grok Space',go(){ openW('gcosmos'); if(typeof gxStart==='function') gxStart(77, 0); }},
+  {k:'boty',g:'boty',n:'🤖 Boty / Auto',go(){ openW('boty'); }},
+  {k:'grok',g:'boty',n:'🤖 Grok DJ',go(){ openW('gcosmos'); if(typeof grokDjStart==='function' && !grokOn) grokDjStart(); }},
+  {k:'ss',g:'boty',n:'🔊 Super Sound DJ',go(){ openW('boty'); if(typeof ssDjStart==='function' && !ssOn) ssDjStart(); }},
+  {k:'autodj',g:'boty',n:'🎧 Auto DJ',go(){ openW('boty'); if(typeof autoDjStart==='function' && !adjOn) autoDjStart(); }},
+  {k:'versus',g:'boty',n:'⚔️ Versus',go(){ openW('boty'); if(typeof vsStart==='function' && !vsOn) vsStart(); }},
+  {k:'et',g:'boty',n:'👽 E.T. Cosmos Set',go(){ openW('gcosmos'); }},
+  {k:'rasta',g:'boty',n:'🇯🇲 Rasta DJ',go(){ openW('gcosmos'); }}
 ];
+function g7LaunchGrouped(cls){
+  const labels={studio:'Studio',wiz:'Wizual',boty:'Boty / Auto'};
+  return ['studio','wiz','boty'].map(g=>{
+    const items=G7_LAUNCH.filter(x=>x.g===g);
+    if(!items.length) return '';
+    const c=cls?(' class="'+cls+'"'):'';
+    return `<span class="g7-g" data-g="${g}"><i>${labels[g]}</i>${items.map(x=>`<button${c} data-act="g7go" data-k="${x.k}">${x.n}</button>`).join('')}</span>`;
+  }).join('');
+}
 
 const G7_SCENES=[
   {id:0,n:'Kraków Peak',bpm:128,mode:'cosmos',style:'krakow',viz:24,pal:0,fx:{delay:0.32,reverb:0.4,crush:0},d:'Styl Kraków, G Studio, wizual GX 25'},
@@ -2713,7 +2756,7 @@ function g7LaunchBar(){
   const el=$('#g7Launch'); if(!el) return;
   el.innerHTML=`
     <b class="g7-brand">⚡ Pro Maxx G7</b>
-    ${G7_LAUNCH.map(x=>`<button data-act="g7go" data-k="${x.k}">${x.n}</button>`).join('')}
+    ${g7LaunchGrouped('')}
     <span class="g7-sep"></span>
     ${G7_SCENES.map(s=>`<button data-act="g7scene" data-i="${s.id}" id="g7s-${s.id}" title="${esc(s.d)}">${s.id+1}. ${s.n}</button>`).join('')}
     <span class="g7-meta"><span id="g7BpmLab">BPM <b id="g7Bpm">${bpm||128}</b></span>
@@ -2733,7 +2776,7 @@ function uiG7(){
   const learnHint=g7Learn?('Ucz się: rusz kontrolerem dla „'+g7Learn+'”'):'Kliknij cel, potem rusz fader/pad (MC-707 albo dowolny MIDI)';
   el.innerHTML=`
     <p class="muted">Launcher na górze otwiera każdy tryb (jedno okno naraz). Siedem scen to gotowe sety: tryb + styl + wizual + FX. Presety w localStorage. Web MIDI learn pod Roland MC-707. Auto-jakość obniża rozdzielczość shaderów, gdy FPS spada (telefony). Tap BPM + Master Sync wyrównuje wszystko do globalnego BPM.</p>
-    <div class="row g7-modes">${G7_LAUNCH.map(x=>`<button class="big" data-act="g7go" data-k="${x.k}">${x.n}</button>`).join('')}</div>
+    <div class="row g7-modes g7-modes-groups">${g7LaunchGrouped('big')}</div>
     <div class="card">
       <b>7 scen performance · one-tap</b>
       <div class="cards g7-scenes">${G7_SCENES.map(s=>`<div class="card ${g7Scene===s.id?'on':''}"><b>${s.id+1}. ${esc(s.n)}</b><div class="muted">${esc(s.d)} · ${s.bpm} BPM</div><div class="row"><button class="big" data-act="g7scene" data-i="${s.id}" id="g7sw-${s.id}">▶ Scena</button></div></div>`).join('')}</div>
@@ -2815,6 +2858,7 @@ function g7StopModes(keep){
   try{ if(typeof rastaOn!=='undefined' && rastaOn && keep!=='rasta' && typeof rastaStop==='function') rastaStop(); }catch(e){}
   try{ if(typeof vsOn!=='undefined' && vsOn && keep!=='versus' && typeof vsStop==='function') vsStop(); }catch(e){}
   try{ if(typeof ssOn!=='undefined' && ssOn && keep!=='ss' && typeof ssDjStop==='function') ssDjStop(); }catch(e){}
+  try{ if(typeof adjOn!=='undefined' && adjOn && keep!=='autodj' && typeof autoDjStop==='function') autoDjStop(); }catch(e){}
 }
 
 async function g7LoadScene(i){
@@ -3313,8 +3357,8 @@ async function vsLoadSide(who, fade, style){
   let cand=loops.filter(l=>re.test((l.name||'')+' '+(l.style||'')));
   if(cand.length<4) cand=loops.slice();
   cand=[...cand].sort((a,b)=>{
-    const sa=1/(1+Math.abs((a.bpm||style.bpm)-style.bpm))+Math.random()*0.3+(who==='ss' && /dark|hood|trap|jungle|krak|rave|wolf/i.test((a.name||'')+' '+(a.style||''))?0.35:0);
-    const sb=1/(1+Math.abs((b.bpm||style.bpm)-style.bpm))+Math.random()*0.3+(who==='ss' && /dark|hood|trap|jungle|krak|rave|wolf/i.test((b.name||'')+' '+(b.style||''))?0.35:0);
+    const sa=1/(1+Math.abs((a.bpm||style.bpm)-style.bpm))+Math.random()*0.3+(who==='ss' && /dark|hood|trap|jungle|krak|rave|wolf/i.test((a.name||'')+' '+(a.style||''))?0.35:0)+(typeof keyScore==='function'?keyScore(a):0);
+    const sb=1/(1+Math.abs((b.bpm||style.bpm)-style.bpm))+Math.random()*0.3+(who==='ss' && /dark|hood|trap|jungle|krak|rave|wolf/i.test((b.name||'')+' '+(b.style||''))?0.35:0)+(typeof keyScore==='function'?keyScore(b):0);
     return sb-sa;
   }).slice(0,4);
   const start=who==='grok'?0:8;
@@ -3452,7 +3496,7 @@ async function ssLoadDeck(deck, fade){
   const re=new RegExp(st.q,'i');
   let cand=loops.filter(l=>re.test((l.name||'')+' '+(l.style||'')));
   if(cand.length<4) cand=loops.slice();
-  cand=[...cand].sort(()=>Math.random()-0.5).slice(0,4);
+  cand=(typeof pickKeyAware==='function')?pickKeyAware(cand,4):[...cand].sort(()=>Math.random()-0.5).slice(0,4);
   const start=deck*8, when=nextQ(1);
   for(let i=0;i<cand.length;i++){
     if(!ssOn) return;
@@ -3515,6 +3559,566 @@ window.__DLOOP.vsStop=vsStop;
 window.__DLOOP.vsForceTurn=()=>vsEndTurn();
 window.__DLOOP.vsFinish=()=>{ if(!vsOn) return; vsRound=vsRounds; vsShowWinner(); };
 window.__DLOOP.vsSetBars=(n)=>{ vsBarsNeed=Math.max(1,+n||16); };
+
+
+/* ===== t513: Mega Grok Space 21, rytm-mózg, Auto DJ, key-aware ===== */
+const MGS_NAMES=[
+  'Deep Space Void','Supernova Bloom','Wormhole Gate','Pulsar Beacon','Aurora Orbit',
+  'Meteor Storm','Saturn Rings','Nebula Drift','Star Nursery','Cosmic Dust',
+  'Gravity Lens','Solar Flare','Ice Comet Tail','Binary Stars','Event Horizon',
+  'Milky Way Arm','Alien Constellation','Quantum Foam','Space Station Grid','Warp Corridor',
+  'Grok Nebula Crown'
+];
+const GX_BASE=77, MGS_COUNT=MGS_NAMES.length;
+function gxVisCount(){ return GX_BASE+MGS_COUNT; }
+window.__DLOOP.mgsCount=MGS_COUNT;
+window.__DLOOP.gxVis=gxVisCount();
+
+const MGS_VS=`attribute vec2 aPos; void main(){ gl_Position=vec4(aPos,0.0,1.0); }`;
+const MGS_FS=`
+#ifdef GL_ES
+precision mediump float;
+#endif
+uniform vec2 uRes; uniform float uTime,uBass,uMid,uHigh,uMode,uBeat,uPal;
+float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
+float noise(vec2 p){ vec2 i=floor(p), f=fract(p); float a=hash(i), b=hash(i+vec2(1,0)), c=hash(i+vec2(0,1)), d=hash(i+vec2(1,1)); vec2 u=f*f*(3.0-2.0*f); return mix(mix(a,b,u.x),mix(c,d,u.x),u.y); }
+float fbm(vec2 p){ float v=0.0, a=0.5; for(int i=0;i<5;i++){ v+=a*noise(p); p*=2.03; a*=0.5; } return v; }
+vec3 spal(float t, float k){
+  vec3 a=vec3(0.15,0.35,0.85)+vec3(0.8,0.25,0.55)*cos(6.2831*(t+vec3(0.0,0.33,0.67)));
+  if(k>0.5) a=mix(a, vec3(0.9,0.55,0.15)+0.45*cos(6.2831*(t+vec3(0.2,0.5,0.8))), 0.65);
+  return a;
+}
+void main(){
+  vec2 uv=gl_FragCoord.xy/uRes;
+  vec2 p=(gl_FragCoord.xy-0.5*uRes)/min(uRes.x,uRes.y);
+  float t=uTime, b=uBass, m=uMid, h=uHigh, beat=uBeat, md=floor(uMode+0.5);
+  vec3 col=vec3(0.01,0.015,0.04);
+  if(md<1.0){ /* Deep Space Void */
+    float v=fbm(p*1.8+t*0.03); col=spal(v*0.6+t*0.01,uPal)*v*0.45; col+=vec3(0.02,0.03,0.08);
+    for(int i=0;i<40;i++){ float fi=float(i); vec2 s=fract(vec2(hash(vec2(fi,1.1)),hash(vec2(fi,2.2)))+vec2(0.0,t*0.01)); vec2 q=(s*2.0-1.0); q.x*=uRes.x/uRes.y; col+=vec3(0.8,0.9,1.0)*smoothstep(0.01+h*0.01,0.0,length(p-q*0.95))*(0.5+b); }
+  } else if(md<2.0){ /* Supernova */
+    float r=length(p); float boom=exp(-r*3.0*(1.2-b))* (0.6+0.8*pow(0.5+0.5*sin(t*2.0+beat*6.28),2.0));
+    col=spal(r-t*0.1,uPal)*boom*1.4; col+=vec3(1.0,0.8,0.4)*exp(-r*8.0)*(0.8+h);
+  } else if(md<3.0){ /* Wormhole */
+    float a=atan(p.y,p.x)+t*0.3; float r=length(p);
+    float z=fract(1.0/max(r,0.04)-t*(0.35+b*0.5));
+    col=spal(a/6.2831+z,uPal)*smoothstep(0.22,0.0,abs(z-0.5))*(0.55+b);
+    col+=spal(r,uPal)*0.12;
+  } else if(md<4.0){ /* Pulsar */
+    float r=length(p); float beam=pow(0.5+0.5*sin(atan(p.y,p.x)*2.0+t*6.0+beat*8.0), 24.0);
+    col=spal(0.2,uPal)*exp(-r*2.5)*(0.5+b)+vec3(0.7,0.9,1.0)*beam*exp(-r*1.2);
+  } else if(md<5.0){ /* Aurora Orbit */
+    float v=fbm(p*2.2+vec2(t*0.08,sin(t*0.2)));
+    float band=smoothstep(0.15,0.0,abs(p.y+0.25*sin(p.x*3.0+t)-0.15*v));
+    col=spal(p.x+t*0.05,uPal)*band*(0.7+b)+spal(v,uPal)*v*0.2;
+  } else if(md<6.0){ /* Meteor Storm */
+    col=vec3(0.02,0.02,0.05);
+    for(int i=0;i<28;i++){ float fi=float(i); float sp=hash(vec2(fi,3.3));
+      vec2 dir=normalize(vec2(0.4+sp,0.9)); float ph=fract(t*(0.4+sp)+hash(vec2(fi,1.0)));
+      vec2 q=(hash(vec2(fi,4.4))*2.0-1.0)*vec2(1.2,1.0)+dir*(ph*2.0-1.0);
+      float d=length(p-q); col+=spal(sp,uPal)*smoothstep(0.04,0.0,d)*smoothstep(0.0,0.2,ph)*(0.7+b);
+    }
+  } else if(md<7.0){ /* Saturn Rings */
+    float a=0.5; vec2 q=vec2(p.x, p.y*1.8);
+    float r=length(q);
+    float rings=smoothstep(0.06,0.0,abs(abs(r-0.45)-0.12*fract(r*8.0-t*0.1))-0.02);
+    col=spal(r+t*0.02,uPal)*rings*(0.6+b);
+    col+=vec3(1.0,0.85,0.5)*exp(-length(q)*6.0)*(1.0+h);
+  } else if(md<8.0){ /* Nebula Drift */
+    float v=fbm(p*1.4+t*0.04)+0.5*fbm(p*3.0-t*0.03);
+    col=spal(v+m*0.2,uPal)*smoothstep(0.15,0.95,v)*(0.55+b*0.5);
+  } else if(md<9.0){ /* Star Nursery */
+    float v=fbm(p*2.0+t*0.02);
+    col=spal(v,uPal)*v*0.5;
+    for(int i=0;i<50;i++){ float fi=float(i); vec2 s=vec2(hash(vec2(fi,8.1)),hash(vec2(fi,2.7)));
+      s=fract(s+vec2(t*0.008*(hash(vec2(fi,1.0))-0.5), t*0.01));
+      vec2 q=(s*2.0-1.0); q.x*=uRes.x/uRes.y;
+      float sz=(0.003+0.015*hash(vec2(fi,5.0)))*(0.6+1.2*max(0.0,sin(t*3.0+fi+beat*6.28)));
+      col+=spal(fi*0.05,uPal)*smoothstep(sz*3.0,0.0,length(p-q))*(0.6+b);
+    }
+  } else if(md<10.0){ /* Cosmic Dust */
+    float v=fbm(p*5.0+t*0.06); col=spal(v*0.7+uv.y,uPal)*v*v*(0.7+b);
+  } else if(md<11.0){ /* Gravity Lens */
+    float r=length(p); vec2 lp=p*(1.0+0.45*b/(r+0.15));
+    float v=fbm(lp*3.0-t*0.08);
+    col=spal(v+r,uPal)*v*(0.5+b); col+=vec3(1.0)*exp(-r*7.0)*0.4;
+  } else if(md<12.0){ /* Solar Flare */
+    float a=atan(p.y,p.x); float r=length(p);
+    float fl=pow(max(0.0,sin(a*3.0+t*2.0+fbm(p*2.0)*3.0)), 3.0)*exp(-r*1.8);
+    col=vec3(1.0,0.55,0.12)*fl*(1.0+b)+vec3(1.0,0.9,0.5)*exp(-r*5.0);
+  } else if(md<13.0){ /* Ice Comet */
+    vec2 dir=normalize(vec2(-0.6,0.3));
+    float along=dot(p,dir); float side=dot(p,vec2(-dir.y,dir.x));
+    float head=exp(-length(p-dir*0.25)*10.0);
+    float tail=smoothstep(0.12+h*0.05,0.0,abs(side))*smoothstep(0.7,0.0,along+0.3);
+    col=vec3(0.6,0.85,1.0)*(head*2.0+tail*0.7)*(0.6+b);
+  } else if(md<14.0){ /* Binary Stars */
+    vec2 a=vec2(cos(t*0.7),sin(t*0.7))*0.28; vec2 c2=-a;
+    col=vec3(1.0,0.85,0.4)*exp(-length(p-a)*8.0)*(1.0+b);
+    col+=vec3(0.4,0.6,1.0)*exp(-length(p-c2)*8.0)*(1.0+h);
+    float v=fbm((p+a)*3.0); col+=spal(v,uPal)*v*0.15;
+  } else if(md<15.0){ /* Event Horizon */
+    float r=length(p);
+    float disk=smoothstep(0.08,0.0,abs(r-0.28-b*0.05))* (0.5+0.5*sin(atan(p.y,p.x)*6.0-t*3.0));
+    col=spal(atan(p.y,p.x)/6.2831+t*0.05,uPal)*disk*1.2;
+    col*=mix(1.0,0.0,smoothstep(0.0,0.16,r)); /* hole */
+    col+=vec3(0.1,0.05,0.0)*smoothstep(0.5,0.16,r);
+  } else if(md<16.0){ /* Milky Way Arm */
+    float a=atan(p.y,p.x), r=log(length(p)+0.12);
+    float arm=fbm(vec2(a*1.4+r*2.0, r*2.0)+t*0.04);
+    col=spal(arm+t*0.02,uPal)*arm*0.7*(0.5+b);
+    for(int i=0;i<30;i++){ float fi=float(i); vec2 s=vec2(hash(vec2(fi,0.3)),hash(vec2(fi,1.9))); vec2 q=(s*2.0-1.0); q.x*=uRes.x/uRes.y; col+=vec3(1.0)*smoothstep(0.008,0.0,length(p-q*0.9)); }
+  } else if(md<17.0){ /* Alien Constellation */
+    col=vec3(0.02,0.03,0.06);
+    for(int i=0;i<18;i++){ float fi=float(i);
+      vec2 a=vec2(hash(vec2(fi,1.0)),hash(vec2(fi,2.0)))*2.0-1.0;
+      vec2 c=vec2(hash(vec2(fi+1.0,1.0)),hash(vec2(fi+1.0,2.0)))*2.0-1.0;
+      a.x*=uRes.x/uRes.y; c.x*=uRes.x/uRes.y;
+      vec2 pa=p-a; vec2 ba=c-a; float h2=clamp(dot(pa,ba)/dot(ba,ba),0.0,1.0);
+      float d=length(pa-ba*h2);
+      col+=spal(fi*0.1,uPal)*smoothstep(0.012,0.0,d)*0.6;
+      col+=spal(fi*0.1,uPal)*smoothstep(0.03+h*0.02,0.0,length(p-a))*(0.7+b);
+    }
+  } else if(md<18.0){ /* Quantum Foam */
+    float v=fbm(p*6.0+t*0.2)+0.3*sin(length(p)*20.0-t*4.0);
+    col=spal(v+beat,uPal)*smoothstep(0.35,0.8,v)*(0.5+b);
+  } else if(md<19.0){ /* Space Station Grid */
+    vec2 gp=p*(8.0+b*2.0); gp.y+=t*0.15;
+    vec2 f=abs(fract(gp)-0.5);
+    float line=smoothstep(0.08,0.02,min(f.x,f.y));
+    col=vec3(0.2,0.9,1.0)*line*(0.4+h);
+    col+=spal(p.y,uPal)*0.08;
+  } else if(md<20.0){ /* Warp Corridor */
+    vec2 q=p; q.x+=0.15*sin(q.y*6.0+t*2.0);
+    float r=length(vec2(q.x,q.y*0.4));
+    float z=fract(1.0/max(r,0.05)-t*(0.5+b));
+    col=spal(z+t*0.05,uPal)*smoothstep(0.2,0.0,abs(z-0.5))*(0.55+b);
+  } else { /* 20 Grok Nebula Crown */
+    float a=atan(p.y,p.x), r=length(p);
+    float crown=abs(sin(a*7.0+t*0.4))+r*0.7;
+    float v=fbm(p*2.2+t*0.05);
+    col=spal(v+a/6.2831,uPal)*smoothstep(1.3,0.25,crown)*(0.55+b);
+    col+=vec3(0.9,0.7,1.0)*exp(-r*4.0)* (0.4+h);
+    col+=spal(v,uPal)*v*0.2;
+  }
+  col*=0.8+0.2*sin(uv.y*60.0+t*4.0)*h*0.35+0.85;
+  col*=smoothstep(1.35,0.18,length(p));
+  gl_FragColor=vec4(col,1.0);
+}
+`;
+
+function gxCompile(gl, vsSrc, fsSrc){
+  const sh=(type,src)=>{ const s=gl.createShader(type); gl.shaderSource(s,src); gl.compileShader(s); if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){ console.error(gl.getShaderInfoLog(s)); return null; } return s; };
+  const vs=sh(gl.VERTEX_SHADER,vsSrc), fs=sh(gl.FRAGMENT_SHADER,fsSrc);
+  if(!vs||!fs) return null;
+  const pr=gl.createProgram(); gl.attachShader(pr,vs); gl.attachShader(pr,fs); gl.linkProgram(pr);
+  if(!gl.getProgramParameter(pr,gl.LINK_STATUS)){ console.error(gl.getProgramInfoLog(pr)); return null; }
+  return pr;
+}
+function gxLocs(gl,pr){
+  return {
+    uRes:gl.getUniformLocation(pr,'uRes'), uTime:gl.getUniformLocation(pr,'uTime'),
+    uBass:gl.getUniformLocation(pr,'uBass'), uMid:gl.getUniformLocation(pr,'uMid'),
+    uHigh:gl.getUniformLocation(pr,'uHigh'), uMode:gl.getUniformLocation(pr,'uMode'),
+    uBeat:gl.getUniformLocation(pr,'uBeat'), uPal:gl.getUniformLocation(pr,'uPal')
+  };
+}
+
+/* Hook gxInit / gxStart after they exist (this file is appended at end of script). */
+(function hookGx(){
+  if(typeof gxInit!=='function') return;
+  const _init=gxInit;
+  gxInit=function(canvas){
+    const ok=_init(canvas);
+    if(!ok || !gxGl || !gxGl.gl) return ok;
+    try{
+      const pr=gxCompile(gxGl.gl, MGS_VS, MGS_FS);
+      if(pr){ gxGl.prMgs=pr; gxGl.uMgs=gxLocs(gxGl.gl,pr); window.__DLOOP.mgsOk=true; }
+      gxGl.pr77=gxGl.pr; gxGl.u77=gxLocs(gxGl.gl,gxGl.pr);
+    }catch(e){ report(e); window.__DLOOP.mgsOk=false; }
+    return ok;
+  };
+  const _start=gxStart;
+  gxStart=function(mode, pal){
+    _start(mode, pal);
+    const st=$('#gxStat');
+    if(st && typeof gxMode==='number' && !gxEndless){
+      if(gxMode>=GX_BASE) st.textContent='Mega Grok Space '+(gxMode-GX_BASE+1)+'/'+MGS_COUNT+' · '+MGS_NAMES[(gxMode-GX_BASE)%MGS_COUNT];
+      else st.textContent='GX '+(gxMode+1)+'/'+gxVisCount();
+    }
+    if(gxGl && gxGl.prMgs && gxRaf){ /* draw already running; uniforms switched below via wrap of nothing — patch draw by restarting if MGS */ }
+    // Restart draw with program switch by wrapping request in a flag handled in patched draw.
+    mgsBindDraw();
+  };
+})();
+
+function mgsBindDraw(){
+  if(!gxGl || !gxGl.gl || gxGl._mgsBound) return;
+  gxGl._mgsBound=true;
+  const origDrawTick=null;
+  // Monkey-patch uniform mode setter by intercepting getUniformLocation usage isn't viable.
+  // Instead replace the animation after gxStart by a thin wrapper around useProgram.
+  const gl=gxGl.gl;
+  const _use=gl.useProgram.bind(gl);
+  gl.useProgram=function(pr){
+    const wantMgs=!gxEndless && typeof gxMode==='number' && gxMode>=GX_BASE && gxGl.prMgs;
+    const use=wantMgs?gxGl.prMgs:(gxGl.pr77||gxGl.pr||pr);
+    _use(use);
+    if(wantMgs && gxGl.uMgs){
+      // remap gxGl uniform pointers for subsequent uniform1f in the same draw
+      Object.assign(gxGl, gxGl.uMgs);
+    } else if(gxGl.u77){
+      Object.assign(gxGl, gxGl.u77);
+    }
+  };
+  const _u1=gl.uniform1f.bind(gl);
+  gl.uniform1f=function(loc, v){
+    if(loc && gxGl && (loc===gxGl.uMode || (gxGl.u77&&loc===gxGl.u77.uMode) || (gxGl.uMgs&&loc===gxGl.uMgs.uMode))){
+      const wantMgs=!gxEndless && typeof gxMode==='number' && gxMode>=GX_BASE;
+      const modeVal=gxEndless==='tunnel'?0: gxEndless==='stars'?25: (wantMgs?gxMode-GX_BASE:gxMode);
+      const L=wantMgs&&gxGl.uMgs?gxGl.uMgs.uMode:(gxGl.u77?gxGl.u77.uMode:loc);
+      return _u1(L, modeVal);
+    }
+    return _u1(loc,v);
+  };
+}
+
+function mgsMountUi(){
+  const host=$('#gxModes'); if(!host) return;
+  let box=$('#mgsBox');
+  if(!box){
+    box=document.createElement('div'); box.id='mgsBox';
+    host.parentNode.insertBefore(box, host.nextSibling);
+  }
+  box.innerHTML=`
+    <b>🌌 Mega Grok Space · ${MGS_COUNT} wizuali WebGL</b>
+    <span class="muted">dodatkowe kosmiczne shadery, beat-sync, ponad GX 77</span>
+    <div class="gx-modes" id="mgsModes">${MGS_NAMES.map((n,i)=>`<button data-act="gxMode" data-i="${GX_BASE+i}" id="gxm-${GX_BASE+i}" title="${n}">MGS ${i+1}</button>`).join('')}</div>`;
+  $$('#mgsModes [data-act="gxMode"], #gxModes [data-act="gxMode"]').forEach(b=>b.classList.toggle('on', +b.dataset.i===gxMode));
+}
+
+/* ===== Rhythm brain ===== */
+let musicBus=null, scGain=null, brainBar=0, brainFillUntil=-1;
+const BRAIN_KEYS=['C','G','D','A','E','F','Am','Em','Dm','Gm','Cm','Fm'];
+let brain={
+  humanize:0.18, accents:1, sidechain:0.55, sub:0.65, fills:1, keyAware:1, key:'Am'
+};
+function loopKey(l){
+  if(!l) return brain.key||'Am';
+  if(l._key) return l._key;
+  const n=String(l.name||'')+' '+String(l.style||'');
+  const m=n.match(/\b([A-G](?:#|b)?(?:m|min|maj)?)\b/i);
+  if(m){ const raw=m[1].replace(/min$/i,'m').replace(/maj$/i,''); l._key=raw.length<=3?raw[0].toUpperCase()+raw.slice(1):raw; return l._key; }
+  let h=0; const id=String(l.id||l.name||'');
+  for(let i=0;i<id.length;i++) h=(h*31+id.charCodeAt(i))>>>0;
+  l._key=BRAIN_KEYS[h%BRAIN_KEYS.length];
+  return l._key;
+}
+function keyCompat(a,b){
+  if(!a||!b) return 1;
+  if(a===b) return 1.25;
+  const rel={C:'Am',Am:'C',G:'Em',Em:'G',D:'Bm',Bm:'D',A:'F#m','F#m':'A',E:'C#m','C#m':'E',F:'Dm',Dm:'F',Gm:'A#','A#':'Gm',Cm:'D#','D#':'Cm',Fm:'G#','G#':'Fm'};
+  if(rel[a]===b) return 1.12;
+  return 0.82;
+}
+function keyScore(l, target){
+  if(!brain.keyAware) return 0;
+  const k=loopKey(l);
+  return 0.35*keyCompat(k, target||brain.key);
+}
+function pickKeyAware(loops, n, extra){
+  const list=loops||[];
+  const scored=list.map(l=>({l, s: 1/(1+Math.abs((l.bpm||bpm)-bpm))+Math.random()*0.28+keyScore(l)+(extra?extra(l):0)}));
+  scored.sort((a,b)=>b.s-a.s);
+  const out=[]; const seen=new Set();
+  for(const x of scored){ if(seen.has(x.l.id)) continue; seen.add(x.l.id); out.push(x.l); if(out.length>=n) break; }
+  if(out[0]) brain.key=loopKey(out[0]);
+  return out;
+}
+function brainEnsureGraph(){
+  if(!ctx || scGain) return;
+  musicBus=ctx.createGain(); musicBus.gain.value=1;
+  scGain=ctx.createGain(); scGain.gain.value=1;
+  musicBus.connect(scGain); scGain.connect(master);
+  window.__DLOOP.brain=true;
+  /* reconnect existing channel splitters if they went straight to master */
+  ch.forEach(c=>{
+    if(!c.nodes||!c.nodes.splitter) return;
+    try{ c.nodes.splitter.disconnect(master); }catch(e){}
+    try{ c.nodes.splitter.connect(musicBus); }catch(e){}
+  });
+}
+function brainSidechain(t){
+  if(!scGain || !(brain.sidechain>0.01)) return;
+  const amt=Math.max(0,Math.min(1,brain.sidechain));
+  const g=scGain.gain;
+  try{
+    g.cancelScheduledValues(t);
+    g.setValueAtTime(Math.max(0.08, 1-amt*0.72), t);
+    g.exponentialRampToValueAtTime(1, t+0.07+0.16*(1-amt));
+  }catch(e){}
+}
+function brainSub(t, vel){
+  if(!ctx || !(brain.sub>0.01)) return;
+  try{
+    const o=ctx.createOscillator(); const g=ctx.createGain();
+    const f=ctx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=90; f.Q.value=0.7;
+    o.type='sine';
+    o.frequency.setValueAtTime(62, t);
+    o.frequency.exponentialRampToValueAtTime(36, t+0.16);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.55*brain.sub*(vel||1), t+0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+0.28);
+    o.connect(f); f.connect(g); g.connect(master);
+    o.start(t); o.stop(t+0.3);
+  }catch(e){}
+}
+function brainVel(step, base){
+  let v=base||1;
+  if(brain.accents && (step%4===0)) v*=(step%16===0?1.28:1.14);
+  if(brain.humanize>0) v*=(1-brain.humanize*0.25)+(Math.random()*brain.humanize*0.5);
+  return Math.max(0.15, Math.min(1.4, v));
+}
+function brainTime(st, step){
+  if(!(brain.humanize>0) || step%4===0) return st;
+  return st+(Math.random()*2-1)*brain.humanize*0.03*beat();
+}
+function brainTick(st, step){
+  if(step===0) brainBar++;
+  if(brain.fills && seq.on && step===12 && brainBar>0 && brainBar%4===0){
+    brainFillUntil=brainBar;
+  }
+  if(brain.fills && seq.on && brainFillUntil===brainBar && step>=12){
+    const t=brainTime(st, step);
+    if(step===12||step===14) drum('s', t, brainVel(step, 0.7));
+    if(step>=13) drum('h', t, brainVel(step, 0.55));
+    if(step===15) drum('p', t, brainVel(step, 0.8));
+  }
+}
+
+function uiBrain(){
+  const el=$('#brainUI'); if(!el) return;
+  el.innerHTML=`
+    <b>🧠 Mózg rytmu / dźwięku</b>
+    <span class="muted">swing już był — tu humanize, akcenty, sidechain, sub, fille i dobór po tonacji (bez płatnego AI)</span>
+    <div class="row brain-row">
+      <label>Humanize <input id="brHuman" type="range" min="0" max="1" step="0.01" value="${brain.humanize}"></label>
+      <label>Sidechain <input id="brSc" type="range" min="0" max="1" step="0.01" value="${brain.sidechain}"></label>
+      <label>Sub <input id="brSub" type="range" min="0" max="1" step="0.01" value="${brain.sub}"></label>
+      <button data-act="brAcc" id="brAccBtn" class="${brain.accents?'on':''}">Akcenty</button>
+      <button data-act="brFills" id="brFillsBtn" class="${brain.fills?'on':''}">Fille</button>
+      <button data-act="brKey" id="brKeyBtn" class="${brain.keyAware?'on':''}">Tonacja ${brain.key}</button>
+    </div>`;
+}
+
+/* ===== Auto DJ autonomous set ===== */
+let adjOn=false, adjBusy=false, adjSec=0, adjBar=0, adjDeck=0;
+const ADJ_SECTIONS=[
+  {id:'intro',n:'Intro',bars:8,energy:0.4,bpm:124,style:'house',viz:77},
+  {id:'build',n:'Build',bars:16,energy:0.65,bpm:128,style:'techno',viz:82},
+  {id:'peak',n:'Peak',bars:16,energy:0.95,bpm:132,style:'trance',viz:81},
+  {id:'break',n:'Break',bars:8,energy:0.45,bpm:100,style:'hiphop',viz:86},
+  {id:'peak2',n:'Peak 2',bars:16,energy:1,bpm:138,style:'trance',viz:90},
+  {id:'krakow',n:'Kraków Peak',bars:16,energy:0.9,bpm:128,style:'krakow',viz:91},
+  {id:'outro',n:'Outro',bars:8,energy:0.35,bpm:118,style:'house',viz:85}
+];
+function adjPaint(){
+  const s=ADJ_SECTIONS[adjSec]||ADJ_SECTIONS[0];
+  const meta=$('#adjMeta');
+  if(meta) meta.textContent=(adjOn?('Auto DJ · '+s.n+' · takt '+adjBar+'/'+s.bars+' · sekcja '+(adjSec+1)+'/'+ADJ_SECTIONS.length+' · '+brain.key):'Auto DJ OFF');
+  const btn=$('#adjBtn'); if(btn) btn.classList.toggle('on', adjOn);
+  window.__DLOOP.autodj=adjOn;
+  window.__DLOOP.adjSec=adjOn?s.id:null;
+  window.__DLOOP.adjIndex=adjSec;
+}
+async function adjLoad(sec, fade){
+  const loops=manifest.loops||[]; if(!loops.length) return;
+  const st=STYLES.find(x=>x.id===sec.style);
+  const re=st?new RegExp(st.q,'i'): /./;
+  let cand=loops.filter(l=>re.test((l.name||'')+' '+(l.style||'')));
+  if(cand.length<4) cand=loops.slice();
+  const pick=pickKeyAware(cand, 4);
+  const start=adjDeck*8, when=nextQ(1);
+  for(let i=0;i<pick.length;i++){
+    if(!adjOn) return;
+    const idx=start+i; await assignLoop(idx, pick[i]);
+    const c=ch[idx]; if(!c.nodes||!c.buf) continue;
+    const vol=0.55+0.4*(sec.energy||0.7);
+    if(fade){ c.nodes.g.gain.setValueAtTime(0, when); c.nodes.g.gain.linearRampToValueAtTime(vol, when+2*bar()); }
+    else if(c.nodes.g) c.nodes.g.gain.setTargetAtTime(vol, when, 0.05);
+    startCh(c, when);
+  }
+  if(fade){
+    const other=adjDeck?0:8;
+    for(let i=other;i<other+8;i++){ const c=ch[i]; if(!c.nodes||!c.on) continue;
+      c.nodes.g.gain.cancelScheduledValues(when);
+      c.nodes.g.gain.setValueAtTime(c.nodes.g.gain.value||0.8, when);
+      c.nodes.g.gain.linearRampToValueAtTime(0.0001, when+2*bar());
+    }
+    setTimeout(()=>{ for(let i=(adjDeck?0:8);i<(adjDeck?0:8)+8;i++){ if(ch[i].on) stopSrc(ch[i]); } uiMix(); }, 2*bar()*1000+80);
+  }
+  if(typeof grokAnnounce==='function') grokAnnounce('Auto DJ · '+sec.n+' · '+sec.bpm+' BPM · '+pick.map(p=>p.name).join(' · ')+' · '+brain.key);
+  uiMix();
+}
+async function adjBeginSec(){
+  if(!adjOn) return;
+  adjBusy=true;
+  const sec=ADJ_SECTIONS[adjSec];
+  adjBar=0;
+  setBpm(sec.bpm);
+  seq.on=true;
+  if(typeof gxEndless!=='undefined') gxEndless=null;
+  if(typeof gxStart==='function') gxStart(sec.viz, 0);
+  if(sec.energy>=0.85){ instOn.bass=1; instOn.lead=1; }
+  else if(sec.energy>=0.6){ instOn.bass=1; instOn.lead=0; }
+  else { instOn.lead=0; instOn.pad=1; instOn.bass=1; }
+  playing=true; startSched();
+  adjPaint();
+  await adjLoad(sec, adjSec>0);
+  adjDeck=1-adjDeck;
+  adjBusy=false;
+  adjPaint();
+}
+function adjTick(t, step){
+  if(!adjOn || adjBusy) return;
+  if(step!==0) return;
+  adjBar++;
+  adjPaint();
+  const sec=ADJ_SECTIONS[adjSec];
+  if(adjBar>=(sec.bars||8)) adjAdvance().catch(report);
+}
+async function adjAdvance(){
+  if(!adjOn||adjBusy) return;
+  if(adjSec>=ADJ_SECTIONS.length-1){
+    adjFinish();
+    return;
+  }
+  adjSec++;
+  await adjBeginSec();
+}
+function adjFinish(){
+  adjOn=false; adjBusy=false;
+  window.__DLOOP.autodj=false;
+  window.__DLOOP.adjDone=true;
+  if(typeof grokAnnounce==='function') grokAnnounce('Auto DJ · set zakończony · '+ADJ_SECTIONS.length+' sekcji');
+  if(typeof toast==='function') toast('Auto DJ · koniec setu');
+  adjPaint();
+  uiBoty();
+}
+async function autoDjStart(){
+  await initAudio();
+  brainEnsureGraph();
+  if(typeof grokOn!=='undefined' && grokOn && typeof grokDjStop==='function') grokDjStop();
+  if(typeof ssOn!=='undefined' && ssOn && typeof ssDjStop==='function') ssDjStop();
+  if(typeof vsOn!=='undefined' && vsOn && typeof vsStop==='function') vsStop();
+  if(typeof etOn!=='undefined' && etOn && typeof etStop==='function') etStop();
+  adjOn=true; adjBusy=false; adjSec=0; adjBar=0; adjDeck=0;
+  window.__DLOOP.autodj=true; window.__DLOOP.adjDone=false;
+  playing=true;
+  const pb=$('#playBtn'); if(pb){ pb.textContent='■ Stop'; pb.classList.add('on'); }
+  if(typeof toast==='function') toast('Auto DJ · autonomiczny set');
+  uiBoty();
+  await adjBeginSec();
+}
+function autoDjStop(){
+  adjOn=false; adjBusy=false;
+  window.__DLOOP.autodj=false;
+  const btn=$('#adjBtn'); if(btn) btn.classList.remove('on');
+  if(typeof grokAnnounce==='function') grokAnnounce('Auto DJ OFF');
+  adjPaint();
+  uiBoty();
+}
+
+window.__DLOOP.autoDjStart=autoDjStart;
+window.__DLOOP.autoDjStop=autoDjStop;
+window.__DLOOP.adjForce=()=>adjAdvance();
+window.__DLOOP.adjFinish=adjFinish;
+window.__DLOOP.adjSections=ADJ_SECTIONS.length;
+window.__DLOOP.pickKeyAware=pickKeyAware;
+window.__DLOOP.loopKey=loopKey;
+window.__DLOOP.brainGet=()=>Object.assign({},brain);
+window.__DLOOP.mgsNames=MGS_NAMES;
+
+/* input hooks for brain sliders — extra listener */
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.id==='brHuman') brain.humanize=+t.value;
+  if(t.id==='brSc') brain.sidechain=+t.value;
+  if(t.id==='brSub') brain.sub=+t.value;
+});
+
+/* post-hooks: wrap existing UI / clock now that all functions exist */
+(function(){
+  if(typeof uiGCosmos==='function'){
+    const _u=uiGCosmos;
+    uiGCosmos=function(){ _u.apply(this,arguments); mgsMountUi(); };
+  }
+  if(typeof uiBoty==='function'){
+    const _b=uiBoty;
+    uiBoty=function(){
+      _b.apply(this,arguments);
+      const el=$('#botyUI'); if(!el || $('#adjCard')) return;
+      const card=document.createElement('div');
+      card.className='card'; card.id='adjCard';
+      card.innerHTML=`<b>🎧 Auto DJ · autonomiczny set</b>
+        <div class="muted">Pełny set: intro → build → peak → break → peak 2 → Kraków → outro. Dobór po tonacji, fille, wizuale Mega Grok Space, bez płatnego AI.</div>
+        <div class="row">
+          <button class="big" data-act="autoDj" id="adjBtn">▶ Auto DJ</button>
+          <button data-act="autoDjStop">■ Stop setu</button>
+        </div>
+        <div class="muted" id="adjMeta">Auto DJ OFF</div>`;
+      el.appendChild(card);
+      adjPaint();
+    };
+  }
+  if(typeof uiSeq==='function'){
+    const _s=uiSeq;
+    uiSeq=function(){
+      _s.apply(this,arguments);
+      if($('#w-rhythm') && !$('#brainUI')){
+        const box=document.createElement('div');
+        box.id='brainUI'; box.className='card';
+        const host=$('#w-rhythm .wb')||$('#seqUI')&&$('#seqUI').parentNode;
+        if(host) host.appendChild(box);
+      }
+      uiBrain();
+    };
+  }
+  if(typeof drum==='function'){
+    const _d=drum;
+    drum=function(kind,t,vel=1){
+      const v=brainVel(typeof schedule._step==='number'?schedule._step:0, vel);
+      _d(kind,t,v);
+      if(kind==='k'){ brainSidechain(t); brainSub(t,v); }
+    };
+  }
+})();
+(function(){
+  if(typeof initAudio==='function'){
+    const _ia=initAudio;
+    initAudio=async function(){
+      const r=await _ia.apply(this,arguments);
+      try{ brainEnsureGraph(); }catch(e){ report(e); }
+      return r;
+    };
+  }
+  if(typeof uiMix==='function'){
+    const _m=uiMix;
+    uiMix=function(){
+      _m.apply(this,arguments);
+      const a=$('#mix'), b=$('#mix2');
+      if(a&&b) b.innerHTML=a.innerHTML;
+    };
+  }
+})();
+
+
+if(typeof WIN==='object' && WIN){
+  if(typeof uiGCosmos==='function' && WIN.gcosmos) WIN.gcosmos.onOpen=uiGCosmos;
+  if(typeof uiBoty==='function' && WIN.boty) WIN.boty.onOpen=uiBoty;
+  if(typeof uiSeq==='function' && WIN.rhythm) WIN.rhythm.onOpen=uiSeq;
+  if(typeof uiG7==='function' && WIN.promaxx) WIN.promaxx.onOpen=uiG7;
+}
 
 </script>
 </body>
