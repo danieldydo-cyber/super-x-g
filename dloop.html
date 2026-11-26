@@ -146,6 +146,21 @@ nav .nav-g>i, #g7Launch .g7-g>i, .g7-modes-groups .g7-g>i{font-style:normal;font
 #brainUI .brain-row label{display:flex;gap:6px;align-items:center;font-size:12px}
 #brainUI input[type=range]{width:90px}
 
+
+.gdj-panel{margin:8px 10px 12px;padding:10px 12px;background:linear-gradient(180deg,#10101acc,#0a0a16ee);border:1px solid #00e5ff55;border-radius:12px;box-shadow:0 0 22px #00e5ff22}
+.gdj-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px}
+.gdj-brand{font-size:16px;font-weight:900;background:linear-gradient(90deg,#00e5ff,#ff2bd6,#ffe600);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gdj-fx label,.gdj-top label{display:flex;gap:6px;align-items:center;font-size:12px}
+.gdj-fx input[type=range],.gdj-top input[type=range]{width:90px}
+.gdj-xf-row{display:flex;align-items:center;gap:10px;max-width:560px;margin:8px 0}
+.gdj-xf-row input{flex:1}
+.gdj-faders{display:flex;gap:6px;overflow-x:auto;padding:6px 0 8px}
+.gdj-strip{min-width:64px;background:#141428;border:1px solid #2a2a4d;border-radius:8px;padding:6px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px}
+.gdj-strip.on{border-color:#00e5ff;box-shadow:0 0 8px #00e5ff44}
+.gdj-strip.sel{border-color:#ffe600}
+.gdj-strip .fader{writing-mode:vertical-lr;direction:rtl;height:90px;width:22px}
+.gdj-nm{font-size:10px;max-width:62px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:2px 4px}
+
 </style>
 </head>
 <body>
@@ -154,7 +169,7 @@ nav .nav-g>i, #g7Launch .g7-g>i, .g7-modes-groups .g7-g>i{font-style:normal;font
   <button class="big" id="playBtn" data-act="playToggle">▶ Play</button>
   <button class="big spm" id="spmBtn" data-act="spmToggle">✨ Super Power Magic</button>
   <button class="big" id="g7Btn" data-act="open" data-w="promaxx">⚡ Pro Maxx G7</button>
-  <label>BPM <input id="bpm" type="number" min="60" max="200" value="128" style="width:64px"></label>
+  <label>BPM <input id="bpm" type="number" min="60" max="200" value="120" style="width:64px"></label>
   <button data-act="tap">Tap</button>
   <button data-act="sync">⟲ Sync</button>
   <label>Master <input id="mvol" type="range" min="0" max="1" step="0.01" value="0.8"></label>
@@ -279,7 +294,7 @@ const AVMODES=['Holo tunel','Plazma','Beat orby','Pierścienie FFT','Siatka neon
 const HW={akai:'Akai',roland:'Roland',novation:'Novation',nova:'Nova'};
 
 let ctx,master,limiter,analyser,rev,revG,del,delFb,delG,crushM,pcmNode,pcmChunks,pcmOn=false;
-let playing=false,bpm=128,t0=0,tapTs=[],openWin=null,manifest={loops:[],oneshots:[],pending_or_failed:[],suno_music_tags:[]};
+let playing=false,bpm=120,t0=0,tapTs=[],openWin=null,manifest={loops:[],oneshots:[],pending_or_failed:[],suno_music_tags:[]};
 const bufs={}; // path -> AudioBuffer
 const ch=[]; // 28 channels
 let userBuf=null,userName='';
@@ -292,7 +307,7 @@ let voice={on:false,mode:'robot',mic:null,nodes:null};
 let avMode=0,avRec=null,holoRaf=0,megaTimer=null,schedId=0;
 let spmOn=false,spmSecTimer=null,spmBarCount=0,spmStyleI=0;
 const instOn={bass:0,lead:0,pad:0,pluck:0,arp:0,stab:0,keys:0};
-window.__DLOOP={ready:false,loaded:0,errors:[],playing:false,spm:false,g77Count:77,gxOk:false,grokdj:false,etSet:false,rasta:false,g7:false,g7Scenes:7,g7Scene:-1,pwa:false,vs:false,ssdj:false,vsWin:false};
+window.__DLOOP={ready:false,loaded:0,errors:[],playing:false,spm:false,g77Count:77,gxOk:false,grokdj:false,etSet:false,rasta:false,g7:false,g7Scenes:8,g7Scene:-1,pwa:false,vs:false,ssdj:false,vsWin:false};
 
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast._);toast._=setTimeout(()=>t.style.display='none',2400)}
 function report(e){console.error(e);window.__DLOOP.errors.push(String(e&&e.message||e))}
@@ -307,7 +322,7 @@ function nextQ(div=4,look=0.06){
   return t0+Math.ceil(el/q)*q;
 }
 function setBpm(v){
-  v=Math.max(60,Math.min(200,+v||128));
+  v=Math.max(60,Math.min(200,+v||120));
   bpm=v; const el=$('#bpm'); if(el&&el.value!=v) el.value=v;
   if(del) del.delayTime.setTargetAtTime(beat()*0.375, now(), 0.02);
   ch.forEach(c=>{ if(c.src&&c.meta&&c.meta.bpm){ try{c.src.playbackRate.value=bpm/(c.meta.bpm||bpm)}catch(e){} } });
@@ -647,6 +662,7 @@ defWin('info','ℹ Info i uczciwe granice', `
     <li>Boty / Auto: Grok DJ i Super Sound DJ (osobne auto-DJ, bez płatnego AI), Versus (tury co 16 taktów) oraz Auto DJ — autonomiczny set (intro, build, peak, break, outro) z doborem po tonacji.</li>
     <li>Mega Grok Space: 21 dodatkowych wizuali WebGL (kosmos, wormhole, supernova, pulsary…) ponad istniejące 77 GX FX.</li>
     <li>Mózg rytmu: swing, humanize, akcenty, sidechain na kick, sub, automatyczne fille i dobór pętli po tonacji.</li>
+    <li>Engine G DJ Sound: na Play tylko 1 ścieżka (kanał 1), reszta uzbrojona; Ambient G 120 BPM; pętle przycięte do dokładnej długości taktów, start na granicy taktu, ping-pong delay, HP 30 Hz, miękki limiter −1 dBTP. G DJ Sound Multitool na pierwszej stronie (fadery, FX, generatory, crossfader, BPM/sync).</li>
     <li>Jedno okno naraz · ✕ · ⛶ · Esc. Wsparcie: tylko BLIK 730 377 357.</li>
   </ul>
   <p class="muted" id="infoStats">—</p>`, ()=>{
@@ -702,7 +718,8 @@ async function styleSet(id){
   ch.forEach((c,i)=>{ if(i>=8) stopSrc(c); });
   for(let i=0;i<pack.length && i<8;i++) await assignLoop(i, pack[i]);
   const t=nextQ(1);
-  for(let i=0;i<pack.length && i<8;i++) startCh(ch[i], t);
+  const nStart=(typeof styleSet._n==='number')?styleSet._n:1;
+  for(let i=0;i<pack.length && i<8;i++){ if(i<nStart) startCh(ch[i], t); }
   playing=true; $('#playBtn').textContent='■ Stop'; $('#playBtn').classList.add('on');
   if(!t0) t0=t;
   startSched(); uiMix(); toast('Style: '+(s?s.n:id));
@@ -1297,7 +1314,7 @@ async function spmStart(){
 }
 async function spmBoot(){
   const s=STYLES[spmStyleI % STYLES.length];
-  try{ await styleSet(s.id); }catch(e){ report(e); }
+  try{ styleSet._n=4; await styleSet(s.id); styleSet._n=null; }catch(e){ report(e); }
   seq.on=true; seqMagic(); seq.kit=['roland','akai','novation','nova','samples'][spmStyleI%5];
   instOn.bass=1; instOn.pad=1; instOn.arp=1; instOn.pluck=1; instOn.stab=0; instOn.lead=0; instOn.keys=0;
   magOn=magOn.map(()=>true);
@@ -1404,8 +1421,8 @@ const ACT={
     if(playing){ stopAll(); }
     else {
       const t=nextQ(1); t0=t;
-      const any=ch.filter(c=>c.buf);
-      if(any.length){ any.slice(0,4).forEach(c=>startCh(c,t)); }
+      const c=(ch[0]&&ch[0].buf)?ch[0]:ch.find(x=>x.buf);
+      if(c) startCh(c,t);
       else { seq.on=true; instOn.bass=1; }
       startSched(); uiMix();
     }
@@ -2444,13 +2461,13 @@ async function grokLoadDeck(deck, fade){
   if(!grokOn) return;
   const loops=manifest.loops||[]; if(!loops.length) return;
   const scored=loops.map(l=>({l, s: 1/(1+Math.abs((l.bpm||bpm)-bpm))+Math.random()*0.3+(typeof keyScore==='function'?keyScore(l):0)})).sort((a,b)=>b.s-a.s);
-  const pick=scored.slice(0,4).map(x=>x.l);
+  const pick=scored.slice(0,2).map(x=>x.l);
   const start=deck*8;
   const when=nextQ(1);
   for(let i=0;i<pick.length;i++){
     const idx=start+i; await assignLoop(idx, pick[i]);
     const c=ch[idx]; if(!c.nodes||!c.buf) continue;
-    if(fade){ c.nodes.g.gain.setValueAtTime(0, when); c.nodes.g.gain.linearRampToValueAtTime(0.85, when+2*bar()); }
+    if(fade){ c.nodes.g.gain.setValueAtTime(0, when); c.nodes.g.gain.linearRampToValueAtTime(0.55, when+2*bar()); }
     startCh(c, when);
   }
   if(fade){
@@ -2687,6 +2704,7 @@ const G7_LAUNCH=[
   {k:'core',g:'studio',n:'🧬 7 Core',go(){ openW('core'); }},
   {k:'voice',g:'studio',n:'🎤 Voice 7',go(){ openW('voice'); }},
   {k:'load',g:'studio',n:'📁 Load MP3',go(){ openW('load'); }},
+  {k:'ambient',g:'studio',n:'🌌 Ambient G',go(){ if(typeof gdjApplyAmbient==='function') gdjApplyAmbient(true); }},
   {k:'spm',g:'wiz',n:'✨ Super Power Magic',go(){ openW('spm'); }},
   {k:'gcosmos',g:'wiz',n:'🌌 G Studio Cosmos 77',go(){ openW('gcosmos'); }},
   {k:'gx',g:'wiz',n:'👁 GX FX visuals',go(){ openW('gcosmos'); if(typeof gxStart==='function') gxStart(typeof gxMode==='number'?gxMode:0, 0); }},
@@ -2716,7 +2734,8 @@ const G7_SCENES=[
   {id:3,n:'Alien Jungle',bpm:174,mode:'et',et:2,viz:12,pal:0,fx:{delay:0.22,reverb:0.3,crush:0.12},d:'E.T. Alien Jungle, 174 BPM'},
   {id:4,n:'Rasta Roots',bpm:76,mode:'rasta',rasta:0,viz:18,pal:1,fx:{delay:0.55,reverb:0.45,crush:0},d:'Rasta DJ Roots, paleta rasta'},
   {id:5,n:'Space Trance',bpm:138,mode:'et',et:1,viz:5,pal:0,fx:{delay:0.42,reverb:0.55,crush:0},d:'E.T. Space Trance, 138 BPM'},
-  {id:6,n:'Hood Night',bpm:130,mode:'hood',style:'dark',viz:8,pal:0,fx:{delay:0.28,reverb:0.25,crush:0.18,hood:true},d:'Dark / Hood Remix, 130 BPM'}
+  {id:6,n:'Hood Night',bpm:130,mode:'hood',style:'dark',viz:8,pal:0,fx:{delay:0.28,reverb:0.25,crush:0.18,hood:true},d:'Dark / Hood Remix, 130 BPM'},
+  {id:7,n:'Ambient G',bpm:120,mode:'ambient',style:'house',viz:84,pal:0,fx:{delay:0.18,reverb:0.38,crush:0},d:'Ambient G · 120 BPM, miękki łańcuch, jedna ścieżka na start'}
 ];
 
 const G7_MC707=[
@@ -2882,6 +2901,9 @@ async function g7LoadScene(i){
     if(s.style && typeof styleSet==='function') await styleSet(s.style);
     if(typeof g77Trig==='function'){ g77Trig(23).catch(report); g77Trig(0).catch(report); }
     startSched();
+  } else if(s.mode==='ambient'){
+    if(typeof gdjApplyAmbient==='function') await gdjApplyAmbient(true);
+    else if(s.style && typeof styleSet==='function') await styleSet(s.style);
   }
   g7Scene=s.id;
   window.__DLOOP.g7Scene=s.id;
@@ -3156,7 +3178,7 @@ function g7NoteFrame(){
     if(g7qMode==='auto') g7qScale=0.7;
   }
   window.__DLOOP.g7=true;
-  window.__DLOOP.g7Scenes=7;
+  window.__DLOOP.g7Scenes=8;
   window.__DLOOP.g7Scene=-1;
   window.__DLOOP.g7LoadScene=g7LoadScene;
   window.__DLOOP.g7SavePreset=g7SavePreset;
@@ -3360,7 +3382,7 @@ async function vsLoadSide(who, fade, style){
     const sa=1/(1+Math.abs((a.bpm||style.bpm)-style.bpm))+Math.random()*0.3+(who==='ss' && /dark|hood|trap|jungle|krak|rave|wolf/i.test((a.name||'')+' '+(a.style||''))?0.35:0)+(typeof keyScore==='function'?keyScore(a):0);
     const sb=1/(1+Math.abs((b.bpm||style.bpm)-style.bpm))+Math.random()*0.3+(who==='ss' && /dark|hood|trap|jungle|krak|rave|wolf/i.test((b.name||'')+' '+(b.style||''))?0.35:0)+(typeof keyScore==='function'?keyScore(b):0);
     return sb-sa;
-  }).slice(0,4);
+  }).slice(0,2);
   const start=who==='grok'?0:8;
   const other=who==='grok'?8:0;
   const when=nextQ(1);
@@ -3368,7 +3390,7 @@ async function vsLoadSide(who, fade, style){
     if(!vsOn && !ssOn) return;
     const idx=start+i; await assignLoop(idx, cand[i]);
     const c=ch[idx]; if(!c.nodes||!c.buf) continue;
-    if(fade){ c.nodes.g.gain.setValueAtTime(0, when); c.nodes.g.gain.linearRampToValueAtTime(0.85, when+2*bar()); }
+    if(fade){ c.nodes.g.gain.setValueAtTime(0, when); c.nodes.g.gain.linearRampToValueAtTime(0.55, when+2*bar()); }
     startCh(c, when);
   }
   if(fade){
@@ -3496,7 +3518,7 @@ async function ssLoadDeck(deck, fade){
   const re=new RegExp(st.q,'i');
   let cand=loops.filter(l=>re.test((l.name||'')+' '+(l.style||'')));
   if(cand.length<4) cand=loops.slice();
-  cand=(typeof pickKeyAware==='function')?pickKeyAware(cand,4):[...cand].sort(()=>Math.random()-0.5).slice(0,4);
+  cand=(typeof pickKeyAware==='function')?pickKeyAware(cand,2):[...cand].sort(()=>Math.random()-0.5).slice(0,2);
   const start=deck*8, when=nextQ(1);
   for(let i=0;i<cand.length;i++){
     if(!ssOn) return;
@@ -3801,7 +3823,7 @@ function mgsMountUi(){
 let musicBus=null, scGain=null, brainBar=0, brainFillUntil=-1;
 const BRAIN_KEYS=['C','G','D','A','E','F','Am','Em','Dm','Gm','Cm','Fm'];
 let brain={
-  humanize:0.18, accents:1, sidechain:0.55, sub:0.65, fills:1, keyAware:1, key:'Am'
+  humanize:0.12, accents:1, sidechain:0.22, sub:0.55, fills:1, keyAware:1, key:'Am'
 };
 function loopKey(l){
   if(!l) return brain.key||'Am';
@@ -3937,7 +3959,8 @@ async function adjLoad(sec, fade){
   const re=st?new RegExp(st.q,'i'): /./;
   let cand=loops.filter(l=>re.test((l.name||'')+' '+(l.style||'')));
   if(cand.length<4) cand=loops.slice();
-  const pick=pickKeyAware(cand, 4);
+  const nLayers=Math.min(4, (adjSec===0?1:adjSec+1));
+  const pick=pickKeyAware(cand, nLayers);
   const start=adjDeck*8, when=nextQ(1);
   for(let i=0;i<pick.length;i++){
     if(!adjOn) return;
@@ -4118,6 +4141,405 @@ if(typeof WIN==='object' && WIN){
   if(typeof uiBoty==='function' && WIN.boty) WIN.boty.onOpen=uiBoty;
   if(typeof uiSeq==='function' && WIN.rhythm) WIN.rhythm.onOpen=uiSeq;
   if(typeof uiG7==='function' && WIN.promaxx) WIN.promaxx.onOpen=uiG7;
+}
+
+
+/* ===== Engine G DJ Sound · Ambient G · Multitool front panel · tight loop sync ===== */
+let gdjXf=0, gdjExp=false, gdjReady=false, gdjHp=null, gdjLp=null, delR=null, gdjPp=false;
+let gdjSel=0;
+window.__DLOOP.engine='G DJ Sound';
+window.__DLOOP.gdj=true;
+
+function gdjLoopPoints(c){
+  if(!c||!c.buf) return {start:0,end:0,rate:1,native:bpm};
+  const native=Math.max(60, (c.meta&&c.meta.bpm)?+c.meta.bpm:bpm);
+  const beatN=60/native;
+  let bars=Math.max(1, Math.round(+(c.meta&&c.meta.bars)||0));
+  if(!c.meta||!c.meta.bars) bars=Math.max(1, Math.round(c.buf.duration/(4*beatN)));
+  const exact=bars*4*beatN;
+  let end=exact;
+  if(c.buf.duration+0.0005<exact){
+    const fit=Math.max(1, Math.floor((c.buf.duration+1e-4)/(4*beatN)));
+    end=fit*4*beatN;
+  }
+  end=Math.min(c.buf.duration, Math.max(0.05, end));
+  return {start:0, end, rate:bpm/native, native, bars, exact};
+}
+function gdjPhaseOffset(c, when){
+  /* align loop phase to master bar clock so crossfades stay on the grid */
+  if(!playing||!t0||!c||!c.buf) return 0;
+  const p=gdjLoopPoints(c);
+  const outLen=p.end/p.rate;
+  if(!outLen||!Number.isFinite(outLen)) return 0;
+  const el=Math.max(0,(when||now())-t0);
+  const pos=el%outLen;
+  return Math.min(p.end-0.001, pos*p.rate);
+}
+
+function gdjEnsureGraph(){
+  if(!ctx) return;
+  if(!gdjHp){
+    gdjHp=ctx.createBiquadFilter(); gdjHp.type='highpass'; gdjHp.frequency.value=30; gdjHp.Q.value=0.7;
+    gdjLp=ctx.createBiquadFilter(); gdjLp.type='lowpass'; gdjLp.frequency.value=18000; gdjLp.Q.value=0.7;
+    try{ master.disconnect(studioComp); }catch(e){}
+    try{ master.connect(gdjHp); gdjHp.connect(gdjLp); gdjLp.connect(studioComp); }catch(e){
+      try{ master.connect(studioComp); }catch(e2){}
+    }
+  }
+  if(studioComp){
+    try{
+      studioComp.threshold.value=-24;
+      studioComp.ratio.value=1.8;
+      studioComp.knee.value=10;
+      studioComp.attack.value=0.03;
+      studioComp.release.value=0.32;
+    }catch(e){}
+  }
+  if(limiter){
+    try{ limiter.threshold.value=-1.0; limiter.knee.value=0; limiter.ratio.value=20; limiter.attack.value=0.003; limiter.release.value=0.16; }catch(e){}
+  }
+  if(rev && typeof makeIR==='function'){
+    try{ rev.buffer=makeIR(3.4); }catch(e){}
+  }
+  if(revG) try{ if(revG.gain.value>0.4) revG.gain.setTargetAtTime(0.32, now(), 0.05); }catch(e){}
+  if(delG) try{ if(delG.gain.value>0.35) delG.gain.setTargetAtTime(0.28, now(), 0.05); }catch(e){}
+  gdjMakePingPong();
+  ch.forEach(gdjEnsureCh);
+  gdjApplyXf();
+  gdjReady=true;
+  window.__DLOOP.gdjReady=true;
+}
+function gdjMakePingPong(){
+  if(!ctx||!del||gdjPp) return;
+  try{
+    delR=ctx.createDelay(1.5);
+    delR.delayTime.value=beat()*0.375;
+    const fbR=ctx.createGain(); fbR.gain.value=0.26;
+    if(delFb) delFb.gain.value=0.26;
+    try{ del.disconnect(delG); }catch(e){}
+    try{ delFb.disconnect(); }catch(e){}
+    try{ del.disconnect(delFb); }catch(e){}
+    del.connect(delFb); delFb.connect(delR);
+    delR.connect(fbR); fbR.connect(del);
+    const panL=ctx.createStereoPanner(); panL.pan.value=-0.95;
+    const panR=ctx.createStereoPanner(); panR.pan.value=0.95;
+    del.connect(panL); panL.connect(delG);
+    delR.connect(panR); panR.connect(delG);
+    gdjPp=true;
+    window.__DLOOP.gdjPp=true;
+  }catch(e){ report(e); }
+}
+function isBassLoop(meta){
+  return /bass|808|sub|kick|bas\b/i.test(String((meta&&(meta.name+' '+(meta.style||'')))||''));
+}
+function gdjEnsureCh(c){
+  if(!ctx||!c||!c.nodes) return;
+  if(!c.nodes.hpMud){
+    try{
+      const hp=ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=30; hp.Q.value=0.65;
+      /* source currently goes to filter; we'll insert hp in startCh */
+      c.nodes.hpMud=hp;
+      hp.connect(c.nodes.filter);
+    }catch(e){}
+  }
+  if(!c.nodes.xf){
+    try{
+      const xf=ctx.createGain(); xf.gain.value=1;
+      /* mute -> dry is existing; insert xf after mute into dry/sends is messy; apply as extra gain on g */
+      c.nodes.xf=xf;
+    }catch(e){}
+  }
+  gdjApplyMud(c);
+}
+function gdjApplyMud(c){
+  if(!c||!c.nodes||!c.nodes.hpMud) return;
+  const hz=isBassLoop(c.meta)?30:140;
+  try{ c.nodes.hpMud.frequency.setTargetAtTime(hz, now(), 0.04); }catch(e){ try{c.nodes.hpMud.frequency.value=hz;}catch(e2){} }
+}
+function gdjApplyXf(){
+  const x=Math.max(0,Math.min(1, gdjXf));
+  const a=Math.cos(x*Math.PI/2), b=Math.sin(x*Math.PI/2);
+  ch.forEach(c=>{
+    if(!c.nodes||!c.nodes.g) return;
+    const base=c.vol;
+    let k=1;
+    if(c.id<8) k=a;
+    else if(c.id<16) k=b;
+    try{ c.nodes.g.gain.setTargetAtTime(base*k, now(), 0.02); }catch(e){}
+  });
+  const el=$('#gdjXf'); if(el&&+el.value!==x) el.value=x;
+  window.__DLOOP.gdjXf=x;
+}
+
+/* wrap startCh for exact bar loops + phase-aligned starts */
+(function(){
+  if(typeof startCh!=='function') return;
+  const _start=startCh;
+  startCh=function(c, when){
+    if(!c||!c.buf||!c.nodes) return;
+    stopSrc(c);
+    gdjEnsureCh(c);
+    const s=ctx.createBufferSource();
+    s.buffer=c.buf; s.loop=true;
+    const p=gdjLoopPoints(c);
+    s.loopStart=p.start;
+    s.loopEnd=p.end;
+    s.playbackRate.value=p.rate;
+    const dest=c.nodes.hpMud||c.nodes.filter;
+    s.connect(dest);
+    const t=(when!=null)?when:nextQ(1);
+    const off=gdjPhaseOffset(c,t);
+    try{ s.start(t, off); }catch(e){ try{ s.start(t); }catch(e2){} }
+    c.src=s; c.on=true;
+    gdjApplyMud(c);
+    gdjApplyXf();
+  };
+})();
+
+(function(){
+  if(typeof setBpm!=='function') return;
+  const _sb=setBpm;
+  setBpm=function(v){
+    _sb(Math.max(60,Math.min(200, +v||120)));
+    try{ if(delR) delR.delayTime.setTargetAtTime(beat()*0.375, now(), 0.02); }catch(e){}
+    const g=$('#gdjBpm'); if(g&&g.value!=bpm) g.value=bpm;
+  };
+})();
+
+(function(){
+  if(typeof initAudio!=='function') return;
+  const _ia=initAudio;
+  initAudio=async function(){
+    const r=await _ia.apply(this, arguments);
+    try{ gdjEnsureGraph(); }catch(e){ report(e); }
+    return r;
+  };
+})();
+
+(function(){
+  if(typeof assignLoop!=='function') return;
+  const _al=assignLoop;
+  assignLoop=async function(i, meta){
+    const r=await _al(i, meta);
+    const c=ch[i];
+    if(c){ gdjEnsureCh(c); gdjApplyMud(c); }
+    return r;
+  };
+})();
+
+(function(){
+  if(typeof uiMix!=='function') return;
+  const _u=uiMix;
+  uiMix=function(){
+    _u.apply(this, arguments);
+    try{ uiGdj(); }catch(e){}
+  };
+})();
+
+function gdjStartOne(force){
+  const t=nextQ(1); if(!t0) t0=t;
+  const c=(ch[0]&&ch[0].buf)?ch[0]:ch.find(x=>x.buf);
+  if(c) startCh(c,t);
+  else { seq.on=true; instOn.bass=1; }
+  playing=true; startSched(); uiMix();
+}
+
+async function gdjApplyAmbient(play){
+  await initAudio();
+  setBpm(120);
+  if(typeof brain!=='undefined'){ brain.sidechain=0.22; brain.humanize=0.12; }
+  if(revG) revG.gain.setTargetAtTime(0.34, now(), 0.05);
+  if(delG) delG.gain.setTargetAtTime(0.22, now(), 0.05);
+  ch.forEach(c=>{
+    c.reverb=Math.max(c.reverb, 0.1);
+    c.delay=c.delay||0.04;
+    c.vol=Math.min(c.vol, 0.8);
+    if(c.nodes) applyChFX(c);
+  });
+  const loops=manifest.loops||[];
+  const house=loops.filter(l=>/house|ambient|chill|minimal|techno/i.test((l.name||'')+' '+(l.style||'')));
+  const pick=(typeof pickKeyAware==='function'?pickKeyAware(house.length?house:loops, 8): (house.length?house:loops).slice(0,8));
+  for(let i=0;i<pick.length && i<8;i++) await assignLoop(i, pick[i]);
+  /* arm 1-7, optionally start ch1 */
+  for(let i=1;i<8;i++){ if(ch[i]&&ch[i].on) stopSrc(ch[i]); }
+  if(typeof gxStart==='function'){ if(typeof gxEndless!=='undefined') gxEndless=null; gxStart(84, 0); }
+  g7Scene=7; if(window.__DLOOP) window.__DLOOP.g7Scene=7;
+  if(typeof g7PaintScenes==='function') g7PaintScenes();
+  if(play){ const t=nextQ(1); t0=t; if(ch[0]&&ch[0].buf) startCh(ch[0], t); startSched(); }
+  uiMix();
+  if(typeof toast==='function') toast('Ambient G · 120 BPM · jedna ścieżka');
+}
+
+async function gdjStyleQuick(){
+  await initAudio();
+  const s=STYLES[(gdjStyleQuick.i=(gdjStyleQuick.i||0)+1)%STYLES.length];
+  if(typeof styleSet==='function') await styleSet(s.id, 1);
+  toast('Style · '+s.n+' · kanał 1');
+}
+async function gdjRemixSet(){
+  await initAudio();
+  const loops=manifest.loops||[];
+  const pack=(typeof pickKeyAware==='function')?pickKeyAware(loops,4):loops.slice(0,4);
+  for(let i=0;i<pack.length;i++) await assignLoop(i, pack[i]);
+  for(let i=1;i<28;i++){ if(ch[i]&&ch[i].on) stopSrc(ch[i]); }
+  const t=nextQ(1); t0=t||t0;
+  if(ch[0]&&ch[0].buf) startCh(ch[0], t);
+  playing=true; startSched(); uiMix();
+  toast('Remix set · 1 gra, 3 uzbrojone');
+}
+
+function uiGdj(){
+  const el=$('#gdjPanel'); if(!el) return;
+  const n=gdjExp?28:8;
+  const strips=ch.slice(0,n).map((c,i)=>`
+    <div class="gdj-strip ${c.on?'on':''} ${gdjSel===i?'sel':''}" data-i="${i}">
+      <button class="gdj-nm" data-act="gdjSel" data-i="${i}" title="${esc(c.name)}">${esc(short(c.name,12))}</button>
+      <input class="fader" type="range" min="0" max="1.2" step="0.01" value="${c.vol}" data-ch="vol" data-i="${i}" orient="vertical" title="Fader ${i+1}">
+      <button data-act="chPlay" data-i="${i}" class="${c.on?'on':''}">${c.on?'■':'▶'}</button>
+      <span class="muted">${c.meta?Math.round(c.meta.bpm||0):'—'}</span>
+    </div>`).join('');
+  const fxC=ch[gdjSel]||ch[0]||{cut:0.85,delay:0,reverb:0.1,crush:0};
+  el.querySelector('#gdjFaders').innerHTML=strips;
+  const m=$('#gdjMaster'); if(m && $('#mvol')) m.value=$('#mvol').value;
+  const bp=$('#gdjBpm'); if(bp&&bp.value!=bpm) bp.value=bpm;
+  const xf=$('#gdjXf'); if(xf&&+xf.value!==gdjXf) xf.value=gdjXf;
+  const cut=$('#gdjCut'); if(cut) cut.value=fxC.cut;
+  const dl=$('#gdjDel'); if(dl) dl.value=fxC.delay;
+  const rv=$('#gdjRev'); if(rv) rv.value=fxC.reverb;
+  const cr=$('#gdjCrush'); if(cr) cr.value=fxC.crush;
+  const sc=$('#gdjSc'); if(sc && typeof brain!=='undefined') sc.value=brain.sidechain;
+  const st=$('#gdjStat');
+  if(st) st.textContent='engine G DJ Sound · '+(ch.filter(c=>c.on).length)+' warstw · ch '+(gdjSel+1)+' · '+bpm+' BPM · '+(playing?'PLAY':'READY');
+  const xb=$('#gdjExpBtn'); if(xb) xb.textContent=gdjExp?'▾ Pierwsze 8':'▸ Rozwiń 28';
+}
+
+function gdjBuildPanel(){
+  if($('#gdjPanel')) return;
+  const main=$('main'); if(!main) return;
+  const sec=document.createElement('section');
+  sec.id='gdjPanel'; sec.className='gdj-panel';
+  sec.innerHTML=`
+    <div class="gdj-head">
+      <b class="gdj-brand">G DJ Sound Multitool</b>
+      <span class="muted" id="gdjStat">engine G DJ Sound</span>
+      <button class="big" data-act="playToggle" id="gdjPlay">▶ Play</button>
+      <button data-act="sync">⟲ Sync</button>
+      <button data-act="allStop">■ Stop kanałów</button>
+    </div>
+    <div class="gdj-top row">
+      <label>BPM <input id="gdjBpm" type="number" min="60" max="200" value="${bpm}" style="width:64px"></label>
+      <button data-act="tap">Tap</button>
+      <button data-act="sync">⟲ Sync</button>
+      <label>Master <input id="gdjMaster" type="range" min="0" max="1" step="0.01" value="${($('#mvol')||{}).value||0.8}"></label>
+      <button class="big" data-act="gdjAmbient" id="gdjAmbBtn">Ambient G</button>
+    </div>
+    <div class="gdj-fx row">
+      <b>FX</b>
+      <label>Filtr <input id="gdjCut" type="range" min="0" max="1" step="0.01" value="0.85"></label>
+      <label>Delay <input id="gdjDel" type="range" min="0" max="1" step="0.01" value="0.04"></label>
+      <label>Reverb <input id="gdjRev" type="range" min="0" max="1" step="0.01" value="0.12"></label>
+      <label>Crush <input id="gdjCrush" type="range" min="0" max="1" step="0.01" value="0"></label>
+      <label>Sidechain <input id="gdjSc" type="range" min="0" max="1" step="0.01" value="0.22"></label>
+      <span class="muted">kanał zaznaczony · ping-pong delay sync BPM · HP 30 Hz</span>
+    </div>
+    <div class="gdj-gen row">
+      <b>Generatory</b>
+      <button data-act="gdjStyle">🎨 Style</button>
+      <button data-act="seqToggle" id="gdjSeqBtn">🥁 Rhythm</button>
+      <button data-act="gdjMagic">✨ Magic Loops</button>
+      <button class="big" data-act="gdjAmbient">🌌 Ambient G</button>
+      <button data-act="gdjRemix">💥 Remix set</button>
+    </div>
+    <div class="gdj-xf-row">
+      <span>A</span>
+      <input id="gdjXf" type="range" min="0" max="1" step="0.01" value="0" title="Crossfader A/B (ch 1–8 / 9–16)">
+      <span>B</span>
+    </div>
+    <div class="row"><b>Fadery</b> <span class="muted">pierwsze 8 · reszta uzbrojona, Ty dopinasz</span>
+      <button type="button" data-act="gdjExp" id="gdjExpBtn">▸ Rozwiń 28</button>
+    </div>
+    <div class="gdj-faders mixer" id="gdjFaders"></div>
+  `;
+  main.insertBefore(sec, main.firstChild);
+  uiGdj();
+}
+
+window.__DLOOP.gdjStartOne=gdjStartOne;
+window.__DLOOP.gdjApplyAmbient=gdjApplyAmbient;
+window.__DLOOP.gdjLoopPoints=gdjLoopPoints;
+window.__DLOOP.gdjLayers=()=>ch.filter(c=>c.on).length;
+window.__DLOOP.capturePcm=async function(ms){
+  await initAudio();
+  pcmChunks=[]; pcmOn=true; recOn=true;
+  await new Promise(r=>setTimeout(r, ms||3000));
+  pcmOn=false; recOn=false;
+  let peak=0, clips=0, n=0, sumsq=0;
+  for(const [L,R] of (pcmChunks||[])){
+    for(let i=0;i<L.length;i++){
+      const x=Math.max(Math.abs(L[i]), Math.abs(R[i]||0));
+      if(x>peak) peak=x;
+      if(x>=0.999) clips++;
+      sumsq+=L[i]*L[i]+(R[i]||0)*(R[i]||0);
+      n+=2;
+    }
+  }
+  const rms=n?Math.sqrt(sumsq/n):0;
+  return {peak, peakDb:peak>0?20*Math.log10(peak):-Infinity, clips, samples:n, rms, lufsIsh:rms>0?20*Math.log10(rms):-Infinity, layers:ch.filter(c=>c.on).length, bpm};
+};
+
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.id==='gdjMaster' && $('#mvol')){ $('#mvol').value=t.value; if(master) master.gain.value=+t.value; }
+  if(t.id==='gdjBpm') setBpm(+t.value);
+  if(t.id==='gdjXf'){ gdjXf=+t.value; gdjApplyXf(); }
+  if(t.id==='gdjCut'||t.id==='gdjDel'||t.id==='gdjRev'||t.id==='gdjCrush'){
+    const c=ch[gdjSel]; if(!c) return;
+    if(t.id==='gdjCut') c.cut=+t.value;
+    if(t.id==='gdjDel') c.delay=+t.value;
+    if(t.id==='gdjRev') c.reverb=+t.value;
+    if(t.id==='gdjCrush') c.crush=+t.value;
+    applyChFX(c);
+  }
+  if(t.id==='gdjSc' && typeof brain!=='undefined'){ brain.sidechain=+t.value; }
+  if(t.id==='mvol'){ const g=$('#gdjMaster'); if(g) g.value=t.value; }
+});
+document.addEventListener('change',e=>{
+  if(e.target.id==='gdjBpm') setBpm(+e.target.value);
+});
+
+/* boot panel + default Ambient G (no autoplay) */
+(async function gdjBoot(){
+  try{ gdjBuildPanel(); }catch(e){ report(e); }
+  if(typeof brain!=='undefined' && brain.sidechain>0.28) brain.sidechain=0.22;
+  if(typeof ACT==='object'){
+    ACT.playToggle=async function(){
+      await initAudio();
+      if(playing){ stopAll(); const pb=$('#playBtn'); if(pb){ pb.textContent='▶ Play'; pb.classList.remove('on'); } const gp=$('#gdjPlay'); if(gp){ gp.textContent='▶ Play'; gp.classList.remove('on'); } uiGdj(); return; }
+      gdjStartOne();
+      const pb=$('#playBtn'); if(pb){ pb.textContent='■ Stop'; pb.classList.add('on'); }
+      const gp=$('#gdjPlay'); if(gp){ gp.textContent='■ Stop'; gp.classList.add('on'); }
+    };
+    ACT.gdjAmbient=()=>gdjApplyAmbient(true).catch(report);
+    ACT.gdjStyle=()=>gdjStyleQuick().catch(report);
+    ACT.gdjMagic=()=>{ magOn[0]=!magOn[0]; initAudio().then(()=>{ if(typeof preloadSome==='function') preloadSome(); startSched(); }); uiMix(); };
+    ACT.gdjRemix=()=>gdjRemixSet().catch(report);
+    ACT.gdjExp=()=>{ gdjExp=!gdjExp; uiGdj(); };
+    ACT.gdjSel=e=>{ gdjSel=+((e.target.closest('[data-i]')||e.target).dataset.i||0); uiGdj(); };
+  }
+  let n=0;
+  while((!window.__DLOOP||!__DLOOP.ready) && n++<200) await new Promise(r=>setTimeout(r,50));
+  try{
+    if(typeof bpm==='number' && bpm===128) setBpm(120);
+    if(!playing && !ch.some(c=>c.on)) await gdjApplyAmbient(false);
+    gdjBuildPanel(); uiGdj();
+  }catch(e){ report(e); }
+})();
+
+
+if(typeof applyChFX==='function' && !applyChFX._gdj){
+  const _ap=applyChFX;
+  applyChFX=function(c){ _ap(c); if(typeof gdjApplyXf==='function') gdjApplyXf(); };
+  applyChFX._gdj=true;
 }
 
 </script>

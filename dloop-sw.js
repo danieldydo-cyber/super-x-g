@@ -1,5 +1,5 @@
 /* D7 DJ Studio service worker — shell + runtime cache for samples. */
-const VER = 'd7dj-v1.3.1';
+const VER = 'd7dj-v1.3.2';
 const SHELL = [
   './dloop.html',
   './superdj.html',
