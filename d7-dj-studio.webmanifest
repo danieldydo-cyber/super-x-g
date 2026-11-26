@@ -1,0 +1,17 @@
+{
+  "id": "./dloop.html",
+  "name": "D7 DJ Studio",
+  "short_name": "D7 DJ",
+  "description": "DLoop X D DJ · D7 DJ Studio — DJ DaX, Kraków. Mixer 28, 7 Core, G Studio Cosmos, Grok DJ, Rasta, Pro Maxx G7.",
+  "start_url": "./dloop.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#07070f",
+  "theme_color": "#07070f",
+  "lang": "pl",
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

@@ -6,6 +6,11 @@
 <title>DLoop X D DJ · D7 DJ Studio · DJ DaX</title>
 <meta name="theme-color" content="#07070f">
 <link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="d7-dj-studio.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="D7 DJ Studio">
 <style>
 :root{--bg:#07070f;--p:#11111f;--p2:#1a1a2e;--c:#00e5ff;--m:#ff2bd6;--y:#ffe600;--g:#39ff88;--r:#ff4d4d;--t:#e8e8ff;--d:#8a8ab0}
 *{box-sizing:border-box}
@@ -97,6 +102,13 @@ button.spm.on{background:linear-gradient(90deg,#ff2bd688,#00e5ff66);border-color
 .g7-modes button{margin:2px 0}
 #w-promaxx .card.on{border-color:#ffe600}
 
+
+#installRow{position:relative;z-index:70;display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px 10px;background:#0c0c18;border-bottom:1px solid #2a2a55}
+#installRow b{margin-right:4px}
+#installRow a button{width:auto}
+#pwaInstall{display:none}
+#pwaInstall.show{display:inline-block}
+
 </style>
 </head>
 <body>
@@ -138,6 +150,16 @@ button.spm.on{background:linear-gradient(90deg,#ff2bd688,#00e5ff66);border-color
   <button data-act="open" data-w="info">ℹ Info</button>
 </nav>
 <div id="g7Launch"></div>
+<div id="installRow">
+  <b>Pobierz / zainstaluj</b>
+  <a href="downloads/D7-DJ-Studio.apk" download="D7-DJ-Studio.apk"><button type="button">📲 Android APK</button></a>
+  <a href="downloads/windows.html"><button type="button">🖥 Windows</button></a>
+  <a href="downloads/D7-DJ-Studio-web.zip" download="D7-DJ-Studio-web.zip"><button type="button">🌐 Web ZIP</button></a>
+  <a href="downloads/d7-dj-studio-extension.zip" download="d7-dj-studio-extension.zip"><button type="button">🧩 Chrome (D7 DJ Studio)</button></a>
+  <button type="button" id="pwaInstall">＋ Zainstaluj aplikację (PWA)</button>
+  <span class="muted">APK · exe Windows · strona offline · nowe rozszerzenie MV3 · PWA w przeglądarce</span>
+</div>
+
 <main>
   <div class="row"><b>Mixer 28 · sample / loop / FX</b><span class="muted" id="loadInfo">— wczytywanie sampli z TikTok @daxdj27…</span>
     <button data-act="allStop">■ Stop kanałów</button>
@@ -220,7 +242,7 @@ let voice={on:false,mode:'robot',mic:null,nodes:null};
 let avMode=0,avRec=null,holoRaf=0,megaTimer=null,schedId=0;
 let spmOn=false,spmSecTimer=null,spmBarCount=0,spmStyleI=0;
 const instOn={bass:0,lead:0,pad:0,pluck:0,arp:0,stab:0,keys:0};
-window.__DLOOP={ready:false,loaded:0,errors:[],playing:false,spm:false,g77Count:77,gxOk:false,grokdj:false,etSet:false,rasta:false,g7:false,g7Scenes:7,g7Scene:-1};
+window.__DLOOP={ready:false,loaded:0,errors:[],playing:false,spm:false,g77Count:77,gxOk:false,grokdj:false,etSet:false,rasta:false,g7:false,g7Scenes:7,g7Scene:-1,pwa:false};
 
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast._);toast._=setTimeout(()=>t.style.display='none',2400)}
 function report(e){console.error(e);window.__DLOOP.errors.push(String(e&&e.message||e))}
@@ -570,6 +592,7 @@ defWin('info','ℹ Info i uczciwe granice', `
     <li>Rasta DJ: 7 stylów reggae (Roots, Dub, Dancehall, Ragga Jungle, Reggaeton, Steppers, Kraków Rasta) — skank, dub delay, syreny, bas, Twoje pętle, wizuale w barwach rasta.</li>
     <li>Endless viz: Psychotronic Tunnel i Magic Stars Life (WebGL, beat-sync, pełny ekran).</li>
     <li>Pro Maxx G7: launcher wszystkich trybów (Mixer 28, 7 Core, Super Power Magic, G Studio Cosmos 77, GX FX, Grok DJ, E.T. Cosmos Set, Rasta DJ, Voice 7, Load MP3), 7 scen one-tap, presety w localStorage, Web MIDI learn (przyjazny Roland MC-707), auto-jakość shaderów na telefonach, Tap BPM i globalny Master Sync.</li>
+    <li>Pobierz / zainstaluj: APK Android, aplikacja Windows (Electron, D7-DJ-Studio.exe), paczka Web, nowe rozszerzenie Chrome MV3 „D7 DJ Studio”, PWA (dodaj do ekranu głównego). Stare rozszerzenie Super DJ Loops zostaje nietknięte.</li>
     <li>Jedno okno naraz · ✕ · ⛶ · Esc. Wsparcie: tylko BLIK 730 377 357.</li>
   </ul>
   <p class="muted" id="infoStats">—</p>`, ()=>{
@@ -3062,6 +3085,26 @@ function g7NoteFrame(){
 })();
 
 try{ g7LaunchBar(); }catch(e){ report(e); }
+
+
+
+/* PWA */
+(function(){
+  const canSW=typeof navigator!=='undefined' && 'serviceWorker' in navigator && /^https?:$/.test(location.protocol);
+  if(canSW){
+    navigator.serviceWorker.register('dloop-sw.js',{scope:'./'}).then(()=>{ if(window.__DLOOP) window.__DLOOP.pwa=true; }).catch(e=>{ if(typeof report==='function') report(e); });
+  }
+  let deferred=null;
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault(); deferred=e;
+    const b=document.getElementById('pwaInstall'); if(b) b.classList.add('show');
+  });
+  document.addEventListener('click',e=>{
+    if(e.target && e.target.id==='pwaInstall' && deferred){
+      deferred.prompt(); deferred.userChoice.finally(()=>{ deferred=null; const b=document.getElementById('pwaInstall'); if(b) b.classList.remove('show'); });
+    }
+  });
+})();
 
 </script>
 </body>

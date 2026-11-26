@@ -59,6 +59,13 @@ body.remote header,body.remote nav,body.remote main,body.remote footer{display:n
 #remote button{width:100%;padding:16px;font-size:18px;font-weight:800}
 #remote .rg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0}
 #remote .rg button{padding:14px 2px;font-size:14px}
+
+#installRow{position:relative;z-index:70;display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px 10px;background:#0c0c18;border-bottom:1px solid #2a2a55}
+#installRow b{margin-right:4px}
+#installRow a button{width:auto}
+#pwaInstall{display:none}
+#pwaInstall.show{display:inline-block}
+
 </style>
 </head>
 <body>
@@ -91,6 +98,16 @@ body.remote header,body.remote nav,body.remote main,body.remote footer{display:n
  <button data-act="open" data-w="blik">💛 BLIK</button>
  <button data-act="open" data-w="info">ℹ Info</button>
 </nav>
+<div id="installRow">
+  <b>Pobierz / zainstaluj</b>
+  <a href="downloads/D7-DJ-Studio.apk" download="D7-DJ-Studio.apk"><button type="button">📲 Android APK</button></a>
+  <a href="downloads/windows.html"><button type="button">🖥 Windows</button></a>
+  <a href="downloads/D7-DJ-Studio-web.zip" download="D7-DJ-Studio-web.zip"><button type="button">🌐 Web ZIP</button></a>
+  <a href="downloads/d7-dj-studio-extension.zip" download="d7-dj-studio-extension.zip"><button type="button">🧩 Chrome (D7 DJ Studio)</button></a>
+  <button type="button" id="pwaInstall">＋ Zainstaluj aplikację (PWA)</button>
+  <span class="muted">APK · exe Windows · strona offline · nowe rozszerzenie MV3 · PWA w przeglądarce</span>
+</div>
+
 <main>
  <div class="row"><b>13 pętli FX</b><span class="muted">— długości 2/4/8/13/16/18/20 beatów, start zawsze na następnym takcie. 7 generatorów na pętlę (beat, synth, werbel, melodia, perkusja, bas, FX) — algorytmiczne.</span>
  <button data-act="allGen">🎲 Losuj wszystkie</button><button data-act="allStop">■ Stop pętli</button></div>
