@@ -1,11 +1,11 @@
 {
   "name": "D7-App-Sync-Manifest",
   "product": "D7 DJ Studio",
-  "version": "1.3.3",
-  "versionCode": 7,
-  "swCache": "d7dj-v1.3.4",
+  "version": "1.4.0",
+  "versionCode": 8,
+  "swCache": "d7dj-v1.4.0",
   "package": "com.danieldydo.d7djstudio",
-  "updated": "2026-11-26T08:40:56+01:00",
+  "updated": "2026-11-26T09:30:51+01:00",
   "timezone": "Europe/Warsaw",
   "note": "Drive is a central download/sync hub. Android and Windows still require a user tap to install updates. Sharing is not changed by this file.",
   "live": {
@@ -49,8 +49,9 @@
     },
     "files": {
       "Android": {
-        "current": "https://drive.google.com/file/d/1Ztcd7v-16ziWoGTw26lqBT-DLD_LvLw0/view?usp=drivesdk",
-        "currentId": "1Ztcd7v-16ziWoGTw26lqBT-DLD_LvLw0",
+        "current": "https://drive.google.com/file/d/1EqTZXU9P6ibWgEuvUJ2mpG1eBA8ka7ev/view?usp=drivesdk",
+        "currentId": "1EqTZXU9P6ibWgEuvUJ2mpG1eBA8ka7ev",
+        "v1.4.0": "https://drive.google.com/file/d/1EzUOy-j6l7HyNNfwVGeZB0JKdq9_DYPJ/view?usp=drivesdk",
         "v1.3.3": "https://drive.google.com/file/d/143_tal-uo8UDi_twQXD-kdMXEMWXS-dp/view?usp=drivesdk",
         "v1.3.2": "https://drive.google.com/file/d/1S9SlUGnxX3_ZHLQ0qIXlIE_p-v5KAGgC/view?usp=drivesdk",
         "v1.3.1": "https://drive.google.com/file/d/1bFsnysqXl-ad_kLW2nOJ8NPx5GP84_9p/view?usp=drivesdk",
@@ -58,27 +59,27 @@
         "v1.2.0": "https://drive.google.com/file/d/1DlXsUPVwEQnfgFPZ9Sv8XEByXwAs9a4y/view?usp=drivesdk"
       },
       "Web": {
-        "zip": "https://drive.google.com/file/d/1QKxU73F0Y8L1qyhxdwiUMdGxyQs3oHG3/view?usp=drivesdk",
-        "readme": "https://drive.google.com/file/d/1ZyJhyMeXEGVSHyoRFw0dw41xxZ6yMzrW/view?usp=drivesdk"
+        "zip": "https://drive.google.com/file/d/19THC1_yPGMIC4eYv4rMFi50OKc4tq8iC/view?usp=drivesdk",
+        "readme": "https://drive.google.com/file/d/1zS4w2p03K2BOk1Anxc1C6Z1ManD6ycdh/view?usp=drivesdk"
       },
       "Chrome": {
-        "d7_dj_studio_extension": "https://drive.google.com/file/d/10L9C7sIMfAUFIAEZ6M_nTatZWjdIazba/view?usp=drivesdk",
+        "d7_dj_studio_extension": "https://drive.google.com/file/d/1gqQD7_nwhzceSxtahCyg9KOMpMyK0bb4/view?usp=drivesdk",
         "super_dj_loops_extension": "https://drive.google.com/file/d/1Vl2L7ftfJctfoVnllZopJikBkttnxLvD/view?usp=drivesdk"
       },
       "Windows": {
-        "part1": "https://drive.google.com/file/d/1aumGBTZU3uwv25kYUO4XV8B2kYzB_8UX/view?usp=drivesdk",
-        "part2": "https://drive.google.com/file/d/1RwHEBugun4MdpDaBZmxHmStp6ZAUyhaK/view?usp=drivesdk",
-        "bat": "https://drive.google.com/file/d/1hHavmwgJuAU6t02qtwc68onN51NR_cNQ/view?usp=drivesdk",
-        "readme": "https://drive.google.com/file/d/1RqiqlRyrfrOU69JiH-K7aU6jycQZKsb-/view?usp=drivesdk"
+        "part1": "https://drive.google.com/file/d/1aEGZkd0BscbZEsaSOp1y7jN9ZV6vaaLs/view?usp=drivesdk",
+        "part2": "https://drive.google.com/file/d/1QwDXgL4bFO4rf1KTMdGKXW1DbHqLH-3e/view?usp=drivesdk",
+        "bat": "https://drive.google.com/file/d/1TnZXaQBS5hTDhKVpvB6ovnqOJgAS-syd/view?usp=drivesdk",
+        "readme": "https://drive.google.com/file/d/13XTqiFXiP9g4qPajIYvwBVCbYpYBnpWo/view?usp=drivesdk"
       }
     }
   },
   "sizes": {
-    "apk_current_bytes": 31960305,
-    "web_zip_bytes": 31518625,
-    "chrome_ext_bytes": 31554672,
-    "windows_zip_bytes": 146378511,
+    "apk_current_bytes": 31993073,
+    "web_zip_bytes": 31534955,
+    "chrome_ext_bytes": 31571047,
+    "windows_zip_bytes": 146391963,
     "windows_part1_bytes": 94371840,
-    "windows_part2_bytes": 52006671
+    "windows_part2_bytes": 52020123
   }
 }

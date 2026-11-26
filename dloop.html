@@ -664,6 +664,7 @@ defWin('info','ℹ Info i uczciwe granice', `
     <li>Mózg rytmu: swing, humanize, akcenty, sidechain na kick, sub, automatyczne fille i dobór pętli po tonacji.</li>
     <li>Engine G DJ Sound: na Play tylko 1 ścieżka (kanał 1), reszta uzbrojona; Ambient G 120 BPM; pętle przycięte do dokładnej długości taktów, start na granicy taktu, ping-pong delay, HP 30 Hz, miękki limiter −1 dBTP. G DJ Sound Multitool na pierwszej stronie (fadery, FX, generatory, crossfader, BPM/sync).</li>
     <li>Studio Rec 7–77 min + wizualizacje: wybór czasu, Auto DJ / Mega Mix z intro i outro, nagranie audio (WebM/Opus lub WAV) w kawałkach do IndexedDB, studio WebM (VP9/VP8+Opus) 720p/1080p 30/60 fps, opcja offline szybciej (tylko audio, max 21 min). Płynność: scheduler w Web Workerze, latencyHint playback, cache sampli, auto-jakość shaderów, pauza ukrytych okien. Super bass (sub + saturacja + mono &lt;120 Hz), super snare (body + szum + transient + krótki room), Mega Mix DJ Remix.</li>
+    <li>Full Pro 1.4.0: Super Studio 77 Loop Pro Remix Station / Super Mega Looper (77 slotów, Auto Loop Generator na Web Workerze, Nova Synth v7 lokalnie, bez płatnego API). Psychedelic Music Video (7 trybów WebGL + 7-point reaction, Studio Rec WebM + WAV 24-bit). All Apps & All Bots Hub. Sprzedaż & Promo (kopiuj tekst, bez auto-posta) + Google/Wikipedia. Max Sound G Unit 👽.</li>
     <li>Full Pro 1.3.3: Mega Dynamic Studio 24-bit (mix 32-bit float, eksport WAV pcm_s24le 48 kHz, dither TPDF; live DAC zależy od urządzenia). Genius Cosmos 3D GPU Engine — 7 scen raymarch, 3FX (Bloom, Prism, Warp), 7-punktowy silnik reakcji (Sub…Air). Smart Ritmus Control, 77 Bot Multitool, pewniejsze nagrania 7–77 min (IndexedDB + HUD + odzysk). Jedno okno naraz, ✕ ⛶ Esc.</li>
     <li>Jedno okno naraz · ✕ · ⛶ · Esc. Wsparcie: tylko BLIK 730 377 357.</li>
   </ul>
@@ -6718,6 +6719,963 @@ void main(){
       if(typeof g7LaunchBar==='function') g7LaunchBar();
       /* band meter rAF */
       (function loop(){ paintBands(); requestAnimationFrame(loop); })();
+    }catch(e){ if(typeof report==='function') report(e); }
+  })();
+})();
+
+
+/* ===== t522 · D7 DJ Studio 1.4.0 · Super Studio 77 Loop Pro Remix Station =====
+   Additive only. No paid APIs. Nova Synth v7 is free Web Audio.
+   Optional API key field is local, unused by default. */
+(function t522Studio77Install(){
+  if(window.__DLOOP && __DLOOP.t522) return;
+  window.__DLOOP=window.__DLOOP||{};
+  __DLOOP.t522=true;
+  __DLOOP.v140=true;
+  __DLOOP.appVersion='1.4.0';
+
+  const LIVE='https://danieldydo-cyber.github.io/super-x-g/dloop.html';
+  const TIKTOK='https://www.tiktok.com/@daxdj27';
+  const TIKTOK_VM='https://vm.tiktok.com/ZN8uqSuvJ/';
+  const WA='https://wa.me/48730377357';
+  const BLIK='730 377 357';
+  const IBAN='PL45 1870 1045 2083 1058 7576 0001';
+
+  function t522Toast(m){ try{ if(typeof window.toast==='function') window.toast(m); else { const el=document.getElementById('toast'); if(el){ el.textContent=m; el.style.display='block'; } } }catch(e){} }
+  function now(){ return (typeof ctx!=='undefined'&&ctx)?ctx.currentTime:0; }
+  function barSec(){ return 4*60/Math.max(60, typeof bpm==='number'?bpm:128); }
+  function qBar(){ return (typeof nextQ==='function')?nextQ(1):(now()+0.05); }
+
+  if(!document.getElementById('t522css')){
+    const st=document.createElement('style'); st.id='t522css';
+    st.textContent=`
+    #s77Grid{display:grid;grid-template-columns:repeat(11,minmax(64px,1fr));gap:4px}
+    #s77Grid button{font-size:10px;padding:6px 4px;min-height:44px;line-height:1.2;white-space:normal}
+    #s77Grid button.on{outline:2px solid #00e5ff;background:#14243a}
+    #s77Grid button.armed{box-shadow:0 0 0 2px #ffe600 inset}
+    #s77Grid button.synth{border-style:dashed}
+    #psyLayer{position:fixed;inset:0;z-index:90;background:#000;display:none;flex-direction:column}
+    #psyLayer.on{display:flex}
+    #psyGL{flex:1;width:100%;height:100%;display:block;background:#000}
+    #psyBar{position:absolute;top:0;left:0;right:0;z-index:91;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 12px;background:#07070fee;border-bottom:1px solid #ff2bd655}
+    #appsGrid,#botsHubGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+    #appsGrid a,#botsHubGrid button{display:block}
+    .promo-box{white-space:pre-wrap;background:#10101c;border:1px solid #2a2a4d;border-radius:8px;padding:10px;font-size:13px;max-height:200px;overflow:auto}
+    #wikiOut{max-height:260px;overflow:auto}
+    #wikiOut a{color:#7ecbff}
+    .s77-bank.on,.genre-btn.on,.psy-mode.on{outline:2px solid #00e5ff}
+    #novaKey{max-width:280px}
+    `;
+    document.head.appendChild(st);
+  }
+
+  /* ---------- Super Mega Looper 77 + Auto Loop Generator + Nova v7 ---------- */
+  const BANKS=[
+    {id:'techno',n:'Techno',bpm:132,col:'#3cf'},
+    {id:'hiphop',n:'Hip-Hop',bpm:92,col:'#f6c'},
+    {id:'minimal',n:'Minimal',bpm:126,col:'#9ab'},
+    {id:'jungle',n:'Jungle',bpm:174,col:'#6f6'},
+    {id:'trance',n:'Trance',bpm:138,col:'#c8f'},
+    {id:'rasta',n:'Rasta / DaX DJ',bpm:78,col:'#ee3'},
+    {id:'gunit',n:'Max Sound G Unit 👽',bpm:96,col:'#fd5'}
+  ];
+  const SCALES={
+    techno:[0,2,3,5,7,8,10],
+    hiphop:[0,3,5,7,10],
+    minimal:[0,2,5,7,9],
+    jungle:[0,2,3,7,8],
+    trance:[0,2,4,7,9],
+    rasta:[0,2,4,5,7,9,10],
+    gunit:[0,3,5,7,10]
+  };
+  const s77={
+    slots:[], bank:0, genre:'techno', auto:false, worker:null, voices:[], bus:null, gunit:false,
+    playing:0, lastBar:0, armed:0
+  };
+
+  function midiHz(m){ return 440*Math.pow(2,(m-69)/12); }
+  function euclid(steps,hits){
+    const p=new Array(steps).fill(0);
+    if(hits<=0) return p;
+    for(let i=0;i<hits;i++) p[Math.floor(i*steps/hits)%steps]=1;
+    return p;
+  }
+  function s77EnsureBus(){
+    if(s77.bus || typeof ctx==='undefined' || !ctx) return s77.bus;
+    const bus=ctx.createGain(); bus.gain.value=0.62;
+    try{ bus.connect(typeof outBus==='function'?outBus():(typeof master!=='undefined'?master:ctx.destination)); }
+    catch(e){ bus.connect(ctx.destination); }
+    s77.bus=bus; return bus;
+  }
+  function s77Env(t,a,d,v){
+    const g=ctx.createGain();
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(Math.max(0.001,v), t+a);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+a+d);
+    return g;
+  }
+  function s77Tone(type,freq,t,dur,v,lp){
+    if(!ctx) return;
+    const bus=s77EnsureBus();
+    const o=ctx.createOscillator(); o.type=type; o.frequency.setValueAtTime(freq,t);
+    const g=s77Env(t,0.008,dur,v);
+    if(lp){ const f=ctx.createBiquadFilter(); f.type='lowpass'; f.frequency.setValueAtTime(lp,t); o.connect(f); f.connect(g); }
+    else o.connect(g);
+    g.connect(bus); o.start(t); o.stop(t+dur+0.04);
+  }
+  function s77Noise(t,dur,v,hp){
+    if(!ctx) return;
+    const n=Math.max(1, Math.floor((ctx.sampleRate||48000)*Math.min(dur,0.4)));
+    const buf=ctx.createBuffer(1,n,ctx.sampleRate);
+    const d=buf.getChannelData(0);
+    let r1=0,r2=0;
+    for(let i=0;i<n;i++){ const w=(Math.random()*2-1); r1+=0.12*(w-r1); r2=w-r1; d[i]=r2; } /* TPDF-ish noise */
+    const s=ctx.createBufferSource(); s.buffer=buf;
+    const f=ctx.createBiquadFilter(); f.type=hp>800?'highpass':'bandpass'; f.frequency.setValueAtTime(hp,t); f.Q.value=0.8;
+    const g=s77Env(t,0.002,dur,v);
+    s.connect(f); f.connect(g); g.connect(s77EnsureBus());
+    s.start(t); s.stop(t+dur+0.02);
+  }
+  function s77Kick(t,v){
+    const vel=(s77.gunit?0.72:0.6)*v;
+    s77Tone('sine', s77.gunit?52:48, t, 0.28, vel, 180);
+    s77Tone('sine', 90, t, 0.06, vel*0.35, 400);
+  }
+  function s77Snare(t,v){
+    const vel=(s77.gunit?0.62:0.5)*v;
+    s77Tone('triangle', 196, t, 0.08, vel*0.45, 1800);
+    s77Noise(t, s77.gunit?0.11:0.16, vel, s77.gunit?1800:1400);
+  }
+  function s77Hat(t,v){ s77Noise(t,0.04,(s77.gunit?0.18:0.22)*v, 7000); }
+  function s77Bass(t,midi,v){
+    const f=midiHz(midi);
+    s77Tone('sine', f, t, 0.32, (s77.gunit?0.55:0.48)*v, 140);
+    s77Tone('square', f, t, 0.18, (s77.gunit?0.16:0.2)*v, 420);
+  }
+  function s77Stab(t,midi,v){
+    s77Tone('sawtooth', midiHz(midi), t, 0.12, 0.18*v, 2200);
+    s77Tone('sawtooth', midiHz(midi+7), t, 0.1, 0.12*v, 2500);
+  }
+  function s77Lead(t,midi,v){ s77Tone('sawtooth', midiHz(midi), t, 0.22, 0.16*v, 3200); }
+  function s77Chord(t,root,v){
+    [0,4,7].forEach((iv,i)=>s77Tone('triangle', midiHz(root+iv), t, 0.7, 0.12*v, 1800));
+  }
+  function s77VoiceTrig(t){
+    try{
+      if(typeof g77Trig==='function') g77Trig(Math.floor(Math.random()*7));
+      else if(typeof voice!=='undefined' && voice){ /* light ping */ s77Tone('sine', 660, t, 0.08, 0.1, 2400); }
+    }catch(e){}
+  }
+
+  function s77Patterns(genre){
+    const g=genre||s77.genre;
+    if(g==='jungle') return {k:euclid(16,5), s:[0,0,0,0,1,0,0,1,0,0,0,0,1,0,1,0], h:euclid(16,14), b:euclid(16,6), st:euclid(16,3), swing:0.12, root:38};
+    if(g==='hiphop'||g==='gunit') return {k:[1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0], s:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0], h:euclid(16,8), b:euclid(16,5), st:euclid(16,2), swing:0.16, root:36};
+    if(g==='rasta') return {k:[1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0], s:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0], h:euclid(16,6), b:euclid(16,4), st:euclid(16,2), swing:0.1, root:43};
+    if(g==='minimal') return {k:euclid(16,3), s:[0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0], h:euclid(16,8), b:euclid(16,4), st:euclid(16,2), swing:0.06, root:41};
+    if(g==='trance') return {k:euclid(16,4), s:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0], h:euclid(16,16), b:euclid(16,8), st:euclid(16,4), swing:0.02, root:45};
+    return {k:euclid(16,4), s:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0], h:euclid(16,8), b:euclid(16,6), st:euclid(16,3), swing:0.08, root:36}; /* techno */
+  }
+
+  function s77SchedBar(when){
+    if(!ctx) return;
+    s77EnsureBus();
+    const p=s77Patterns(s77.genre);
+    const step=(60/Math.max(60,bpm||128))/4;
+    const scale=SCALES[s77.genre]||SCALES.techno;
+    const swing=p.swing||0;
+    for(let i=0;i<16;i++){
+      const t=when+i*step+((i%2)?swing*step:0);
+      if(p.k[i]) s77Kick(t,1);
+      if(p.s[i]) s77Snare(t,1);
+      if(p.h[i]) s77Hat(t, i%2?0.7:1);
+      if(p.b[i]) s77Bass(t, p.root+(scale[i%scale.length]||0), 1);
+      if(p.st[i]) s77Stab(t, p.root+12+(scale[(i+2)%scale.length]||0), 1);
+      if(s77.genre==='trance' && i%4===2) s77Lead(t, p.root+24+(scale[i%scale.length]||0), 0.8);
+      if(i===0 && (s77.genre==='trance'||s77.genre==='rasta')) s77Chord(t, p.root+12, 0.8);
+      if(i===12 && s77.auto) s77VoiceTrig(t);
+    }
+    /* optional armed sample, retriggered on bar, max 1 to respect one-track spirit of Play */
+    const armed=s77.slots.find(s=>s.armed && s.buf);
+    if(armed && armed.buf){
+      try{
+        if(armed.src){ try{armed.src.stop();}catch(e){} }
+        const src=ctx.createBufferSource(); src.buffer=armed.buf; src.loop=true;
+        const native=(armed.loop&&armed.loop.bpm)?armed.loop.bpm:(bpm||128);
+        src.playbackRate.value=(bpm||128)/native;
+        const g=ctx.createGain(); g.gain.value=0.38;
+        src.connect(g); g.connect(s77EnsureBus());
+        src.start(when); armed.src=src; armed.on=true;
+      }catch(e){}
+    }
+    s77.lastBar=when;
+  }
+
+  function s77EnsureWorker(){
+    if(s77.worker) return s77.worker;
+    const src=`
+      let on=false, bpm=128, timer=0;
+      function loop(){
+        if(!on) return;
+        const barMs=(60/Math.max(60,bpm))*4*1000;
+        timer=setTimeout(()=>{ if(on){ postMessage({cmd:'bar', bpm:bpm}); loop(); } }, barMs);
+      }
+      onmessage=function(e){
+        const m=e.data||{};
+        if(m.cmd==='start'){ bpm=m.bpm||bpm; on=true; postMessage({cmd:'bar', bpm:bpm}); loop(); }
+        if(m.cmd==='bpm'){ bpm=m.bpm||bpm; }
+        if(m.cmd==='stop'){ on=false; if(timer) clearTimeout(timer); }
+      };
+    `;
+    try{
+      s77.worker=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));
+      s77.worker.onmessage=function(ev){
+        if(!s77.auto) return;
+        if(ev.data&&ev.data.cmd==='bar'){
+          const t=qBar();
+          /* schedule on audio clock — worker only wakes us, no main-thread drift in the notes */
+          s77SchedBar(t);
+        }
+      };
+      __DLOOP.s77Worker=true;
+    }catch(e){
+      s77.worker=null; __DLOOP.s77Worker=false;
+    }
+    return s77.worker;
+  }
+  function s77Auto(on){
+    s77.auto=!!on;
+    __DLOOP.s77Auto=s77.auto;
+    const w=s77EnsureWorker();
+    if(s77.auto){
+      initAudio().then(()=>{
+        s77EnsureBus();
+        if(w) w.postMessage({cmd:'start', bpm:bpm||128});
+        else { s77SchedBar(qBar()); s77._fb=setInterval(()=>{ if(s77.auto) s77SchedBar(qBar()); }, barSec()*1000); }
+        t522Toast('Auto Loop Generator ON · '+s77.genre);
+      });
+    }else{
+      try{ if(w) w.postMessage({cmd:'stop'}); }catch(e){}
+      if(s77._fb){ clearInterval(s77._fb); s77._fb=null; }
+      t522Toast('Auto Loop Generator OFF');
+    }
+    const b=document.getElementById('s77AutoBtn'); if(b) b.classList.toggle('on', s77.auto);
+  }
+  function s77SetGenre(id){
+    const g=BANKS.find(x=>x.id===id)||BANKS[0];
+    s77.genre=g.id; s77.gunit=(g.id==='gunit');
+    __DLOOP.s77Genre=s77.genre; __DLOOP.gunit=s77.gunit;
+    if(typeof setBpm==='function') setBpm(g.bpm);
+    if(s77.gunit && typeof mdsSetOn==='function') try{ mdsSetOn(true); }catch(e){}
+    if(s77.worker && s77.auto) try{ s77.worker.postMessage({cmd:'bpm', bpm:g.bpm}); }catch(e){}
+    document.querySelectorAll('.genre-btn').forEach(el=>el.classList.toggle('on', el.dataset.genre===g.id));
+    t522Toast(g.n+(s77.gunit?' · tight sub + snare, 0 clipów':''));
+  }
+
+  function s77BuildSlots(){
+    const loops=(typeof manifest!=='undefined' && manifest && manifest.loops)?manifest.loops:[];
+    s77.slots=[];
+    for(let i=0;i<77;i++){
+      const bank=Math.floor(i/11), n=i%11;
+      const useSample=loops.length && (n<8 || i<loops.length);
+      const loop=loops.length?loops[i%loops.length]:null;
+      s77.slots.push({
+        i, bank, n,
+        kind: useSample&&loop?'sample':'synth',
+        loop, name: (useSample&&loop)?(loop.name||('Loop '+(i+1))):('Nova '+BANKS[bank].n+' '+(n+1)),
+        buf:null, armed:false, on:false, src:null
+      });
+    }
+    __DLOOP.s77Slots=s77.slots.length;
+    __DLOOP.s77Banks=7;
+    return s77.slots;
+  }
+  async function s77LoadSlot(slot){
+    if(!slot||slot.buf) return slot;
+    await initAudio();
+    if(slot.kind==='sample' && slot.loop && slot.loop.file && typeof decodePath==='function'){
+      try{ slot.buf=await decodePath(slot.loop.file); }catch(e){ slot.kind='synth'; }
+    }
+    if(!slot.buf) slot.buf=novaRenderLoop(slot.bank);
+    return slot;
+  }
+  async function s77Arm(i){
+    const slot=s77.slots[i]; if(!slot) return;
+    await s77LoadSlot(slot);
+    s77.slots.forEach(s=>{ if(s!==slot) s.armed=false; });
+    slot.armed=!slot.armed;
+    s77.armed=slot.armed?1:0;
+    __DLOOP.s77Armed=slot.armed?slot.i:-1;
+    uiS77Grid();
+    t522Toast(slot.armed?('Slot '+(i+1)+' uzbrojony (1 pętla)'):('Slot '+(i+1)+' rozbrojony'));
+  }
+
+  /* Nova Synth v7 — local algorithmic loop builder (2 bars, 48 kHz stereo) */
+  function novaRenderLoop(bankIdx, kind){
+    if(!ctx) return null;
+    const sr=ctx.sampleRate||48000;
+    const g=BANKS[bankIdx%7]||BANKS[0];
+    const bsec=4*60/g.bpm;
+    const n=Math.max(1, Math.floor(sr*bsec*2));
+    const buf=ctx.createBuffer(2,n,sr);
+    const L=buf.getChannelData(0), R=buf.getChannelData(1);
+    const scale=SCALES[g.id]||SCALES.techno;
+    const pat=s77Patterns(g.id);
+    const step=Math.floor(sr*(60/g.bpm)/4);
+    function add(ch, i, v){ if(i>=0&&i<n) ch[i]=Math.max(-0.89, Math.min(0.89, ch[i]+v)); }
+    for(let s=0;s<32;s++){
+      const i0=s*step;
+      const k=pat.k[s%16], sn=pat.s[s%16], h=pat.h[s%16], b=pat.b[s%16], st=pat.st[s%16];
+      if(k){ for(let j=0;j<Math.floor(sr*0.22);j++){ const t=j/sr; const env=Math.exp(-t*18); const v=env*0.7*Math.sin(2*Math.PI*(48+(52-48)*Math.exp(-t*30))*t); add(L,i0+j,v); add(R,i0+j,v*0.96); } }
+      if(sn){ for(let j=0;j<Math.floor(sr*0.12);j++){ const t=j/sr; const env=Math.exp(-t*22); const nv=(Math.random()+Math.random())-1; const v=env*(0.28*Math.sin(2*Math.PI*196*t)+0.4*nv); add(L,i0+j,v); add(R,i0+j,v*0.8+env*0.08*nv); } }
+      if(h){ for(let j=0;j<Math.floor(sr*0.03);j++){ const nv=(Math.random()+Math.random())-1; const env=Math.exp(-j/(sr*0.02)); const v=env*0.12*nv; add(L,i0+j,v); add(R,i0+j,v); } }
+      if(b){ const midi=pat.root+(scale[s%scale.length]||0); const f=midiHz(midi); for(let j=0;j<Math.floor(sr*0.28);j++){ const t=j/sr; const env=Math.exp(-t*6)*0.5; const v=env*(Math.sin(2*Math.PI*f*t)+0.2*Math.sign(Math.sin(2*Math.PI*f*t))); add(L,i0+j,v); add(R,i0+j,v*0.9); } }
+      if(st || kind==='lead'){ const midi=pat.root+12+(scale[(s+2)%scale.length]||0); const f=midiHz(midi); for(let j=0;j<Math.floor(sr*0.1);j++){ const t=j/sr; const env=Math.exp(-t*10)*0.22; const v=env*((t*f*2)%2-1); add(L,i0+j,v); add(R,i0+j+20,v*0.7); } }
+    }
+    return buf;
+  }
+  function novaFillBank(kind){
+    const bank=s77.bank;
+    for(let n=0;n<11;n++){
+      const slot=s77.slots[bank*11+n]; if(!slot) continue;
+      slot.kind='synth'; slot.name='Nova v7 '+BANKS[bank].n+' '+(n+1); slot.buf=novaRenderLoop(bank, kind||['drums','bass','chord','arp','lead'][n%5]); slot.loop=null;
+    }
+    uiS77Grid();
+    t522Toast('Nova Synth v7 · bank '+(bank+1)+' wypełniony (lokalnie, bez API)');
+  }
+  function novaKeySet(v){
+    const s=String(v||'').trim();
+    try{ if(s) localStorage.setItem('d7-nova-key-optional', s); else localStorage.removeItem('d7-nova-key-optional'); }catch(e){}
+    __DLOOP.novaKeySet=!!s;
+    /* never used, never sent, never logged */
+  }
+
+  /* ---------- Psychedelic Music Video Generator ---------- */
+  const PSY_NAMES=['Acid Mandala','Liquid Fractal','Kaleido Prism 3D','Strobe Tunnel','UV Nebula','Rasta Wave','G-Unit Neon Grid'];
+  const PSY_FS=`precision highp float;
+uniform vec2 uRes; uniform float uTime,uMode,uBeat,uBloom;
+uniform float uSub,uBass,uLo,uMid,uHi,uPr,uAir;
+vec3 pal(float t, vec3 a, vec3 b, vec3 c, vec3 d){ return a+b*cos(6.28318*(c*t+d)); }
+void main(){
+  vec2 uv=(gl_FragCoord.xy-0.5*uRes)/min(uRes.x,uRes.y);
+  float t=uTime, md=uMode, beat=uBeat;
+  float sub=uSub, bass=uBass, mid=uMid, air=uAir;
+  vec3 col=vec3(0.01,0.012,0.03);
+  if(md<0.5){
+    float r=length(uv), a=atan(uv.y,uv.x);
+    float petals=8.0+4.0*bass;
+    float m=abs(sin(a*petals+t*0.7))+sin(r*14.0-t*2.0+sub*6.0);
+    col=pal(m*0.35+t*0.05, vec3(0.5,0.2,0.5), vec3(0.5,0.4,0.2), vec3(1.0,0.8,0.5), vec3(0.0,0.25,0.4));
+    col*=smoothstep(1.2,0.05,r)* (0.55+0.7*m);
+  } else if(md<1.5){
+    vec2 p=uv*2.2;
+    for(int i=0;i<6;i++){ p=abs(p)/dot(p,p)-vec2(0.65+0.12*sin(t*0.3),0.45+0.15*bass); }
+    col=pal(p.x*0.4+p.y*0.2+t*0.04, vec3(0.2,0.15,0.4), vec3(0.5,0.3,0.5), vec3(1.0), vec3(0.1,0.4,0.7));
+    col*=0.7+0.5*mid;
+  } else if(md<2.5){
+    float a=atan(uv.y,uv.x), r=length(uv);
+    float seg=6.0+4.0*uPr; a=mod(a,6.28318/seg)-3.14159/seg;
+    vec2 p=vec2(cos(a),sin(a))*r;
+    p=abs(p)-0.15; p.x+=0.1*sin(t+r*8.0);
+    float d=length(p)-0.08;
+    col=pal(r-t*0.1, vec3(0.5), vec3(0.5), vec3(1.0,0.6,0.3), vec3(0.0,0.33,0.67));
+    col+=vec3(0.4,0.05,0.3)*smoothstep(0.08,0.0,abs(d));
+    col.r+=0.18*uHi; col.b+=0.18*air;
+  } else if(md<3.5){
+    float a=atan(uv.y,uv.x), r=length(uv);
+    float tun=fract(1.0/(r+0.15)-t*0.45+sub);
+    float rings=smoothstep(0.08,0.0,abs(fract(tun*12.0)-0.5));
+    float strobe=0.55+0.45*step(0.5, fract(t*(4.0+6.0*beat)));
+    col=vec3(0.05,0.7,1.0)*rings*strobe + vec3(1.0,0.1,0.6)*(1.0-r)*beat;
+  } else if(md<4.5){
+    vec2 p=uv*3.0; float n=0.0;
+    for(int i=0;i<5;i++){ n+=abs(sin(p.x+t*0.2)+cos(p.y-t*0.15)); p*=mat2(1.2,0.5,-0.4,1.1)+bass*0.1; }
+    col=mix(vec3(0.05,0.0,0.15), vec3(0.7,0.1,1.0), smoothstep(1.0,4.0,n));
+    col+=vec3(0.05,0.9,0.4)*smoothstep(3.0,5.0,n)*air;
+  } else if(md<5.5){
+    float w=sin(uv.x*8.0+t*1.2)+sin(uv.y*5.0-t+bass*4.0);
+    vec3 rasta=mix(vec3(0.05,0.45,0.08), vec3(0.85,0.75,0.1), smoothstep(-0.4,0.2,uv.y+0.15*w));
+    rasta=mix(rasta, vec3(0.75,0.05,0.05), smoothstep(0.15,0.55,uv.y+0.1*w));
+    col=rasta*(0.65+0.5*w);
+  } else {
+    vec2 p=uv; p.y+=0.35; p/= (p.y+0.65);
+    vec2 g=abs(fract(p*vec2(8.0,14.0)+vec2(0.0,t*0.4))-0.5);
+    float line=smoothstep(0.08,0.02,min(g.x,g.y));
+    col=vec3(0.02,0.0,0.05)+vec3(1.0,0.8,0.15)*line*(0.4+0.8*beat);
+    col+=vec3(0.9,0.1,0.7)*smoothstep(0.4,0.0,length(uv))*bass;
+  }
+  col*=(0.75+0.45*uBloom);
+  col=col/(col+0.7); /* soft filmic */
+  gl_FragColor=vec4(col,1.0);
+}`;
+  const PSY_VS=`attribute vec2 aPos; void main(){ gl_Position=vec4(aPos,0.0,1.0); }`;
+  const psy={gl:null,pr:null,canvas:null,raf:0,mode:0,fs:false,ok:false,scale:1};
+
+  function psyShader(gl,type,src){
+    const s=gl.createShader(type); gl.shaderSource(s,src); gl.compileShader(s);
+    if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){ console.error('psy shader', gl.getShaderInfoLog(s)); return null; }
+    return s;
+  }
+  function psyInit(canvas){
+    const gl=canvas.getContext('webgl2',{antialias:true,preserveDrawingBuffer:true})
+          ||canvas.getContext('webgl',{antialias:true,preserveDrawingBuffer:true});
+    if(!gl){ psy.ok=false; __DLOOP.psyOk=false; return false; }
+    const vs=psyShader(gl,gl.VERTEX_SHADER,PSY_VS);
+    const fs=psyShader(gl,gl.FRAGMENT_SHADER,PSY_FS);
+    if(!vs||!fs){ psy.ok=false; __DLOOP.psyErr='shader'; return false; }
+    const pr=gl.createProgram(); gl.attachShader(pr,vs); gl.attachShader(pr,fs); gl.linkProgram(pr);
+    if(!gl.getProgramParameter(pr,gl.LINK_STATUS)){ console.error(gl.getProgramInfoLog(pr)); psy.ok=false; return false; }
+    const buf=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+    const loc=gl.getAttribLocation(pr,'aPos');
+    gl.useProgram(pr); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+    psy.gl=gl; psy.pr=pr; psy.buf=buf; psy.loc=loc; psy.canvas=canvas;
+    const U=n=>gl.getUniformLocation(pr,n);
+    psy.u={res:U('uRes'),time:U('uTime'),mode:U('uMode'),beat:U('uBeat'),bloom:U('uBloom'),
+           sub:U('uSub'),bass:U('uBass'),lo:U('uLo'),mid:U('uMid'),hi:U('uHi'),pr:U('uPr'),air:U('uAir')};
+    psy.ok=true; __DLOOP.psyOk=true; __DLOOP.psyWebgl2=typeof WebGL2RenderingContext!=='undefined' && gl instanceof WebGL2RenderingContext;
+    return true;
+  }
+  function psySize(c){
+    const dpr=Math.min(2, window.devicePixelRatio||1);
+    const w=Math.max(64, Math.floor(c.clientWidth*dpr)), h=Math.max(64, Math.floor(c.clientHeight*dpr));
+    if(c.width!==w||c.height!==h){ c.width=w; c.height=h; }
+  }
+  function psyEnsure(){
+    if(document.getElementById('psyLayer')) return;
+    const layer=document.createElement('div'); layer.id='psyLayer';
+    layer.innerHTML=`<div id="psyBar">
+      <b>Psychedelic Music Video</b>
+      <span class="muted" id="psyStat">—</span>
+      <button data-act="psyFs" title="Pełny ekran">⛶</button>
+      <button data-act="psyStop" title="Zamknij (Esc)">✕</button>
+    </div><canvas id="psyGL"></canvas>`;
+    document.body.appendChild(layer);
+  }
+  let psyLastT=0, psyNonBlank=0, psyFps=0;
+  function psyDraw(tms){
+    psy.raf=requestAnimationFrame(psyDraw);
+    const {gl,pr,canvas:c}=psy; if(!gl||!c) return;
+    psySize(c);
+    gl.viewport(0,0,c.width,c.height);
+    gl.useProgram(pr);
+    const bands=(typeof __DLOOP.bandLevels==='function')?__DLOOP.bandLevels():new Float32Array(7);
+    const beat=(bands[0]+bands[1])*0.5;
+    gl.uniform2f(psy.u.res,c.width,c.height);
+    gl.uniform1f(psy.u.time, (tms||performance.now())/1000);
+    gl.uniform1f(psy.u.mode, psy.mode);
+    gl.uniform1f(psy.u.beat, beat);
+    gl.uniform1f(psy.u.bloom, 0.7+0.3*bands[6]);
+    gl.uniform1f(psy.u.sub,bands[0]||0); gl.uniform1f(psy.u.bass,bands[1]||0);
+    gl.uniform1f(psy.u.lo,bands[2]||0); gl.uniform1f(psy.u.mid,bands[3]||0);
+    gl.uniform1f(psy.u.hi,bands[4]||0); gl.uniform1f(psy.u.pr,bands[5]||0); gl.uniform1f(psy.u.air,bands[6]||0);
+    gl.drawArrays(gl.TRIANGLES,0,3);
+    if(psy.raf%30===1){
+      const px=new Uint8Array(4);
+      gl.readPixels((c.width/2)|0,(c.height/2)|0,1,1,gl.RGBA,gl.UNSIGNED_BYTE,px);
+      __DLOOP.psySample=[px[0],px[1],px[2],px[3]];
+      if(px[0]+px[1]+px[2]>8) psyNonBlank++;
+      __DLOOP.psyNonBlank=psyNonBlank;
+    }
+    if(psyLastT){ psyFps=0.8*psyFps+0.2*(1000/Math.max(1,tms-psyLastT)); __DLOOP.psyFps=Math.round(psyFps); }
+    psyLastT=tms;
+    const st=document.getElementById('psyStat');
+    if(st) st.textContent=PSY_NAMES[psy.mode]+' · '+( __DLOOP.psyFps||0)+' fps · 7-point reaction';
+  }
+  function psyStart(mode,fs){
+    psyEnsure();
+    const layer=document.getElementById('psyLayer');
+    const canvas=document.getElementById('psyGL');
+    psy.mode=Math.max(0, Math.min(6, mode|0));
+    if(!psy.ok) psyInit(canvas);
+    layer.classList.add('on');
+    __DLOOP.psyOn=true; __DLOOP.psyMode=psy.mode; __DLOOP.psyName=PSY_NAMES[psy.mode];
+    if(!psy.raf) psy.raf=requestAnimationFrame(psyDraw);
+    if(fs) psyFullscreen(true);
+    t522Toast('Psychedelic · '+PSY_NAMES[psy.mode]);
+    return psy.ok;
+  }
+  function psyStop(){
+    const layer=document.getElementById('psyLayer');
+    if(layer) layer.classList.remove('on');
+    if(psy.raf){ cancelAnimationFrame(psy.raf); psy.raf=0; }
+    if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+    psy.fs=false; __DLOOP.psyOn=false;
+  }
+  function psyFullscreen(on){
+    psyEnsure();
+    const layer=document.getElementById('psyLayer');
+    if(!layer) return;
+    if(on===false){ if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); psy.fs=false; return; }
+    layer.classList.add('on');
+    if(layer.requestFullscreen) layer.requestFullscreen().catch(()=>{});
+    psy.fs=true;
+  }
+  function hookEscPsy(){
+    if(hookEscPsy._on) return;
+    document.addEventListener('keydown',e=>{
+      if(e.key!=='Escape') return;
+      if(document.getElementById('psyLayer')&&document.getElementById('psyLayer').classList.contains('on')){
+        e.preventDefault(); psyStop(); e.stopImmediatePropagation();
+      }
+    }, true);
+    hookEscPsy._on=true;
+  }
+  function hookSqViz(){
+    if(typeof sqStampLoop!=='function' || sqStampLoop._t522) return;
+    const orig=sqStampLoop;
+    sqStampLoop=function(){
+      orig();
+      const c=typeof sqRec!=='undefined'?sqRec.recC:null; if(!c) return;
+      const g=c.getContext('2d');
+      const spin=()=>{
+        if(typeof sqRec==='undefined'||!sqRec.on) return;
+        requestAnimationFrame(spin);
+        const layer=document.getElementById('psyLayer');
+        const src=document.getElementById('psyGL');
+        if(layer&&layer.classList.contains('on')&&src&&src.width){
+          try{ g.drawImage(src,0,0,c.width,c.height); }catch(e){}
+        }
+      };
+      requestAnimationFrame(spin);
+    };
+    sqStampLoop._t522=true;
+  }
+  async function psyRecStudio(){
+    psyStart(psy.mode,true);
+    if(typeof __DLOOP.sqStartRec==='function') await __DLOOP.sqStartRec({mode:'studio', durSec: Math.max(8, (typeof sqRec!=='undefined'&&sqRec.durSec)||30), startEngine:false});
+    else if(typeof sqStartRec==='function') await sqStartRec({mode:'studio', durSec:30, startEngine:false});
+    t522Toast('Studio Rec WebM · psychedelic viz');
+  }
+  async function psyRecWav24(){
+    await initAudio();
+    if(!s77.auto) s77Auto(true);
+    if(typeof __DLOOP.wav24Test==='function'){
+      const r=await __DLOOP.wav24Test(2);
+      t522Toast('WAV 24-bit · '+(r&&r.bits?r.bits+' bit':'ok'));
+      return r;
+    }
+    if(typeof ACT==='object' && ACT.rec) ACT.rec();
+  }
+
+  /* ---------- All Apps & All Bots Hub ---------- */
+  const APPS=[
+    {f:'dloop.html',n:'DLoop X D DJ · D7 DJ Studio',g:'Studio'},
+    {f:'superdj.html',n:'Super DJ Loops',g:'Studio'},
+    {f:'x7gen.html',n:'Super Genius X7 Generator X',g:'Studio'},
+    {f:'index.html',n:'Super Genius X7 (index)',g:'Studio'},
+    {f:'start.html',n:'Super X G — start',g:'Studio'},
+    {f:'g-dj-super-pro.html',n:'G DJ Super Pro',g:'Studio'},
+    {f:'g-pro.html',n:'Super Bot G Pro',g:'Boty'},
+    {f:'g.html',n:'Super Bot G',g:'Boty'},
+    {f:'gpro.html',n:'Super Bot G Pro (gpro)',g:'Boty'},
+    {f:'superbotg.html',n:'Super Bot D PRO',g:'Boty'},
+    {f:'superapp.html',n:'Super G',g:'Boty'},
+    {f:'super.html',n:'7D SUPER',g:'Boty'},
+    {f:'bots.html',n:'D7 Universal Bots',g:'Boty'},
+    {f:'agents.html',n:'Hub 8888 agentów SI',g:'Boty'},
+    {f:'autofix.html',n:'Super Core Auto-Fix',g:'Narzędzia'},
+    {f:'auto.html',n:'DJ Supreme D · Kali Live Auto',g:'DJ'},
+    {f:'dj.html',n:'Super DJ Bot',g:'DJ'},
+    {f:'dj777si.html',n:'DJ 777 SI',g:'DJ'},
+    {f:'d.html',n:'7D · D',g:'Boty'},
+    {f:'app.html',n:'D7 DJ ONE',g:'Studio'},
+    {f:'app-gen.html',n:'Generator aplikacji',g:'Narzędzia'},
+    {f:'music-gen.html',n:'Generator muzyki',g:'Studio'},
+    {f:'radio-gen.html',n:'D7 Radio + Techno Generator',g:'Studio'},
+    {f:'remixlive.html',n:'Remixlive',g:'Studio'},
+    {f:'wedj.html',n:'WeDJ PRO',g:'DJ'},
+    {f:'pro-dj.html',n:'PRO DJ · PRO8 Fluid',g:'DJ'},
+    {f:'pro-dj-classic.html',n:'PRO DJ Classic · MilkDrop',g:'DJ'},
+    {f:'pro-dj-tile.html',n:'PRO DJ · PRO8 Fluid (kafel)',g:'DJ'},
+    {f:'classic.html',n:'D7 DJ Classic',g:'DJ'},
+    {f:'index-classic.html',n:'D7 DJ · PRO8 Fluid Classic',g:'DJ'},
+    {f:'pro8-tile.html',n:'D7 DJ · PRO8 Fluid (kafel)',g:'DJ'},
+    {f:'kali.html',n:'KALI RADIO · Butterchurn',g:'Wizual'},
+    {f:'kali-live.html',n:'KALI LIVE · PRO8 Fluid',g:'Wizual'},
+    {f:'kali-live-classic.html',n:'KALI LIVE Classic · MilkDrop',g:'Wizual'},
+    {f:'kali-live-tile.html',n:'KALI LIVE (kafel)',g:'Wizual'},
+    {f:'visuals-pro.html',n:'Ghost Visuals PRO',g:'Wizual'},
+    {f:'viz.html',n:'Super Viz · Genius Ghost',g:'Wizual'},
+    {f:'mixviz.html',n:'Mix Visuals 778',g:'Wizual'},
+    {f:'ghost2.html',n:'Ghost 2 · psychodelik hologram',g:'Wizual'},
+    {f:'dragon.html',n:'Dragon D Pro · Mega Fly Dreams',g:'Boty'},
+    {f:'dragon71b.html',n:'DJ Dragon v71b',g:'Boty'},
+    {f:'bpm.html',n:'BPM Tapper',g:'Narzędzia'},
+    {f:'looptimer.html',n:'Loop Timer',g:'Narzędzia'},
+    {f:'setlist.html',n:'Setlist Maker',g:'Narzędzia'},
+    {f:'chat-d.html',n:'Czat na żywo z Bot D',g:'Boty'},
+    {f:'public-chat.html',n:'Czat publiczny',g:'Boty'},
+    {f:'status.html',n:'Panel statusu botów',g:'Narzędzia'},
+    {f:'download.html',n:'Pobierz APK',g:'System'},
+    {f:'ios.html',n:'iPhone · 7D',g:'System'},
+    {f:'shop.html',n:'Ghost X G Shop',g:'System'},
+    {f:'privacy.html',n:'Polityka prywatności',g:'System'},
+    {f:'v51.html',n:'D7 DJ · X7S v51',g:'Studio'},
+    {f:'v77.html',n:'C Mass G Unit v77 (tylko link, nie zmieniana)',g:'Linki',lock:1},
+    {f:'hiphopx.html',n:'HipHop X (tylko link, nie zmieniana)',g:'Linki',lock:1},
+    {f:'ghostxg.html',n:'Ghost X G · pobierz (tylko link)',g:'Linki',lock:1}
+  ];
+  const BOT_ROSTER=[
+    {g:'DJ',n:'Dragon',fn:()=>t522Toast('Dragon · lokalny preset'), go:'dragon.html'},
+    {g:'DJ',n:'SuperGrok',fn:()=>{ if(typeof grokStart==='function') grokStart(); else if(typeof ACT==='object'&&ACT.grokToggle) ACT.grokToggle(); t522Toast('SuperGrok / Grok DJ'); }},
+    {g:'Studio',n:'77',fn:()=>{ if(typeof openW==='function') openW('bots77'); }},
+    {g:'DJ',n:'DargonMoon',fn:()=>t522Toast('DargonMoon · lokalny skrót'), go:'dragon71b.html'},
+    {g:'Narzędzia',n:'AutoFix',fn:()=>t522Toast('AutoFix · otwórz stronę'), go:'autofix.html'},
+    {g:'Studio',n:'SuperCharger',fn:()=>{ if(typeof mdsSetOn==='function') mdsSetOn(true); s77SetGenre('gunit'); t522Toast('SuperCharger · G Unit + Mega Dynamic'); }},
+    {g:'DJ',n:'D',fn:()=>t522Toast('Bot D'), go:'d.html'},
+    {g:'DJ',n:'SuperBotD',fn:()=>t522Toast('SuperBot D PRO'), go:'superbotg.html'},
+    {g:'Wizual',n:'Mr D Fluid',fn:()=>t522Toast('Mr D Fluid · PRO8'), go:'pro-dj.html'},
+    {g:'Narzędzia',n:'Bot Pamięć',fn:()=>{ try{ const n=1+(+localStorage.getItem('d7-mem-n')||0); localStorage.setItem('d7-mem-n',n); t522Toast('Bot Pamięć · notatka lokalna #'+n); }catch(e){ t522Toast('Pamięć niedostępna'); } }},
+    {g:'Studio',n:'Nova G',fn:()=>{ openW('smloop'); novaFillBank('lead'); }},
+    {g:'Studio',n:'SuperBrain 1',fn:()=>{ s77SetGenre('techno'); s77Auto(true); }},
+    {g:'Studio',n:'SuperBrain 2',fn:()=>{ s77SetGenre('hiphop'); s77Auto(true); }},
+    {g:'Studio',n:'SuperBrain 3',fn:()=>{ s77SetGenre('minimal'); s77Auto(true); }},
+    {g:'Studio',n:'SuperBrain 4',fn:()=>{ s77SetGenre('jungle'); s77Auto(true); }},
+    {g:'Studio',n:'SuperBrain 5',fn:()=>{ s77SetGenre('trance'); s77Auto(true); }},
+    {g:'Studio',n:'SuperBrain 6',fn:()=>{ s77SetGenre('rasta'); if(typeof rastaStart==='function') rastaStart(); s77Auto(true); }},
+    {g:'Studio',n:'SuperBrain 7',fn:()=>{ s77SetGenre('gunit'); s77Auto(true); }},
+    {g:'Narzędzia',n:'MegaFix 1',fn:()=>t522Toast('MegaFix 1 · audio '+(typeof ctx!=='undefined'&&ctx?'ON':'off'))},
+    {g:'Narzędzia',n:'MegaFix 2',fn:()=>t522Toast('MegaFix 2 · okna '+((typeof __DLOOP.winIds==='function')?__DLOOP.winIds().length:'?'))},
+    {g:'Narzędzia',n:'MegaFix 3',fn:()=>t522Toast('MegaFix 3 · 3D '+(__DLOOP.g3dOk?'OK':'—')+' · psy '+(__DLOOP.psyOk?'OK':'—'))},
+    {g:'Narzędzia',n:'MegaFix 4',fn:()=>t522Toast('MegaFix 4 · worker '+(__DLOOP.sqWorker||__DLOOP.s77Worker?'ON':'off'))},
+    {g:'Narzędzia',n:'MegaFix 5',fn:()=>t522Toast('MegaFix 5 · wersja '+(__DLOOP.appVersion||'1.4.0'))},
+    {g:'Boty',n:'Web G',fn:()=>t522Toast('Web G'), go:'g.html'},
+    {g:'Wsparcie',n:'BLIK Sieć 77',fn:()=>{ if(typeof openW==='function') openW('blik'); }},
+    {g:'Studio',n:'Loop77 Fire',fn:()=>{ openW('smloop'); s77Auto(true); t522Toast('Loop77 Fire · Auto Generator'); }},
+    {g:'DJ',n:'Rasta DJ',fn:()=>{ if(typeof rastaStart==='function') rastaStart(); s77SetGenre('rasta'); }},
+    {g:'DJ',n:'E.T. DJ',fn:()=>{ if(typeof etStart==='function') etStart(); t522Toast('E.T. DJ'); }},
+    {g:'DJ',n:'Grok DJ',fn:()=>{ if(typeof grokStart==='function') grokStart(); t522Toast('Grok DJ'); }}
+  ];
+
+  /* ---------- Promo + Search ---------- */
+  const PROMO={
+    facebook:`DJ DaX · D7 DJ Studio 1.4.0 Full Pro jest za darmo w przeglądarce 🎛️
+
+Super Studio 77 Loop Pro Remix Station, Auto Loop Generator, Nova Synth v7 (lokalnie, bez płatnego AI), psychodeliczne teledyski, nagranie studia i 24-bit WAV.
+
+Otwórz aplikację:
+${LIVE}
+
+Mój TikTok (@daxdj27):
+${TIKTOK}
+${TIKTOK_VM}
+
+WhatsApp: ${WA}
+Wsparcie BLIK: ${BLIK}
+Przelew Nest Bank (IBAN): ${IBAN}
+
+Jedna ścieżka na start, jedno okno, ✕ ⛶ Esc. Z Krakowa 💛`,
+    tiktok:`D7 DJ Studio 1.4.0 👽 Super Mega Looper 77 + psychodelik + Nova Synth v7 (za darmo w przeglądarce)
+
+${LIVE}
+
+TikTok: ${TIKTOK}
+WhatsApp: ${WA}
+BLIK ${BLIK}
+IBAN Nest Bank ${IBAN}
+
+#djdax #d7djstudio #krakow #techno #hiphop`,
+    web:`D7 DJ Studio / DLoop X D DJ — DJ DaX (Kraków)
+
+Darmowa aplikacja DJ: 77-slotowy Super Mega Looper, Auto Loop Generator (rytm algorytmiczny, synchro do taktu), Nova Synth v7 (lokalny Web Audio, bez płatnego Suno/ChatGPT), generator psychodelicznych teledysków, nagranie studia WebM i WAV 24-bit.
+
+Aplikacja: ${LIVE}
+TikTok @daxdj27: ${TIKTOK}
+WhatsApp: ${WA}
+Wsparcie BLIK na telefon: ${BLIK}
+Nest Bank IBAN: ${IBAN}
+
+Aplikacja nie wysyła postów sama — skopiuj tekst i wklej gdzie chcesz.`
+  };
+  async function copyPromo(k){
+    const t=PROMO[k]||'';
+    try{ await navigator.clipboard.writeText(t); t522Toast('Skopiowano tekst ('+k+')'); __DLOOP.promoCopied=k; return true; }
+    catch(e){
+      try{ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); t522Toast('Skopiowano tekst ('+k+')'); __DLOOP.promoCopied=k; return true; }
+      catch(e2){ t522Toast('Nie udało się skopiować'); return false; }
+    }
+  }
+  function googleSearch(q){
+    const s=String(q||'').trim(); if(!s){ t522Toast('Wpisz szukaną frazę'); return; }
+    window.open('https://www.google.com/search?q='+encodeURIComponent(s),'_blank','noopener');
+    __DLOOP.searchGoogle=s;
+  }
+  async function wikiSearch(q){
+    const s=String(q||'').trim(); if(!s){ t522Toast('Wpisz szukaną frazę'); return []; }
+    const url='https://pl.wikipedia.org/w/api.php?action=query&list=search&srsearch='+encodeURIComponent(s)+'&utf8=1&format=json&origin=*&srlimit=5';
+    const out=document.getElementById('wikiOut');
+    if(out) out.textContent='Szukam w Wikipedii…';
+    try{
+      const r=await fetch(url); const j=await r.json();
+      const hits=(j.query&&j.query.search)||[];
+      __DLOOP.wikiHits=hits.length; __DLOOP.wikiQ=s;
+      if(out){
+        if(!hits.length){ out.innerHTML='<p class="muted">Brak wyników.</p>'; return hits; }
+        out.innerHTML=hits.map(h=>{
+          const href='https://pl.wikipedia.org/wiki/'+encodeURIComponent(String(h.title).replace(/ /g,'_'));
+          const snip=String(h.snippet||'').replace(/<[^>]+>/g,'');
+          return `<div class="card"><b><a href="${href}" target="_blank" rel="noopener">${h.title}</a></b><p class="muted">${snip}</p><p class="muted">Źródło: ${href}</p></div>`;
+        }).join('');
+      }
+      return hits;
+    }catch(e){
+      if(out) out.innerHTML='<p class="muted">Wikipedia niedostępna (offline?).</p>';
+      __DLOOP.wikiHits=0; __DLOOP.wikiErr=String(e&&e.message||e);
+      return [];
+    }
+  }
+
+  /* ---------- UI windows & first-page panels ---------- */
+  function uiS77Grid(){
+    const el=document.getElementById('s77Grid'); if(!el) return;
+    if(!s77.slots.length) s77BuildSlots();
+    const bank=s77.bank;
+    el.innerHTML=s77.slots.slice(bank*11, bank*11+11).map(s=>
+      `<button data-act="s77Arm" data-i="${s.i}" class="${s.armed?'armed':''} ${s.on?'on':''} ${s.kind==='synth'?'synth':''}" title="${s.name}">${s.i+1}<br>${s.name.slice(0,18)}</button>`
+    ).join('');
+    const st=document.getElementById('s77Stat');
+    if(st) st.textContent='77 slotów · bank '+(bank+1)+'/7 · '+BANKS[bank].n+' · '+(s77.auto?'AUTO ON':'auto off')+' · '+s77.genre;
+  }
+  function uiS77(){
+    const el=document.getElementById('s77UI'); if(!el) return;
+    if(!s77.slots.length) s77BuildSlots();
+    el.innerHTML=`
+      <p class="muted">Super Studio 77 Loop Pro Remix Station / Super Mega Looper — 7 banków × 11 slotów, powiązane z Twoimi 162 pętlami + pętlami z Nova Synth v7. Auto Loop Generator liczy takty w Web Workerze i układa nuty na zegarze audio (bez dryfu wątku UI). Play na stronie głównej nadal startuje tylko 1 ścieżkę.</p>
+      <div class="row">
+        ${BANKS.map((b,i)=>`<button class="s77-bank ${s77.bank===i?'on':''}" data-act="s77Bank" data-i="${i}">${i+1}. ${b.n}</button>`).join('')}
+      </div>
+      <div class="row">
+        <b>Gatunek / preset</b>
+        ${BANKS.map(b=>`<button class="genre-btn ${s77.genre===b.id?'on':''}" data-act="s77Genre" data-genre="${b.id}">${b.n}</button>`).join('')}
+      </div>
+      <div class="row">
+        <button class="big" data-act="s77Auto" id="s77AutoBtn">▶ Auto Loop Generator</button>
+        <button data-act="s77Stop">■ Stop generator</button>
+        <button data-act="novaFill">✨ Nova v7: wypełnij bank</button>
+        <button data-act="novaDrums">Drums</button>
+        <button data-act="novaBass">Bass</button>
+        <button data-act="novaChord">Chord / arp</button>
+        <button data-act="novaLead">Lead</button>
+        <span class="muted" id="s77Stat"></span>
+      </div>
+      <div id="s77Grid"></div>
+      <div class="card">
+        <b>Nova Synth v7 (Free Web Audio)</b>
+        <p class="muted">Lokalny generator: akordy, arp, bas, perkusja, lead. Działa offline w przeglądarce. Bez płatnego Suno i bez ChatGPT.</p>
+        <label>Własny klucz API (opcjonalnie)
+          <input id="novaKey" type="password" autocomplete="off" placeholder="niewykorzystywany — zostaw puste">
+        </label>
+        <p class="muted">To pole jest tylko na tym urządzeniu. Nova v7 <b>domyślnie nie używa żadnego klucza ani płatnego API</b>. Wklejasz klucz wyłącznie jeśli sam chcesz podłączyć własny serwis — aplikacja tego nie robi automatycznie i nic nie wysyła.</p>
+      </div>`;
+    uiS77Grid();
+    try{ const v=localStorage.getItem('d7-nova-key-optional'); const inp=document.getElementById('novaKey'); if(inp&&v) inp.value=v; }catch(e){}
+  }
+  function uiPsy(){
+    const el=document.getElementById('psyUI'); if(!el) return;
+    el.innerHTML=`
+      <p class="muted">7 trybów psychodelicznych (WebGL), reakcja na 7-punktowy silnik (Sub…Air). Pełny ekran, ✕ ⛶ Esc. Podpięte do Studio Rec (WebM VP9/VP8+Opus) i eksportu WAV 24-bit.</p>
+      <div class="row">${PSY_NAMES.map((n,i)=>`<button class="psy-mode" data-act="psyMode" data-i="${i}">${i+1}. ${n}</button>`).join('')}</div>
+      <div class="row">
+        <button class="big" data-act="psyGo">▶ Psychedelic Video</button>
+        <button data-act="psyFs">⛶ Pełny ekran</button>
+        <button data-act="psyRec">⏺ Studio Rec + viz</button>
+        <button data-act="psyWav">⬇ WAV 24-bit</button>
+      </div>`;
+  }
+  function uiAllHub(){
+    const el=document.getElementById('allHubUI'); if(!el) return;
+    const groups=[...new Set(APPS.map(a=>a.g))];
+    const bg=[...new Set(BOT_ROSTER.map(b=>b.g))];
+    el.innerHTML=`
+      <p class="muted">Wszystkie prawdziwe aplikacje z Twojego GitHub Pages (tylko linki). <b>v77, hiphopx, Special X i gx/brain.js nie są tu edytowane</b> — wyłącznie otwarcie w nowej karcie. Boty poniżej to lokalne presety/skróty w tej przeglądarce, nie płatne AI.</p>
+      ${groups.map(g=>`<div class="card"><b>Aplikacje · ${g}</b><div id="appsGrid">${APPS.filter(a=>a.g===g).map(a=>`<a href="${a.f}" target="_blank" rel="noopener"><button type="button">${a.n}${a.lock?' 🔒':''}</button></a>`).join('')}</div></div>`).join('')}
+      ${bg.map(g=>`<div class="card"><b>Boty · ${g}</b><div id="botsHubGrid">${BOT_ROSTER.filter(b=>b.g===g).map((b,i)=>`<button type="button" data-act="hubBot" data-g="${g}" data-n="${b.n}">${b.n}</button>`).join('')}</div></div>`).join('')}`;
+    __DLOOP.appsCount=APPS.length;
+    __DLOOP.botsHubCount=BOT_ROSTER.length;
+  }
+  function uiPromo(){
+    const el=document.getElementById('promoUI'); if(!el) return;
+    el.innerHTML=`
+      <p class="muted">Gotowe teksty po polsku do skopiowania. Aplikacja <b>nie publikuje sama</b> i nie łączy się z API Facebooka/TikToka. Wklejasz ręcznie gdzie chcesz.</p>
+      <div class="card"><b>Facebook</b><pre class="promo-box" id="promoFb">${PROMO.facebook.replace(/</g,'&lt;')}</pre><button class="big" data-act="promoCopy" data-k="facebook">📋 Kopiuj Facebook</button></div>
+      <div class="card"><b>TikTok</b><pre class="promo-box" id="promoTt">${PROMO.tiktok.replace(/</g,'&lt;')}</pre><button class="big" data-act="promoCopy" data-k="tiktok">📋 Kopiuj TikTok</button></div>
+      <div class="card"><b>Web / strona</b><pre class="promo-box" id="promoWeb">${PROMO.web.replace(/</g,'&lt;')}</pre><button class="big" data-act="promoCopy" data-k="web">📋 Kopiuj Web</button></div>
+      <div class="card">
+        <b>Szybkie szukanie (Google / Wikipedia)</b>
+        <div class="row">
+          <input id="searchQ" placeholder="np. techno break, Euclidean rhythm, Kraków" style="flex:1">
+          <button class="big" data-act="searchGoogle">🔎 Google (nowa karta)</button>
+          <button data-act="searchWiki">📖 Wikipedia (w aplikacji)</button>
+        </div>
+        <div id="wikiOut" class="muted">Wyniki Wikipedii i źródła pojawią się tutaj. Google otwiera się w nowej karcie.</div>
+      </div>
+      <p class="muted">WhatsApp ${WA} · BLIK ${BLIK} · IBAN ${IBAN}</p>`;
+  }
+
+  function defNewWins(){
+    if(typeof defWin!=='function' || typeof WIN==='undefined') return;
+    if(!WIN.smloop) defWin('smloop','🎛️ Super Studio 77 Loop Pro Remix Station · Super Mega Looper', `<div id="s77UI"></div>`, uiS77);
+    if(!WIN.psyvid) defWin('psyvid','🌈 Psychedelic Music Video Generator · 7 trybów', `<div id="psyUI"></div>`, uiPsy);
+    if(!WIN.allhub) defWin('allhub','🗂 All Apps & All Bots Hub', `<div id="allHubUI"></div>`, uiAllHub);
+    if(!WIN.promohub) defWin('promohub','📣 Sprzedaż & Promo · Szukanie Google / Wikipedia', `<div id="promoUI"></div>`, uiPromo);
+  }
+  function injectWin(id){
+    if(document.getElementById('w-'+id)) return;
+    if(typeof WIN==='undefined'||!WIN[id]) return;
+    const host=document.getElementById('wins'); if(!host) return;
+    const w=WIN[id];
+    const div=document.createElement('div');
+    div.className='win'; div.id='w-'+id; div.setAttribute('role','dialog');
+    div.innerHTML=`<div class="wh"><b>${w.title}</b><span><button data-act="max" title="Pełny ekran">⛶</button><button data-act="close" title="Zamknij (Esc)">✕</button></span></div><div class="wb">${w.html}</div>`;
+    host.appendChild(div);
+  }
+  function injectAllWins(){
+    defNewWins();
+    ['smloop','psyvid','allhub','promohub'].forEach(injectWin);
+  }
+
+  function buildT522Panels(){
+    const main=document.querySelector('main'); if(!main) return;
+    if(!document.getElementById('s77Panel')){
+      const sec=document.createElement('section');
+      sec.id='s77Panel'; sec.className='gdj-panel pro-panel';
+      sec.innerHTML=`
+        <div class="gdj-head">
+          <b class="pro-brand">Super Studio 77 Loop Pro Remix Station · Super Mega Looper</b>
+          <span class="muted">77 slotów · Auto Loop Generator · Nova Synth v7 · Max Sound G Unit 👽</span>
+          <button class="big" data-act="openS77">▶ Otwórz stację</button>
+          <button data-act="s77Auto" id="s77AutoBtn2">Auto Generator</button>
+        </div>
+        <div class="row">
+          ${BANKS.map(b=>`<button class="genre-btn" data-act="s77Genre" data-genre="${b.id}">${b.n}</button>`).join('')}
+          <button data-act="open" data-w="psyvid">🌈 Psychedelic Video</button>
+          <button data-act="open" data-w="allhub">🗂 All Apps & Bots</button>
+          <button data-act="open" data-w="promohub">📣 Promo & Szukanie</button>
+        </div>
+        <p class="muted">Algorytmiczne polirytmy (Euclidean / swing), bas, staby i voice-FX zsynchronizowane z zegarem Workera. Nova v7 jest darmowa i lokalna. Play na górze nadal włącza tylko 1 track.</p>`;
+      const after=document.getElementById('g3dPanel')||document.getElementById('ritPanel')||document.getElementById('mdsPanel');
+      if(after&&after.parentNode) after.parentNode.insertBefore(sec, after.nextSibling);
+      else main.appendChild(sec);
+    }
+  }
+  function hookNav(){
+    const studio=document.querySelector('nav .nav-g[data-g="studio"]');
+    if(studio && !studio.querySelector('[data-w="smloop"]')){
+      const b=document.createElement('button'); b.setAttribute('data-act','open'); b.setAttribute('data-w','smloop');
+      b.textContent='🎛️ Super Studio 77'; studio.appendChild(b);
+    }
+    const wiz=document.querySelector('nav .nav-g[data-g="wiz"]');
+    if(wiz && !wiz.querySelector('[data-w="psyvid"]')){
+      const b=document.createElement('button'); b.setAttribute('data-act','open'); b.setAttribute('data-w','psyvid');
+      b.textContent='🌈 Psychedelic Video'; wiz.appendChild(b);
+    }
+    const sys=document.querySelector('nav .nav-g[data-g="system"]');
+    if(sys && !sys.querySelector('[data-w="allhub"]')){
+      const a=document.createElement('button'); a.setAttribute('data-act','open'); a.setAttribute('data-w','allhub'); a.textContent='🗂 All Apps & Bots';
+      const p=document.createElement('button'); p.setAttribute('data-act','open'); p.setAttribute('data-w','promohub'); p.textContent='📣 Promo & Szukanie';
+      sys.appendChild(a); sys.appendChild(p);
+    }
+    const header=document.querySelector('header');
+    if(header && !document.getElementById('s77HdrBtn')){
+      const b=document.createElement('button'); b.id='s77HdrBtn'; b.className='big'; b.setAttribute('data-act','openS77'); b.textContent='🎛️ Super Studio 77';
+      const g7=document.getElementById('g7Btn');
+      if(g7&&g7.parentNode) g7.parentNode.insertBefore(b, g7.nextSibling);
+      else header.appendChild(b);
+    }
+    const info=document.querySelector('#w-info .wb ul, #info ul');
+    /* add 1.4.0 bullet on the first-page info if present later via open */
+  }
+  function hookInfo(){
+    try{
+      if(typeof WIN!=='undefined' && WIN.info && WIN.info.html && WIN.info.html.indexOf('1.4.0')<0){
+        WIN.info.html=WIN.info.html.replace('</ul>',
+          '<li>Full Pro 1.4.0: Super Studio 77 Loop Pro Remix Station / Super Mega Looper (77 slotów, Auto Loop Generator na Web Workerze, Nova Synth v7 lokalnie). Psychedelic Music Video (7 trybów WebGL, 7-point reaction, Studio Rec WebM + WAV 24-bit). All Apps & All Bots Hub. Sprzedaż & Promo (kopiuj tekst, bez auto-posta) + szybkie szukanie Google/Wikipedia. Max Sound G Unit 👽.</li></ul>');
+      }
+    }catch(e){}
+  }
+  function hookLaunch(){
+    try{
+      if(typeof G7_LAUNCH!=='undefined' && Array.isArray(G7_LAUNCH)){
+        if(!G7_LAUNCH.some(x=>x.k==='smloop')) G7_LAUNCH.push({k:'smloop',g:'studio',n:'🎛️ Super Studio 77',go(){ openW('smloop'); uiS77(); }});
+        if(!G7_LAUNCH.some(x=>x.k==='psyvid')) G7_LAUNCH.push({k:'psyvid',g:'wiz',n:'🌈 Psychedelic Video',go(){ openW('psyvid'); uiPsy(); }});
+        if(!G7_LAUNCH.some(x=>x.k==='allhub')) G7_LAUNCH.push({k:'allhub',g:'studio',n:'🗂 All Apps & Bots',go(){ openW('allhub'); uiAllHub(); }});
+        if(!G7_LAUNCH.some(x=>x.k==='promohub')) G7_LAUNCH.push({k:'promohub',g:'studio',n:'📣 Promo & Szukanie',go(){ openW('promohub'); uiPromo(); }});
+        if(typeof g7LaunchBar==='function') g7LaunchBar();
+      }
+      if(typeof G7_SCENES!=='undefined' && Array.isArray(G7_SCENES) && !G7_SCENES.some(s=>s.id===10)){
+        G7_SCENES.push({id:10,n:'Super Studio 77 + Psy',bpm:128,mode:'s77',style:'techno',viz:0,pal:0,fx:{delay:0.1,reverb:0.18,crush:0},d:'Super Mega Looper + psychedelic video'});
+        if(__DLOOP) __DLOOP.g7Scenes=G7_SCENES.length;
+        if(typeof g7PaintScenes==='function') g7PaintScenes();
+      }
+    }catch(e){}
+  }
+
+  if(typeof ACT==='object'){
+    ACT.openS77=()=>{ injectAllWins(); openW('smloop'); uiS77(); };
+    ACT.s77Bank=e=>{ s77.bank=+((e.target.closest('[data-i]')||e.target).dataset.i||0); uiS77Grid(); document.querySelectorAll('.s77-bank').forEach((el,i)=>el.classList.toggle('on', i===s77.bank)); };
+    ACT.s77Genre=e=>{ const id=(e.target.closest('[data-genre]')||e.target).dataset.genre; s77SetGenre(id); };
+    ACT.s77Auto=()=>s77Auto(!s77.auto);
+    ACT.s77Stop=()=>s77Auto(false);
+    ACT.s77Arm=e=>{ const i=+((e.target.closest('[data-i]')||e.target).dataset.i||0); s77Arm(i); };
+    ACT.novaFill=()=>{ initAudio().then(()=>novaFillBank()); };
+    ACT.novaDrums=()=>{ initAudio().then(()=>novaFillBank('drums')); };
+    ACT.novaBass=()=>{ initAudio().then(()=>novaFillBank('bass')); };
+    ACT.novaChord=()=>{ initAudio().then(()=>novaFillBank('chord')); };
+    ACT.novaLead=()=>{ initAudio().then(()=>novaFillBank('lead')); };
+    ACT.psyGo=()=>psyStart(psy.mode,true);
+    ACT.psyMode=e=>{ const i=+((e.target.closest('[data-i]')||e.target).dataset.i||0); psyStart(i,true); };
+    ACT.psyFs=()=>{ if(!__DLOOP.psyOn) psyStart(psy.mode,true); else psyFullscreen(true); };
+    ACT.psyStop=()=>psyStop();
+    ACT.psyRec=()=>psyRecStudio().catch(err=>{ if(typeof report==='function') report(err); });
+    ACT.psyWav=()=>psyRecWav24().catch(err=>{ if(typeof report==='function') report(err); });
+    ACT.promoCopy=e=>{ const k=(e.target.closest('[data-k]')||e.target).dataset.k; copyPromo(k); };
+    ACT.searchGoogle=()=>googleSearch((document.getElementById('searchQ')||{}).value);
+    ACT.searchWiki=()=>wikiSearch((document.getElementById('searchQ')||{}).value);
+    ACT.hubBot=e=>{
+      const n=(e.target.closest('[data-n]')||e.target).dataset.n;
+      const b=BOT_ROSTER.find(x=>x.n===n); if(!b) return;
+      try{ b.fn(); }catch(err){ if(typeof report==='function') report(err); }
+      if(b.go) window.open(b.go,'_blank','noopener');
+    };
+  }
+  document.addEventListener('input',e=>{
+    if(e.target && e.target.id==='novaKey') novaKeySet(e.target.value);
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Enter' && e.target && e.target.id==='searchQ'){ e.preventDefault(); wikiSearch(e.target.value); }
+  });
+
+  /* exports for tests */
+  __DLOOP.s77Start=()=>s77Auto(true);
+  __DLOOP.s77Stop=()=>s77Auto(false);
+  __DLOOP.s77SetGenre=s77SetGenre;
+  __DLOOP.s77Build=s77BuildSlots;
+  __DLOOP.s77SlotsCount=()=> (s77.slots.length||s77BuildSlots().length);
+  __DLOOP.novaFill=novaFillBank;
+  __DLOOP.novaRender=novaRenderLoop;
+  __DLOOP.psyStart=psyStart;
+  __DLOOP.psyStop=psyStop;
+  __DLOOP.psyNames=PSY_NAMES;
+  __DLOOP.apps=APPS.map(a=>({f:a.f,n:a.n,g:a.g,lock:!!a.lock}));
+  __DLOOP.botsHub=BOT_ROSTER.map(b=>({n:b.n,g:b.g}));
+  __DLOOP.copyPromo=copyPromo;
+  __DLOOP.googleSearch=googleSearch;
+  __DLOOP.wikiSearch=wikiSearch;
+  __DLOOP.promo=PROMO;
+
+  (async function boot(){
+    try{
+      hookEscPsy(); hookSqViz(); hookNav(); hookInfo(); defNewWins(); injectAllWins(); buildT522Panels(); hookLaunch();
+      s77BuildSlots();
+    }catch(e){ if(typeof report==='function') report(e); }
+    let n=0;
+    while((!window.__DLOOP||!__DLOOP.ready) && n++<200) await new Promise(r=>setTimeout(r,50));
+    try{
+      hookEscPsy(); hookSqViz(); hookNav(); hookInfo(); defNewWins(); injectAllWins(); buildT522Panels(); hookLaunch();
+      s77BuildSlots();
+      __DLOOP.t522=true; __DLOOP.appsCount=APPS.length; __DLOOP.botsHubCount=BOT_ROSTER.length;
+      __DLOOP.s77Slots=s77.slots.length; __DLOOP.psyModes=PSY_NAMES.length;
     }catch(e){ if(typeof report==='function') report(e); }
   })();
 })();

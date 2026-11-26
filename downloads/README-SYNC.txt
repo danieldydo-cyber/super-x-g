@@ -1,10 +1,10 @@
-D7 DJ Studio — 77-Bot-Multitool / sync hub · 1.3.3
+D7 DJ Studio — 77-Bot-Multitool / sync hub · 1.4.0
 
 Ten folder na Google Drive to centralny hub pobierania i sprawdzania wersji.
 Drive NIE instaluje automatycznie aktualizacji na telefonie ani Windows —
 zawsze potrzebne jest Twoje kliknięcie (zainstaluj APK / złóż ZIP).
 
-Aplikacja: 1.3.3   Android versionCode: 7   PWA: d7dj-v1.3.4
+Aplikacja: 1.4.0   Android versionCode: 8   PWA: d7dj-v1.4.0
 Pakiet: com.danieldydo.d7djstudio
 
 ADRESY NA ŻYWO
