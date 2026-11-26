@@ -85,6 +85,18 @@ button.spm.on{background:linear-gradient(90deg,#ff2bd688,#00e5ff66);border-color
 #spmBar{position:absolute;top:0;left:0;right:0;z-index:91;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 12px;background:#07070fee;border-bottom:1px solid #00e5ff55}
 #spmBar b{background:linear-gradient(90deg,var(--c),var(--m),var(--y));-webkit-background-clip:text;background-clip:text;color:transparent;font-size:16px}
 
+
+#g7Launch{position:sticky;top:52px;z-index:70;display:flex;flex-wrap:wrap;gap:5px;align-items:center;padding:6px 10px;background:#0a0a18f2;border-bottom:1px solid #2a2a55}
+#g7Launch .g7-brand{background:linear-gradient(90deg,#00e5ff,#ff2bd6,#ffe600);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:900;margin-right:4px}
+#g7Launch .g7-sep{width:1px;height:18px;background:#33335a;margin:0 4px}
+#g7Launch .g7-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-left:auto}
+.g7-led{display:inline-block;width:10px;height:10px;border-radius:50%;background:#333;box-shadow:0 0 0 #000;vertical-align:middle}
+.g7-led.on{background:#39ff88;box-shadow:0 0 10px #39ff88}
+.g7-scenes{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+.g7-tap-pad{min-width:120px;min-height:52px;font-size:16px;background:#1a1020}
+.g7-modes button{margin:2px 0}
+#w-promaxx .card.on{border-color:#ffe600}
+
 </style>
 </head>
 <body>
@@ -92,6 +104,7 @@ button.spm.on{background:linear-gradient(90deg,#ff2bd688,#00e5ff66);border-color
   <div><div class="logo">DLoop X D DJ</div><div class="sub">D7 DJ Studio · 7 Core · DJ DaX · Kraków</div></div>
   <button class="big" id="playBtn" data-act="playToggle">▶ Play</button>
   <button class="big spm" id="spmBtn" data-act="spmToggle">✨ Super Power Magic</button>
+  <button class="big" id="g7Btn" data-act="open" data-w="promaxx">⚡ Pro Maxx G7</button>
   <label>BPM <input id="bpm" type="number" min="60" max="200" value="128" style="width:64px"></label>
   <button data-act="tap">Tap</button>
   <button data-act="sync">⟲ Sync</button>
@@ -102,6 +115,7 @@ button.spm.on{background:linear-gradient(90deg,#ff2bd688,#00e5ff66);border-color
   <a href="superdj.html" style="margin-left:auto"><button>⬅ Super DJ Loops</button></a>
 </header>
 <nav>
+  <button data-act="open" data-w="promaxx">⚡ Pro Maxx G7</button>
   <button data-act="open" data-w="mixer">🎚 Mixer 28</button>
   <button data-act="open" data-w="core">🧬 7 Core</button>
   <button data-act="open" data-w="spm">✨ Super Power Magic</button>
@@ -123,6 +137,7 @@ button.spm.on{background:linear-gradient(90deg,#ff2bd688,#00e5ff66);border-color
   <button data-act="open" data-w="blik">💛 BLIK</button>
   <button data-act="open" data-w="info">ℹ Info</button>
 </nav>
+<div id="g7Launch"></div>
 <main>
   <div class="row"><b>Mixer 28 · sample / loop / FX</b><span class="muted" id="loadInfo">— wczytywanie sampli z TikTok @daxdj27…</span>
     <button data-act="allStop">■ Stop kanałów</button>
@@ -205,7 +220,7 @@ let voice={on:false,mode:'robot',mic:null,nodes:null};
 let avMode=0,avRec=null,holoRaf=0,megaTimer=null,schedId=0;
 let spmOn=false,spmSecTimer=null,spmBarCount=0,spmStyleI=0;
 const instOn={bass:0,lead:0,pad:0,pluck:0,arp:0,stab:0,keys:0};
-window.__DLOOP={ready:false,loaded:0,errors:[],playing:false,spm:false,g77Count:77,gxOk:false,grokdj:false,etSet:false,rasta:false};
+window.__DLOOP={ready:false,loaded:0,errors:[],playing:false,spm:false,g77Count:77,gxOk:false,grokdj:false,etSet:false,rasta:false,g7:false,g7Scenes:7,g7Scene:-1};
 
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast._);toast._=setTimeout(()=>t.style.display='none',2400)}
 function report(e){console.error(e);window.__DLOOP.errors.push(String(e&&e.message||e))}
@@ -537,6 +552,7 @@ defWin('spm','✨ Super Power Magic · 7 Core naraz', `
   <div class="card"><b>📲 Aplikacja Android</b><div class="row"><a href="downloads/D7-DJ-Studio.apk" download="D7-DJ-Studio.apk"><button type="button">Pobierz APK D7 DJ Studio</button></a></div><p class="muted">Darmowy APK, podpis debug/lokalny. DLoop i sample są w paczce (offline). Super DJ Loops też jest w paczce; YouTube Music wymaga internetu.</p></div>`);
 defWin('blik','💛 Wsparcie BLIK', `<p>Jedyna forma wsparcia DJ DaX:</p><p class="blik">BLIK na telefon<br>730 377 357</p><p class="muted">Aplikacja jest darmowa. Nie ma tu żadnych innych płatności.</p>`);
 defWin('gcosmos','🌌 G Studio Cosmos · 77 gen · GX FX · Grok DJ', `<div id="gcosUI"></div>`, uiGCosmos);
+defWin('promaxx','⚡ Pro Maxx G7 · launcher · 7 scen · MIDI · sync', `<div id="g7UI"></div>`, uiG7);
 defWin('info','ℹ Info i uczciwe granice', `
   <ul>
     <li>DLoop X D DJ / D7 DJ Studio — darmowa aplikacja przeglądarkowa (Web Audio). Bez płatnego AI, bez APK w tej wersji.</li>
@@ -553,6 +569,7 @@ defWin('info','ℹ Info i uczciwe granice', `
     <li>E.T. Cosmos Set: 7 stylów (Cosmic Techno, Space Trance, Alien Jungle, Galactic Hood, Nebula Ambient, Pulsar Psy, Kraków Cosmos) + auto-cycle, prowadzony przez awatar E.T. DJ.</li>
     <li>Rasta DJ: 7 stylów reggae (Roots, Dub, Dancehall, Ragga Jungle, Reggaeton, Steppers, Kraków Rasta) — skank, dub delay, syreny, bas, Twoje pętle, wizuale w barwach rasta.</li>
     <li>Endless viz: Psychotronic Tunnel i Magic Stars Life (WebGL, beat-sync, pełny ekran).</li>
+    <li>Pro Maxx G7: launcher wszystkich trybów (Mixer 28, 7 Core, Super Power Magic, G Studio Cosmos 77, GX FX, Grok DJ, E.T. Cosmos Set, Rasta DJ, Voice 7, Load MP3), 7 scen one-tap, presety w localStorage, Web MIDI learn (przyjazny Roland MC-707), auto-jakość shaderów na telefonach, Tap BPM i globalny Master Sync.</li>
     <li>Jedno okno naraz · ✕ · ⛶ · Esc. Wsparcie: tylko BLIK 730 377 357.</li>
   </ul>
   <p class="muted" id="infoStats">—</p>`, ()=>{
@@ -1386,7 +1403,18 @@ const ACT={
   rastaStop:()=>rastaStop(),
   spmToggle:()=>{ if(spmOn) spmStop(); else spmStart(); },
   spmStop:()=>spmStop(),
-  spmFs:()=>{ const el=$('#spmLayer'); if(!el) return; if(!document.fullscreenElement && el.requestFullscreen) el.requestFullscreen().catch(()=>{}); else if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
+  spmFs:()=>{ const el=$('#spmLayer'); if(!el) return; if(!document.fullscreenElement && el.requestFullscreen) el.requestFullscreen().catch(()=>{}); else if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); },
+  g7go:e=>g7go(e.target.closest('[data-k]').dataset.k),
+  g7scene:e=>g7LoadScene(+e.target.closest('[data-i]').dataset.i).catch(report),
+  g7save:()=>g7SavePreset((($('#g7PresetName')||{}).value||'').trim()),
+  g7load:e=>g7LoadPreset(+e.target.dataset.i).catch(report),
+  g7del:e=>g7DelPreset(+e.target.dataset.i),
+  g7midi:()=>g7MidiToggle(),
+  g7learn:e=>g7LearnStart(e.target.dataset.id),
+  g7map707:()=>g7Map707(),
+  g7mapclear:()=>{ g7Map={}; g7SaveStore({map:{}}); uiG7(); toast('Mapa MIDI wyczyszczona'); },
+  g7q:e=>g7SetQuality(e.target.dataset.k),
+  g7sync:()=>g7MasterSync()
 };
 
 async function preloadSome(){
@@ -2290,6 +2318,7 @@ function gxStart(mode, pal){
     gl.uniform1f(gxGl.uPal, gxGl.pal||0);
     gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
     window.__DLOOP.gxOk=true;
+    if(typeof g7NoteFrame==='function') g7NoteFrame();
   };
   draw();
 }
@@ -2552,6 +2581,487 @@ function uiGCosmos(){
 window.__DLOOP.g77Count=77;
 window.__DLOOP.g77Trig=(i)=>g77Trig(i);
 window.__DLOOP.g77Stop=g77StopAll;
+
+
+/* ===== Pro Maxx G7 · launcher · 7 scenes · presets · MIDI learn · auto-quality · BPM sync ===== */
+const G7_LS='d7-promaxx-g7';
+let g7Scene=-1, g7qScale=1, g7qMode='auto', g7Fps=60, g7FpsWin=[], g7Learn=null, g7MidiOn=false, g7MidiAccess=null, g7MidiName='—', g7Clock={n:0,t:0,bpm:0};
+let g7Map=g7LoadStore().map||{};
+
+const G7_LAUNCH=[
+  {k:'mixer',n:'🎚 Mixer 28',go(){ openW('mixer'); }},
+  {k:'core',n:'🧬 7 Core',go(){ openW('core'); }},
+  {k:'spm',n:'✨ Super Power Magic',go(){ openW('spm'); }},
+  {k:'gcosmos',n:'🌌 G Studio Cosmos 77',go(){ openW('gcosmos'); }},
+  {k:'gx',n:'👁 GX FX visuals',go(){ openW('gcosmos'); if(typeof gxStart==='function') gxStart(typeof gxMode==='number'?gxMode:0, 0); }},
+  {k:'grok',n:'🤖 Grok DJ',go(){ openW('gcosmos'); if(typeof grokDjStart==='function' && !grokOn) grokDjStart(); }},
+  {k:'et',n:'👽 E.T. Cosmos Set',go(){ openW('gcosmos'); }},
+  {k:'rasta',n:'🇯🇲 Rasta DJ',go(){ openW('gcosmos'); }},
+  {k:'voice',n:'🎤 Voice 7',go(){ openW('voice'); }},
+  {k:'load',n:'📁 Load MP3',go(){ openW('load'); }}
+];
+
+const G7_SCENES=[
+  {id:0,n:'Kraków Peak',bpm:128,mode:'cosmos',style:'krakow',viz:24,pal:0,fx:{delay:0.32,reverb:0.4,crush:0},d:'Styl Kraków, G Studio, wizual GX 25'},
+  {id:1,n:'Super Magic',bpm:128,mode:'spm',viz:0,pal:0,fx:{delay:0.4,reverb:0.5,crush:0},d:'Super Power Magic + Psychotronic Tunnel'},
+  {id:2,n:'Cosmic Grok',bpm:136,mode:'grok',viz:2,pal:0,fx:{delay:0.3,reverb:0.35,crush:0},d:'Grok DJ, holo tunnel, Twoje pętle'},
+  {id:3,n:'Alien Jungle',bpm:174,mode:'et',et:2,viz:12,pal:0,fx:{delay:0.22,reverb:0.3,crush:0.12},d:'E.T. Alien Jungle, 174 BPM'},
+  {id:4,n:'Rasta Roots',bpm:76,mode:'rasta',rasta:0,viz:18,pal:1,fx:{delay:0.55,reverb:0.45,crush:0},d:'Rasta DJ Roots, paleta rasta'},
+  {id:5,n:'Space Trance',bpm:138,mode:'et',et:1,viz:5,pal:0,fx:{delay:0.42,reverb:0.55,crush:0},d:'E.T. Space Trance, 138 BPM'},
+  {id:6,n:'Hood Night',bpm:130,mode:'hood',style:'dark',viz:8,pal:0,fx:{delay:0.28,reverb:0.25,crush:0.18,hood:true},d:'Dark / Hood Remix, 130 BPM'}
+];
+
+const G7_MC707=[
+  {id:'master',typ:'cc',ch:0,d1:7,n:'Master (CC7)'},
+  {id:'bpm',typ:'cc',ch:0,d1:10,n:'BPM (CC10)'},
+  {id:'ch:0:vol',typ:'cc',ch:0,d1:16,n:'Fader 1 (CC16)'},
+  {id:'ch:1:vol',typ:'cc',ch:0,d1:17,n:'Fader 2 (CC17)'},
+  {id:'ch:2:vol',typ:'cc',ch:0,d1:18,n:'Fader 3 (CC18)'},
+  {id:'ch:3:vol',typ:'cc',ch:0,d1:19,n:'Fader 4 (CC19)'},
+  {id:'ch:0:cut',typ:'cc',ch:0,d1:20,n:'Filtr 1 (CC20)'},
+  {id:'ch:0:delay',typ:'cc',ch:0,d1:21,n:'Delay 1 (CC21)'},
+  {id:'ch:0:reverb',typ:'cc',ch:0,d1:22,n:'Reverb 1 (CC22)'},
+  {id:'play',typ:'note',ch:0,d1:43,n:'Pad Play (note 43)'},
+  {id:'sync',typ:'note',ch:0,d1:44,n:'Pad Sync (note 44)'},
+  {id:'scene:0',typ:'note',ch:0,d1:36,n:'Scena 1 (C1)'},
+  {id:'scene:1',typ:'note',ch:0,d1:37,n:'Scena 2'},
+  {id:'scene:2',typ:'note',ch:0,d1:38,n:'Scena 3'},
+  {id:'scene:3',typ:'note',ch:0,d1:39,n:'Scena 4'},
+  {id:'scene:4',typ:'note',ch:0,d1:40,n:'Scena 5'},
+  {id:'scene:5',typ:'note',ch:0,d1:41,n:'Scena 6'},
+  {id:'scene:6',typ:'note',ch:0,d1:42,n:'Scena 7'}
+];
+
+function g7LoadStore(){
+  try{ return JSON.parse(localStorage.getItem(G7_LS)||'{}')||{}; }catch(e){ return {}; }
+}
+function g7SaveStore(part){
+  try{
+    const s=Object.assign(g7LoadStore(), part||{});
+    if(part && part.map) s.map=part.map;
+    localStorage.setItem(G7_LS, JSON.stringify(s));
+    return s;
+  }catch(e){ report(e); return g7LoadStore(); }
+}
+
+function g7LaunchBar(){
+  const el=$('#g7Launch'); if(!el) return;
+  el.innerHTML=`
+    <b class="g7-brand">⚡ Pro Maxx G7</b>
+    ${G7_LAUNCH.map(x=>`<button data-act="g7go" data-k="${x.k}">${x.n}</button>`).join('')}
+    <span class="g7-sep"></span>
+    ${G7_SCENES.map(s=>`<button data-act="g7scene" data-i="${s.id}" id="g7s-${s.id}" title="${esc(s.d)}">${s.id+1}. ${s.n}</button>`).join('')}
+    <span class="g7-meta"><span id="g7BpmLab">BPM <b id="g7Bpm">${bpm||128}</b></span>
+    <span id="g7FpsLab" class="muted">FPS <b id="g7Fps">—</b> · <span id="g7Qlab">auto</span></span>
+    <span id="g7MidiLab" class="muted">MIDI ${g7MidiName}</span>
+    <button data-act="open" data-w="promaxx">⚙ Hub</button>
+    <button data-act="tap" id="g7TapBtn">Tap</button>
+    <button data-act="g7sync" id="g7SyncBtn">⟲ Master Sync</button>
+    <span id="g7Led" class="g7-led"></span></span>`;
+  g7PaintScenes();
+}
+
+function uiG7(){
+  const el=$('#g7UI'); if(!el) return;
+  const store=g7LoadStore();
+  const presets=store.presets||[];
+  const learnHint=g7Learn?('Ucz się: rusz kontrolerem dla „'+g7Learn+'”'):'Kliknij cel, potem rusz fader/pad (MC-707 albo dowolny MIDI)';
+  el.innerHTML=`
+    <p class="muted">Launcher na górze otwiera każdy tryb (jedno okno naraz). Siedem scen to gotowe sety: tryb + styl + wizual + FX. Presety w localStorage. Web MIDI learn pod Roland MC-707. Auto-jakość obniża rozdzielczość shaderów, gdy FPS spada (telefony). Tap BPM + Master Sync wyrównuje wszystko do globalnego BPM.</p>
+    <div class="row g7-modes">${G7_LAUNCH.map(x=>`<button class="big" data-act="g7go" data-k="${x.k}">${x.n}</button>`).join('')}</div>
+    <div class="card">
+      <b>7 scen performance · one-tap</b>
+      <div class="cards g7-scenes">${G7_SCENES.map(s=>`<div class="card ${g7Scene===s.id?'on':''}"><b>${s.id+1}. ${esc(s.n)}</b><div class="muted">${esc(s.d)} · ${s.bpm} BPM</div><div class="row"><button class="big" data-act="g7scene" data-i="${s.id}" id="g7sw-${s.id}">▶ Scena</button></div></div>`).join('')}</div>
+    </div>
+    <div class="card">
+      <b>Presety użytkownika</b> <span class="muted">localStorage · ten typ przeglądarki</span>
+      <div class="row">
+        <input id="g7PresetName" placeholder="nazwa presetu" maxlength="48" style="min-width:180px">
+        <button class="big" data-act="g7save">💾 Zapisz</button>
+      </div>
+      <div id="g7PresetList">${presets.length?presets.map((p,i)=>`<div class="row"><b>${esc(p.n)}</b> <span class="muted">${p.bpm||'?'} BPM${p.scene>=0?' · scena '+(p.scene+1):''}</span> <button data-act="g7load" data-i="${i}">Wczytaj</button> <button data-act="g7del" data-i="${i}">Usuń</button></div>`).join(''):'<div class="muted">Brak zapisanych presetów.</div>'}</div>
+    </div>
+    <div class="card">
+      <b>Web MIDI Learn</b> <span class="muted">Roland MC-707: fader CC16–19, master CC7, pady scen C1–F#1 (36–42), MIDI Clock → BPM</span>
+      <div class="row">
+        <button class="big" data-act="g7midi" id="g7MidiBtn">${g7MidiOn?'■ MIDI ON':'🎹 Włącz MIDI'}</button>
+        <button data-act="g7map707">Wczytaj mapę MC-707</button>
+        <button data-act="g7mapclear">Wyczyść mapę</button>
+        <span id="g7MidiStat" class="muted">${g7MidiName} · ${Object.keys(g7Map).length} mapowań</span>
+      </div>
+      <div class="muted" id="g7LearnHint">${esc(learnHint)}</div>
+      <div class="row g7-learn">${[['master','Master'],['bpm','BPM'],['play','Play/Stop'],['sync','Master Sync']].map(x=>`<button data-act="g7learn" data-id="${x[0]}" class="${g7Learn===x[0]?'on':''}">${x[1]}</button>`).join('')}
+        ${[0,1,2,3].map(i=>`<button data-act="g7learn" data-id="ch:${i}:vol" class="${g7Learn===('ch:'+i+':vol')?'on':''}">Fader ${i+1}</button>`).join('')}
+        ${G7_SCENES.map(s=>`<button data-act="g7learn" data-id="scene:${s.id}" class="${g7Learn===('scene:'+s.id)?'on':''}">Pad scena ${s.id+1}</button>`).join('')}
+      </div>
+      <div id="g7MidiLog" class="muted"></div>
+    </div>
+    <div class="card">
+      <b>Auto-jakość · telefony</b>
+      <div class="row">
+        <button data-act="g7q" data-k="auto" class="${g7qMode==='auto'?'on':''}">Auto</button>
+        <button data-act="g7q" data-k="high" class="${g7qMode==='high'?'on':''}">Wysoka</button>
+        <button data-act="g7q" data-k="low" class="${g7qMode==='low'?'on':''}">Niska (telefon)</button>
+        <span class="muted">FPS <b id="g7Fps2">${g7Fps?Math.round(g7Fps):'—'}</b> · skala shaderów ${(g7qScale*100)|0}%</span>
+      </div>
+    </div>
+    <div class="card">
+      <b>Tap BPM + Master Sync</b>
+      <div class="row">
+        <button class="big g7-tap-pad" data-act="tap">● TAP</button>
+        <button class="big" data-act="g7sync">⟲ Master Sync</button>
+        <span>BPM <b id="g7Bpm2">${bpm||128}</b></span>
+        <span class="muted">2–4 stuknięcia · MIDI Clock też ustawia BPM · Sync wyrównuje pętle, delay i scheduler do taktu</span>
+      </div>
+    </div>`;
+  g7PaintScenes();
+}
+
+function g7PaintScenes(){
+  G7_SCENES.forEach(s=>{
+    ['#g7s-'+s.id,'#g7sw-'+s.id].forEach(sel=>{ const b=$(sel); if(b) b.classList.toggle('on', g7Scene===s.id); });
+  });
+  const a=$('#g7Bpm'), b=$('#g7Bpm2');
+  if(a) a.textContent=bpm; if(b) b.textContent=bpm;
+}
+
+function g7go(k){
+  const x=G7_LAUNCH.find(v=>v.k===k); if(!x) return;
+  x.go();
+}
+
+function g7ApplyFx(fx){
+  if(!fx) return;
+  ch.forEach(c=>{
+    if(fx.delay!=null) c.delay=fx.delay;
+    if(fx.reverb!=null) c.reverb=fx.reverb;
+    if(fx.crush!=null) c.crush=fx.crush;
+    if(c.nodes) applyChFX(c);
+  });
+  if(fx.hood===true && !hoodOn){ hoodOn=true; const hb=$('#hoodBtn'); if(hb) hb.classList.add('on'); }
+  if(fx.hood===false && hoodOn){ hoodOn=false; const hb=$('#hoodBtn'); if(hb) hb.classList.remove('on'); }
+  uiMix();
+}
+
+function g7StopModes(keep){
+  try{ if(typeof spmOn!=='undefined' && spmOn && keep!=='spm' && typeof spmStop==='function') spmStop(); }catch(e){}
+  try{ if(typeof grokOn!=='undefined' && grokOn && keep!=='grok' && typeof grokDjStop==='function') grokDjStop(); }catch(e){}
+  try{ if(typeof etOn!=='undefined' && etOn && keep!=='et' && typeof etStop==='function') etStop(); }catch(e){}
+  try{ if(typeof rastaOn!=='undefined' && rastaOn && keep!=='rasta' && typeof rastaStop==='function') rastaStop(); }catch(e){}
+}
+
+async function g7LoadScene(i){
+  await initAudio();
+  const s=G7_SCENES[(i+G7_SCENES.length)%G7_SCENES.length];
+  if(!s) throw new Error('brak sceny '+i);
+  g7StopModes(s.mode);
+  setBpm(s.bpm);
+  g7ApplyFx(s.fx);
+  if(typeof gxEndless!=='undefined') gxEndless=null;
+  if(typeof gxStart==='function') gxStart(s.viz, s.pal||0);
+  if(s.mode==='spm' && typeof spmStart==='function'){ if(!spmOn) spmStart(); }
+  else if(s.mode==='grok' && typeof grokDjStart==='function'){ if(!grokOn) await grokDjStart(); }
+  else if(s.mode==='et' && typeof etStart==='function'){ await etStart(s.et||0); }
+  else if(s.mode==='rasta' && typeof rastaStart==='function'){ await rastaStart(s.rasta||0); }
+  else if(s.mode==='hood'){
+    if(s.style && typeof styleSet==='function') await styleSet(s.style);
+    hoodOn=true; const hb=$('#hoodBtn'); if(hb) hb.classList.add('on');
+    seq.on=true; startSched();
+  } else if(s.mode==='cosmos'){
+    if(s.style && typeof styleSet==='function') await styleSet(s.style);
+    if(typeof g77Trig==='function'){ g77Trig(23).catch(report); g77Trig(0).catch(report); }
+    startSched();
+  }
+  g7Scene=s.id;
+  window.__DLOOP.g7Scene=s.id;
+  g7PaintScenes();
+  uiG7();
+  toast('Pro Maxx G7 · '+s.n+' · '+s.bpm+' BPM');
+  return s;
+}
+
+function g7Capture(name){
+  return {
+    n: String(name||'Preset').slice(0,48),
+    t: Date.now(),
+    bpm: bpm,
+    scene: g7Scene,
+    mvol: +(( $('#mvol')||{}).value||0.8),
+    gxMode: typeof gxMode==='number'?gxMode:0,
+    gxPal: (typeof gxGl!=='undefined' && gxGl)? (gxGl.pal||0):0,
+    hoodOn: !!hoodOn,
+    fxOn: (fxOn||[]).slice(),
+    ch: ch.map(c=>({vol:c.vol,pan:c.pan,cut:c.cut,delay:c.delay,reverb:c.reverb,crush:c.crush})),
+    map: Object.assign({}, g7Map)
+  };
+}
+
+function g7SavePreset(name){
+  const s=g7LoadStore();
+  const presets=s.presets||[];
+  const p=g7Capture(name||(($('#g7PresetName')||{}).value)||('Preset '+(presets.length+1)));
+  presets.push(p);
+  g7SaveStore({presets:presets, map:g7Map});
+  uiG7();
+  toast('Zapisano preset: '+p.n);
+  return presets.length;
+}
+
+async function g7LoadPreset(i){
+  const presets=(g7LoadStore().presets||[]);
+  const p=presets[i]; if(!p) throw new Error('brak presetu '+i);
+  await initAudio();
+  if(p.bpm) setBpm(p.bpm);
+  if(p.mvol!=null){ const m=$('#mvol'); if(m) m.value=p.mvol; if(master) master.gain.value=+p.mvol; }
+  if(p.ch) p.ch.forEach((s,j)=>{ const c=ch[j]; if(!c||!s) return; ['vol','pan','cut','delay','reverb','crush'].forEach(k=>{ if(s[k]!=null) c[k]=s[k]; }); if(c.nodes) applyChFX(c); });
+  if(p.fxOn) p.fxOn.forEach((v,j)=>{ fxOn[j]=v; });
+  if(p.map){ g7Map=Object.assign({}, p.map); g7SaveStore({map:g7Map}); }
+  if(typeof gxStart==='function' && p.gxMode!=null) gxStart(p.gxMode, p.gxPal||0);
+  if(p.scene!=null && p.scene>=0) await g7LoadScene(p.scene);
+  else uiMix();
+  toast('Wczytano: '+p.n);
+  return p;
+}
+
+function g7DelPreset(i){
+  const s=g7LoadStore();
+  const presets=s.presets||[];
+  presets.splice(i,1);
+  g7SaveStore({presets:presets, map:g7Map});
+  uiG7();
+}
+
+async function g7MidiToggle(){
+  if(g7MidiOn){ g7MidiOn=false; window.__DLOOP.g7Midi=false; uiG7(); toast('MIDI OFF'); return; }
+  try{
+    if(!navigator.requestMIDIAccess){ toast('Web MIDI niedostępne w tej przeglądarce'); window.__DLOOP.g7Midi=false; return; }
+    g7MidiAccess=await navigator.requestMIDIAccess({sysex:false});
+    g7MidiOn=true; window.__DLOOP.g7Midi=true;
+    const names=[];
+    g7MidiAccess.inputs.forEach(inp=>{
+      names.push(inp.name||'MIDI');
+      inp.onmidimessage=ev=>g7MidiMsg(ev.data);
+    });
+    if(g7MidiAccess.onstatechange){ /* keep */ }
+    g7MidiAccess.onstatechange=()=>{ /* reconnect names */ };
+    g7MidiName=names.length?names.join(', '):'brak wejść (mapa i learn działają)';
+    uiG7();
+    toast('MIDI ON · '+g7MidiName);
+  }catch(e){
+    window.__DLOOP.g7Midi=false;
+    toast('MIDI: brak zgody lub sterownika');
+    report(e);
+  }
+}
+
+function g7Map707(){
+  g7Map={};
+  G7_MC707.forEach(m=>{ g7Map[m.id]={typ:m.typ,ch:m.ch,d1:m.d1}; });
+  g7SaveStore({map:g7Map});
+  uiG7();
+  toast('Mapa Roland MC-707 wczytana · '+G7_MC707.length+' celów');
+}
+
+function g7LearnStart(id){
+  g7Learn=id;
+  window.__DLOOP.g7Learn=id;
+  uiG7();
+  toast('MIDI Learn: '+id+' — rusz fader lub pad');
+}
+
+function g7Bind(id, typ, chn, d1){
+  g7Map[id]={typ:typ,ch:chn,d1:d1};
+  g7SaveStore({map:g7Map});
+  g7Learn=null;
+  window.__DLOOP.g7Learn=null;
+  uiG7();
+  toast('Zmapowano '+id+' ← '+(typ==='cc'?'CC':'Note')+' '+d1+' ch'+(chn+1));
+}
+
+function g7MidiLog(msg){
+  const el=$('#g7MidiLog'); if(!el) return;
+  const d=document.createElement('div'); d.textContent=msg;
+  el.prepend(d); while(el.children.length>6) el.lastChild.remove();
+}
+
+function g7ApplyTarget(id, val, vel){
+  if(id==='master'){
+    const m=$('#mvol'); if(m) m.value=val;
+    if(master) master.gain.setTargetAtTime(val, now?now():0, 0.02);
+    return;
+  }
+  if(id==='bpm'){ setBpm(Math.round(60+val*140)); return; }
+  if(id==='play' && vel){ if(ACT.playToggle) ACT.playToggle(); return; }
+  if(id==='sync' && vel){ g7MasterSync(); return; }
+  if(id.indexOf('scene:')===0 && vel){ g7LoadScene(+id.split(':')[1]).catch(report); return; }
+  if(id.indexOf('ch:')===0){
+    const p=id.split(':'); const i=+p[1], key=p[2];
+    const c=ch[i]; if(!c) return;
+    let v=val;
+    if(key==='vol') v=val*1.2;
+    if(key==='pan') v=val*2-1;
+    c[key]=v;
+    if(c.nodes) applyChFX(c);
+    const inp=document.querySelector(`[data-ch="${key}"][data-i="${i}"]`);
+    if(inp) inp.value=v;
+  }
+}
+
+function g7MidiMsg(data){
+  if(!data||!data.length) return;
+  const st=data[0], typ=st&0xF0, chn=st&0x0F, d1=data[1]|0, d2=data.length>2?data[2]:0;
+  if(st===0xF8){ /* MIDI clock */
+    const t=performance.now();
+    g7Clock.n++;
+    if(g7Clock.n===1) g7Clock.t=t;
+    if(g7Clock.n>=24){
+      const dt=t-g7Clock.t;
+      if(dt>80 && dt<2000){
+        const nb=Math.round(60000/dt);
+        g7Clock.bpm=nb;
+        if(Math.abs(nb-bpm)>=1) setBpm(nb);
+      }
+      g7Clock.n=0; g7Clock.t=t;
+    }
+    return;
+  }
+  if(st===0xFA||st===0xFB){ g7Clock.n=0; if(typeof startSched==='function') startSched(); return; }
+  if(typ!==0xB0 && typ!==0x90 && typ!==0x80) return;
+  const isCc=typ===0xB0;
+  const isNoteOn=typ===0x90 && d2>0;
+  const isNoteOff=typ===0x80 || (typ===0x90 && d2===0);
+  if(g7Learn && (isCc||isNoteOn)){
+    const id=g7Learn;
+    g7Bind(id, isCc?'cc':'note', chn, d1);
+    if(isCc) g7ApplyTarget(id, d2/127, d2);
+    else g7ApplyTarget(id, 1, d2);
+    return;
+  }
+  const val=isCc?(d2/127):1;
+  Object.keys(g7Map).forEach(id=>{
+    const m=g7Map[id]; if(!m) return;
+    if(m.ch!==chn || m.d1!==d1) return;
+    if(m.typ==='cc' && isCc) g7ApplyTarget(id, val, d2);
+    if(m.typ==='note' && isNoteOn) g7ApplyTarget(id, 1, d2);
+  });
+  g7MidiLog((isCc?'CC ':'Note ')+d1+' ch'+(chn+1)+' · '+d2);
+}
+
+function g7MasterSync(){
+  setBpm(bpm);
+  const t=(typeof nextQ==='function')?nextQ(1):(typeof now==='function'?now():0);
+  if(typeof startCh==='function') ch.forEach(c=>{ if(c.on&&c.buf) startCh(c,t); });
+  if(typeof del!=='undefined' && del && del.delayTime && typeof beat==='function'){
+    try{ del.delayTime.setTargetAtTime(beat()*0.375, (typeof now==='function'?now():0), 0.02); }catch(e){}
+  }
+  const led=$('#g7Led'); if(led){ led.classList.add('on'); setTimeout(()=>led.classList.remove('on'), 180); }
+  const btn=$('#g7SyncBtn'); if(btn){ btn.classList.add('on'); setTimeout(()=>btn.classList.remove('on'), 300); }
+  toast('Master Sync · '+bpm+' BPM');
+}
+
+function g7TapPulse(){
+  const led=$('#g7Led'); if(led){ led.classList.add('on'); setTimeout(()=>led.classList.remove('on'), 120); }
+  const b=$('#g7TapBtn'); if(b){ b.classList.add('on'); setTimeout(()=>b.classList.remove('on'), 120); }
+  g7PaintScenes();
+}
+
+function g7SetQuality(mode){
+  g7qMode=mode||'auto';
+  if(g7qMode==='high') g7qScale=1;
+  if(g7qMode==='low') g7qScale=0.45;
+  if(g7qMode==='auto'){
+    const phone=(typeof window.matchMedia==='function' && (window.matchMedia('(pointer:coarse)').matches||window.innerWidth<900)) || (navigator.maxTouchPoints||0)>1;
+    g7qScale=phone?0.7:1;
+  }
+  window.__DLOOP.g7q=g7qMode;
+  window.__DLOOP.g7qScale=g7qScale;
+  const lab=$('#g7Qlab'); if(lab) lab.textContent=g7qMode+(g7qScale<1?(' · '+(g7qScale*100|0)+'%'):'');
+  if(typeof gxGl!=='undefined' && gxGl && gxGl.canvas && typeof gxSize==='function') gxSize(gxGl.canvas);
+  uiG7();
+  toast('Jakość: '+g7qMode);
+}
+
+function g7NoteFrame(){
+  const t=performance.now();
+  if(g7NoteFrame._t){
+    const fps=1000/Math.max(1,t-g7NoteFrame._t);
+    g7FpsWin.push(fps); if(g7FpsWin.length>45) g7FpsWin.shift();
+    const avg=g7FpsWin.reduce((a,b)=>a+b,0)/g7FpsWin.length;
+    g7Fps=avg;
+    window.__DLOOP.g7Fps=Math.round(avg);
+    const a=$('#g7Fps'), b=$('#g7Fps2');
+    if(a) a.textContent=Math.round(avg);
+    if(b) b.textContent=Math.round(avg);
+    if(g7qMode==='auto' && g7FpsWin.length>=20){
+      let next=g7qScale;
+      if(avg<38 && g7qScale>0.35) next=Math.max(0.35, +(g7qScale-0.15).toFixed(2));
+      else if(avg>55 && g7qScale<1) next=Math.min(1, +(g7qScale+0.1).toFixed(2));
+      if(Math.abs(next-g7qScale)>0.04){
+        g7qScale=next;
+        window.__DLOOP.g7qScale=g7qScale;
+        if(typeof gxGl!=='undefined' && gxGl && gxGl.canvas && typeof gxSize==='function') gxSize(gxGl.canvas);
+        const lab=$('#g7Qlab'); if(lab) lab.textContent='auto · '+(g7qScale*100|0)+'%';
+      }
+    }
+  }
+  g7NoteFrame._t=t;
+}
+
+/* hooks: wrap setBpm, gxSize, tap/sync, quality init */
+(function g7Install(){
+  if(typeof setBpm==='function'){
+    const _set=setBpm;
+    setBpm=function(v){ _set(v); window.__DLOOP.bpm=bpm; g7PaintScenes(); };
+  }
+  if(typeof gxSize==='function'){
+    const _sz=gxSize;
+    gxSize=function(c){
+      if(!c) return;
+      const d=Math.max(0.35, (window.devicePixelRatio||1)* (g7qScale||1));
+      if(c.id==='gxGLMini'){
+        const w=c.clientWidth||960, h=c.clientHeight||180;
+        c.width=Math.max(64, Math.floor(w*d));
+        c.height=Math.max(48, Math.floor(h*d));
+      } else {
+        c.width=Math.max(64, Math.floor((window.innerWidth||1280)*d));
+        c.height=Math.max(64, Math.floor((window.innerHeight||720)*d));
+      }
+    };
+  }
+  if(typeof ACT==='object'){
+    const _tap=ACT.tap;
+    ACT.tap=function(){
+      const t=performance.now(); tapTs.push(t); tapTs=tapTs.filter(x=>t-x<4000);
+      if(tapTs.length>=2){
+        const dt=(tapTs[tapTs.length-1]-tapTs[0])/(tapTs.length-1);
+        if(dt>200 && dt<2000){ setBpm(Math.round(60000/dt)); toast('BPM '+bpm+' (tap)'); }
+      }
+      g7TapPulse();
+    };
+    const _sync=ACT.sync;
+    ACT.sync=function(){ g7MasterSync(); };
+  }
+  if(typeof window.matchMedia==='function' && (window.matchMedia('(pointer:coarse)').matches||window.innerWidth<900)){
+    if(g7qMode==='auto') g7qScale=0.7;
+  }
+  window.__DLOOP.g7=true;
+  window.__DLOOP.g7Scenes=7;
+  window.__DLOOP.g7Scene=-1;
+  window.__DLOOP.g7LoadScene=g7LoadScene;
+  window.__DLOOP.g7SavePreset=g7SavePreset;
+  window.__DLOOP.g7LoadPreset=g7LoadPreset;
+  window.__DLOOP.g7MidiLearn=g7LearnStart;
+  window.__DLOOP.g7MidiMsg=g7MidiMsg;
+  window.__DLOOP.g7Map707=g7Map707;
+  window.__DLOOP.g7SetQuality=g7SetQuality;
+  window.__DLOOP.g7q=g7qMode;
+  window.__DLOOP.g7qScale=g7qScale;
+  window.__DLOOP.g7Sync=g7MasterSync;
+  window.__DLOOP.g7Tap=()=>{ if(ACT&&ACT.tap) ACT.tap(); };
+  window.__DLOOP.bpm=typeof bpm==='number'?bpm:128;
+})();
+
+try{ g7LaunchBar(); }catch(e){ report(e); }
 
 </script>
 </body>
