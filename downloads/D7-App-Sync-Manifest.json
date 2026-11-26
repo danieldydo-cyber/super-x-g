@@ -1,0 +1,84 @@
+{
+  "name": "D7-App-Sync-Manifest",
+  "product": "D7 DJ Studio",
+  "version": "1.3.3",
+  "versionCode": 7,
+  "swCache": "d7dj-v1.3.4",
+  "package": "com.danieldydo.d7djstudio",
+  "updated": "2026-11-26T08:40:56+01:00",
+  "timezone": "Europe/Warsaw",
+  "note": "Drive is a central download/sync hub. Android and Windows still require a user tap to install updates. Sharing is not changed by this file.",
+  "live": {
+    "app": "https://danieldydo-cyber.github.io/super-x-g/dloop.html",
+    "superdj": "https://danieldydo-cyber.github.io/super-x-g/superdj.html",
+    "apk": "https://danieldydo-cyber.github.io/super-x-g/downloads/D7-DJ-Studio.apk",
+    "extension": "https://danieldydo-cyber.github.io/super-x-g/downloads/d7-dj-studio-extension.zip",
+    "extension_new": "https://danieldydo-cyber.github.io/super-x-g/downloads/d7-dj-studio-extension.zip",
+    "extension_old": "https://danieldydo-cyber.github.io/super-x-g/downloads/super-dj-loops-extension.zip",
+    "webzip": "https://danieldydo-cyber.github.io/super-x-g/downloads/D7-DJ-Studio-web.zip",
+    "windows_help": "https://danieldydo-cyber.github.io/super-x-g/downloads/windows.html",
+    "readme_web": "https://danieldydo-cyber.github.io/super-x-g/downloads/README-WEB.txt"
+  },
+  "drive": {
+    "root": {
+      "name": "D7 DJ Studio",
+      "id": "1FlUcz66hUqu34ATfAxroskZQ3Wh2cw0N",
+      "url": "https://drive.google.com/drive/folders/1FlUcz66hUqu34ATfAxroskZQ3Wh2cw0N"
+    },
+    "folders": {
+      "Android": {
+        "id": "1GOwqqxx3e9v6un0Q98hm2S4--ij46656",
+        "url": "https://drive.google.com/drive/folders/1GOwqqxx3e9v6un0Q98hm2S4--ij46656"
+      },
+      "Windows": {
+        "id": "1Oj0YfwBFckfqt3viPytx6qHR1riyzJ5H",
+        "url": "https://drive.google.com/drive/folders/1Oj0YfwBFckfqt3viPytx6qHR1riyzJ5H"
+      },
+      "Chrome": {
+        "id": "1z0dCN7ACYgAgXg7BYzphthnz24NFWISc",
+        "url": "https://drive.google.com/drive/folders/1z0dCN7ACYgAgXg7BYzphthnz24NFWISc"
+      },
+      "Web": {
+        "id": "1C6VzIcGpBW-TB7cZBAowhlzpIuLp97jk",
+        "url": "https://drive.google.com/drive/folders/1C6VzIcGpBW-TB7cZBAowhlzpIuLp97jk"
+      },
+      "77-Bot-Multitool": {
+        "id": "1tfjiAGm9H6oyx-Ste9y177KPsqSWwVmW",
+        "url": "https://drive.google.com/drive/folders/1tfjiAGm9H6oyx-Ste9y177KPsqSWwVmW"
+      }
+    },
+    "files": {
+      "Android": {
+        "current": "https://drive.google.com/file/d/1Ztcd7v-16ziWoGTw26lqBT-DLD_LvLw0/view?usp=drivesdk",
+        "currentId": "1Ztcd7v-16ziWoGTw26lqBT-DLD_LvLw0",
+        "v1.3.3": "https://drive.google.com/file/d/143_tal-uo8UDi_twQXD-kdMXEMWXS-dp/view?usp=drivesdk",
+        "v1.3.2": "https://drive.google.com/file/d/1S9SlUGnxX3_ZHLQ0qIXlIE_p-v5KAGgC/view?usp=drivesdk",
+        "v1.3.1": "https://drive.google.com/file/d/1bFsnysqXl-ad_kLW2nOJ8NPx5GP84_9p/view?usp=drivesdk",
+        "v1.3.0": "https://drive.google.com/file/d/1kgDMH4ZiBP4CYYG45D9wsMqcpVEAQreU/view?usp=drivesdk",
+        "v1.2.0": "https://drive.google.com/file/d/1DlXsUPVwEQnfgFPZ9Sv8XEByXwAs9a4y/view?usp=drivesdk"
+      },
+      "Web": {
+        "zip": "https://drive.google.com/file/d/1QKxU73F0Y8L1qyhxdwiUMdGxyQs3oHG3/view?usp=drivesdk",
+        "readme": "https://drive.google.com/file/d/1ZyJhyMeXEGVSHyoRFw0dw41xxZ6yMzrW/view?usp=drivesdk"
+      },
+      "Chrome": {
+        "d7_dj_studio_extension": "https://drive.google.com/file/d/10L9C7sIMfAUFIAEZ6M_nTatZWjdIazba/view?usp=drivesdk",
+        "super_dj_loops_extension": "https://drive.google.com/file/d/1Vl2L7ftfJctfoVnllZopJikBkttnxLvD/view?usp=drivesdk"
+      },
+      "Windows": {
+        "part1": "https://drive.google.com/file/d/1aumGBTZU3uwv25kYUO4XV8B2kYzB_8UX/view?usp=drivesdk",
+        "part2": "https://drive.google.com/file/d/1RwHEBugun4MdpDaBZmxHmStp6ZAUyhaK/view?usp=drivesdk",
+        "bat": "https://drive.google.com/file/d/1hHavmwgJuAU6t02qtwc68onN51NR_cNQ/view?usp=drivesdk",
+        "readme": "https://drive.google.com/file/d/1RqiqlRyrfrOU69JiH-K7aU6jycQZKsb-/view?usp=drivesdk"
+      }
+    }
+  },
+  "sizes": {
+    "apk_current_bytes": 31960305,
+    "web_zip_bytes": 31518625,
+    "chrome_ext_bytes": 31554672,
+    "windows_zip_bytes": 146378511,
+    "windows_part1_bytes": 94371840,
+    "windows_part2_bytes": 52006671
+  }
+}

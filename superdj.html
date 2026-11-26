@@ -612,6 +612,39 @@ if(IS_REMOTE)buildRemote();else{uiLoops();LOOPS.forEach(L=>{if(!L.events.length)
 ['mgBass','mgSyn','mgSnare'].forEach((id,i)=>{$('#'+id).value=[S.bass,S.syn,S.snare][i]});$('#mgGenre').value=S.magicGenre;
 requestAnimationFrame(frame);
 window.SDJ={S,LOOPS,MAGIC,MAR,AGENTS,PADS,CH,M,FIX,ERR,get ctx(){return ctx},initAudio,start,stop,toggleLoop,regen,genreSet,openW,closeWin,renderLoops,hitPad,botReply,runFix,handleCmd};
+
+
+/* t520 Smart windows + test hooks */
+(function(){
+  window.__SUPERDJ=window.__SUPERDJ||{errors:[],openWin:null};
+  const _ow=openW, _cw=closeWin;
+  closeWin=function(){
+    try{ _cw(); }catch(e){}
+    document.querySelectorAll('.win.open').forEach(w=>w.classList.remove('open','max'));
+    const ov=document.getElementById('ov'); if(ov) ov.style.display='none';
+    if(typeof openWin!=='undefined') openWin=null;
+    __SUPERDJ.openWin=null;
+  };
+  openW=function(id){
+    closeWin();
+    const el=document.getElementById('w-'+id);
+    if(!el){ if(typeof toast==='function') toast('Brak okna '+id); else console.warn('no win',id); __SUPERDJ.err=id; return false; }
+    el.classList.add('open');
+    const ov=document.getElementById('ov'); if(ov) ov.style.display='block';
+    if(typeof openWin!=='undefined') openWin=id;
+    try{ WIN[id]&&WIN[id].onOpen&&WIN[id].onOpen(); }catch(e){ if(typeof reportErr==='function') reportErr(e); else console.error(e); __SUPERDJ.errors.push(String(e&&e.message||e)); }
+    document.querySelectorAll('.win.open').forEach(w=>{ if(w!==el) w.classList.remove('open','max'); });
+    __SUPERDJ.openWin=id;
+    return true;
+  };
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){ closeWin(); }
+  });
+  __SUPERDJ.winIds=()=>[...document.querySelectorAll('.win')].map(w=>w.id.replace(/^w-/,''));
+  __SUPERDJ.open=openW;
+  __SUPERDJ.close=closeWin;
+})();
+
 </script>
 </body>
 </html>
