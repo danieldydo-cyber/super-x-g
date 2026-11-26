@@ -109,6 +109,35 @@ button.spm.on{background:linear-gradient(90deg,#ff2bd688,#00e5ff66);border-color
 #pwaInstall{display:none}
 #pwaInstall.show{display:inline-block}
 
+
+#vsHud{position:fixed;left:0;right:0;top:0;z-index:72;display:none;padding:8px 12px 10px;background:linear-gradient(180deg,#07070fee,#07070fbb 80%,transparent);pointer-events:none}
+#vsHud.on{display:block}
+#vsHud .vs-row{pointer-events:auto;display:flex;gap:10px;align-items:center;max-width:1100px;margin:0 auto;background:#0e0e1ccc;border:1px solid #ffe60066;border-radius:12px;padding:8px 10px;box-shadow:0 0 18px #ffe60022}
+.vs-score{flex:1;min-width:180px;text-align:center}
+.vs-names{font-size:13px}.vs-pts{font-size:22px;font-weight:800;letter-spacing:1px}
+.vs-pts #vsPtsG{color:#00e5ff}.vs-pts #vsPtsS{color:#ffe600}
+.vs-meta{color:#8a8ab0;font-size:11px;margin-top:2px}
+.vs-meter{height:8px;background:#22224a;border-radius:6px;overflow:hidden;margin-top:6px}
+#vsEnergyBar{height:100%;width:0;background:linear-gradient(90deg,#00e5ff,#ff2bd6,#ffe600);transition:width .12s linear}
+.vs-av{width:56px;height:64px;position:relative;flex:0 0 56px;filter:grayscale(.4) brightness(.85);transition:.2s}
+.vs-av.on{filter:none;transform:translateY(-2px)}
+.vs-head{width:46px;height:46px;margin:0 auto;border-radius:50%;position:relative}
+.vs-head-g{background:#163047;box-shadow:inset 0 -6px 8px #0004,0 0 0 2px #00e5ff}
+.vs-head-s{background:linear-gradient(180deg,#ffe600,#ff8a00);box-shadow:0 0 10px #ffe60088}
+.vs-eye{position:absolute;top:16px;width:8px;height:10px;background:#00e5ff;border-radius:50%;box-shadow:0 0 6px #00e5ff}
+.vs-av.on .vs-eye{background:#9ffffa}
+.vs-eye:first-child{left:10px}.vs-eye:last-of-type{right:10px}
+.vs-phones{position:absolute;top:10px;left:2px;right:2px;height:8px;border:3px solid #222;border-bottom:none;border-radius:8px 8px 0 0}
+.vs-star{position:absolute;left:0;right:0;top:12px;text-align:center;color:#111;font-size:18px}
+.vs-spk{width:20px;height:8px;margin:2px auto 0;background:#111;border-radius:0 0 6px 6px}
+.vs-x{pointer-events:auto;margin-left:4px}
+#vsWin{position:fixed;inset:0;z-index:91;display:none;align-items:center;justify-content:center;background:#000a}
+#vsWin.on{display:flex}
+.vs-win-card{background:#11111fee;border:1px solid #ffe600;border-radius:14px;padding:22px 26px;text-align:center;min-width:280px;max-width:90vw;box-shadow:0 0 40px #ffe60044}
+.vs-win-card h2{margin:8px 0;background:linear-gradient(90deg,#00e5ff,#ff2bd6,#ffe600);-webkit-background-clip:text;background-clip:text;color:transparent}
+.vs-win-avs{display:flex;gap:16px;align-items:center;justify-content:center;margin:12px 0}
+.vs-card{border-color:#ffe60066}
+
 </style>
 </head>
 <body>
@@ -128,6 +157,7 @@ button.spm.on{background:linear-gradient(90deg,#ff2bd688,#00e5ff66);border-color
 </header>
 <nav>
   <button data-act="open" data-w="promaxx">⚡ Pro Maxx G7</button>
+  <button data-act="open" data-w="boty">🤖 Boty / Auto</button>
   <button data-act="open" data-w="mixer">🎚 Mixer 28</button>
   <button data-act="open" data-w="core">🧬 7 Core</button>
   <button data-act="open" data-w="spm">✨ Super Power Magic</button>
@@ -242,7 +272,7 @@ let voice={on:false,mode:'robot',mic:null,nodes:null};
 let avMode=0,avRec=null,holoRaf=0,megaTimer=null,schedId=0;
 let spmOn=false,spmSecTimer=null,spmBarCount=0,spmStyleI=0;
 const instOn={bass:0,lead:0,pad:0,pluck:0,arp:0,stab:0,keys:0};
-window.__DLOOP={ready:false,loaded:0,errors:[],playing:false,spm:false,g77Count:77,gxOk:false,grokdj:false,etSet:false,rasta:false,g7:false,g7Scenes:7,g7Scene:-1,pwa:false};
+window.__DLOOP={ready:false,loaded:0,errors:[],playing:false,spm:false,g77Count:77,gxOk:false,grokdj:false,etSet:false,rasta:false,g7:false,g7Scenes:7,g7Scene:-1,pwa:false,vs:false,ssdj:false,vsWin:false};
 
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast._);toast._=setTimeout(()=>t.style.display='none',2400)}
 function report(e){console.error(e);window.__DLOOP.errors.push(String(e&&e.message||e))}
@@ -574,6 +604,7 @@ defWin('spm','✨ Super Power Magic · 7 Core naraz', `
   <div class="card"><b>📲 Aplikacja Android</b><div class="row"><a href="downloads/D7-DJ-Studio.apk" download="D7-DJ-Studio.apk"><button type="button">Pobierz APK D7 DJ Studio</button></a></div><p class="muted">Darmowy APK, podpis debug/lokalny. DLoop i sample są w paczce (offline). Super DJ Loops też jest w paczce; YouTube Music wymaga internetu.</p></div>`);
 defWin('blik','💛 Wsparcie BLIK', `<p>Jedyna forma wsparcia DJ DaX:</p><p class="blik">BLIK na telefon<br>730 377 357</p><p class="muted">Aplikacja jest darmowa. Nie ma tu żadnych innych płatności.</p>`);
 defWin('gcosmos','🌌 G Studio Cosmos · 77 gen · GX FX · Grok DJ', `<div id="gcosUI"></div>`, uiGCosmos);
+defWin('boty','🤖 Boty / Auto · Grok DJ · Super Sound DJ · Versus', `<div id="botyUI"></div>`, uiBoty);
 defWin('promaxx','⚡ Pro Maxx G7 · launcher · 7 scen · MIDI · sync', `<div id="g7UI"></div>`, uiG7);
 defWin('info','ℹ Info i uczciwe granice', `
   <ul>
@@ -593,6 +624,7 @@ defWin('info','ℹ Info i uczciwe granice', `
     <li>Endless viz: Psychotronic Tunnel i Magic Stars Life (WebGL, beat-sync, pełny ekran).</li>
     <li>Pro Maxx G7: launcher wszystkich trybów (Mixer 28, 7 Core, Super Power Magic, G Studio Cosmos 77, GX FX, Grok DJ, E.T. Cosmos Set, Rasta DJ, Voice 7, Load MP3), 7 scen one-tap, presety w localStorage, Web MIDI learn (przyjazny Roland MC-707), auto-jakość shaderów na telefonach, Tap BPM i globalny Master Sync.</li>
     <li>Pobierz / zainstaluj: APK Android, aplikacja Windows (Electron, D7-DJ-Studio.exe), paczka Web, nowe rozszerzenie Chrome MV3 „D7 DJ Studio”, PWA (dodaj do ekranu głównego). Stare rozszerzenie Super DJ Loops zostaje nietknięte.</li>
+    <li>Boty / Auto: Grok DJ i Super Sound DJ (osobne auto-DJ, bez płatnego AI) oraz Versus — tury co 16 taktów, różne style, tablica wyników, energia tłumu, awatary i ekran zwycięzcy.</li>
     <li>Jedno okno naraz · ✕ · ⛶ · Esc. Wsparcie: tylko BLIK 730 377 357.</li>
   </ul>
   <p class="muted" id="infoStats">—</p>`, ()=>{
@@ -676,7 +708,7 @@ function schedule(){
   if(!ctx) return;
   const horizon=now()+0.25;
   schedule._next=schedule._next||now();
-  if(!playing && !seq.on && !Object.values(instOn).some(Boolean) && !magOn.some(Boolean) && !fxOn.some(Boolean) && !hoodOn && !scootOn && !prodOn){
+  if(!playing && !seq.on && !Object.values(instOn).some(Boolean) && !magOn.some(Boolean) && !fxOn.some(Boolean) && !hoodOn && !scootOn && !prodOn && !(typeof vsOn!=='undefined' && vsOn) && !(typeof ssOn!=='undefined' && ssOn)){
     schedule._next=now();
     return;
   }
@@ -706,6 +738,7 @@ function schedule(){
     if(scootOn) scootTick(st, step);
     if(prodOn) prodTick(st, step);
     if(typeof rastaOn!=='undefined' && rastaOn) rastaTick(st, step);
+    if(typeof vsOn!=='undefined' && vsOn) vsTick(st, step);
     magOn.forEach((on,i)=>{ if(on) magTick(i,st,step) });
     fxOn.forEach((on,i)=>{ if(on) fxTick(i,st,step) });
     schedule._next+=bt;
@@ -736,6 +769,8 @@ function stopAll(){
   if(typeof grokOn!=='undefined' && grokOn && typeof grokDjStop==='function') grokDjStop();
   if(typeof etOn!=='undefined' && etOn && typeof etStop==='function') etStop();
   if(typeof rastaOn!=='undefined' && rastaOn && typeof rastaStop==='function') rastaStop();
+  if(typeof vsOn!=='undefined' && vsOn && typeof vsStop==='function') vsStop();
+  if(typeof ssOn!=='undefined' && ssOn && typeof ssDjStop==='function') ssDjStop();
   window.__DLOOP.playing=false; window.__DLOOP.spm=false;
   uiMix(); uiSeq();
   ['hoodBtn','scootBtn','prodBtn','seqBtn'].forEach(id=>{const e=$('#'+id); if(e) e.classList.remove('on')});
@@ -1437,7 +1472,12 @@ const ACT={
   g7map707:()=>g7Map707(),
   g7mapclear:()=>{ g7Map={}; g7SaveStore({map:{}}); uiG7(); toast('Mapa MIDI wyczyszczona'); },
   g7q:e=>g7SetQuality(e.target.dataset.k),
-  g7sync:()=>g7MasterSync()
+  g7sync:()=>g7MasterSync(),
+  ssDj:()=>{ if(ssOn) ssDjStop(); else ssDjStart(); },
+  ssDjStop:()=>ssDjStop(),
+  vsStart:()=>vsStart().catch(report),
+  vsStop:()=>vsStop(),
+  vsWinClose:()=>vsWinClose()
 };
 
 async function preloadSome(){
@@ -1506,7 +1546,7 @@ document.addEventListener('change',e=>{
   if(e.target.id==='mp3File'&&e.target.files[0]){ /* wait for button or auto */ }
 });
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ if(spmOn){ spmStop(); return; } if(typeof gxFs!=='undefined' && gxFs){ gxExitFs(); return; } closeWin(); return; }
+  if(e.key==='Escape'){ if(spmOn){ spmStop(); return; } if(typeof gxFs!=='undefined' && gxFs){ gxExitFs(); return; } if(typeof vsWinOn!=='undefined' && vsWinOn){ vsWinClose(); return; } if(typeof vsOn!=='undefined' && vsOn){ vsStop(); return; } closeWin(); return; }
   if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
   if(e.key===' '){ e.preventDefault(); ACT.playToggle(); }
 });
@@ -2621,7 +2661,9 @@ const G7_LAUNCH=[
   {k:'et',n:'👽 E.T. Cosmos Set',go(){ openW('gcosmos'); }},
   {k:'rasta',n:'🇯🇲 Rasta DJ',go(){ openW('gcosmos'); }},
   {k:'voice',n:'🎤 Voice 7',go(){ openW('voice'); }},
-  {k:'load',n:'📁 Load MP3',go(){ openW('load'); }}
+  {k:'load',n:'📁 Load MP3',go(){ openW('load'); }},
+  {k:'boty',n:'🤖 Boty / Auto',go(){ openW('boty'); }},
+  {k:'versus',n:'⚔️ Versus',go(){ openW('boty'); if(typeof vsStart==='function' && !vsOn) vsStart(); }}
 ];
 
 const G7_SCENES=[
@@ -2771,6 +2813,8 @@ function g7StopModes(keep){
   try{ if(typeof grokOn!=='undefined' && grokOn && keep!=='grok' && typeof grokDjStop==='function') grokDjStop(); }catch(e){}
   try{ if(typeof etOn!=='undefined' && etOn && keep!=='et' && typeof etStop==='function') etStop(); }catch(e){}
   try{ if(typeof rastaOn!=='undefined' && rastaOn && keep!=='rasta' && typeof rastaStop==='function') rastaStop(); }catch(e){}
+  try{ if(typeof vsOn!=='undefined' && vsOn && keep!=='versus' && typeof vsStop==='function') vsStop(); }catch(e){}
+  try{ if(typeof ssOn!=='undefined' && ssOn && keep!=='ss' && typeof ssDjStop==='function') ssDjStop(); }catch(e){}
 }
 
 async function g7LoadScene(i){
@@ -3105,6 +3149,372 @@ try{ g7LaunchBar(); }catch(e){ report(e); }
     }
   });
 })();
+
+
+/* ===== Boty / Auto · Super Sound DJ · Versus (Grok DJ vs Super Sound DJ) ===== */
+let ssOn=false, ssTimer=null, ssDeck=0;
+let vsOn=false, vsWinOn=false, vsBusy=false, vsWho='grok', vsRound=0, vsRounds=6, vsBar=0, vsBarsNeed=16;
+let vsScore={grok:0,ss:0}, vsEnergy=0, vsEnergySum=0, vsEnergyN=0, vsStyle={grok:'',ss:''};
+const VS_GROK_STYLES=[
+  {id:'techno',n:'Cosmic Techno',bpm:128,q:'techno|minimal',viz:2},
+  {id:'trance',n:'Space Trance',bpm:138,q:'trance|wolf',viz:5},
+  {id:'house',n:'House Glow',bpm:124,q:'house',viz:3},
+  {id:'jungle',n:'Alien Jungle',bpm:174,q:'jungle|drum',viz:12},
+  {id:'dark',n:'Galaxy Hood',bpm:130,q:'dark|hood',viz:8},
+  {id:'krakow',n:'Kraków Cosmos',bpm:128,q:'krak|krk|wis',viz:24},
+  {id:'hiphop',n:'Boom-bap',bpm:96,q:'hip|rap',viz:20}
+];
+const VS_SS_STYLES=[
+  {id:'rave',n:'Super Rave',bpm:148,q:'trance|wolf|rave',viz:5},
+  {id:'hood',n:'Super Hood',bpm:130,q:'dark|hood|trap',viz:8},
+  {id:'jungle',n:'Super Jungle',bpm:174,q:'jungle|drum',viz:12},
+  {id:'krakow',n:'Super Kraków',bpm:128,q:'krak|cracovia|wis|krk',viz:24},
+  {id:'bass',n:'Super Bass',bpm:140,q:'trap|break',viz:18},
+  {id:'techno',n:'Super Techno',bpm:132,q:'techno|minimal',viz:2},
+  {id:'house',n:'Super House',bpm:124,q:'house',viz:16}
+];
+
+function vsPickStyle(who, avoid){
+  const pack=who==='grok'?VS_GROK_STYLES:VS_SS_STYLES;
+  const opts=pack.filter(s=>s.n!==avoid);
+  return (opts.length?opts:pack)[Math.floor(Math.random()* (opts.length||pack.length))];
+}
+
+function uiBoty(){
+  const el=$('#botyUI'); if(!el) return;
+  el.innerHTML=`
+    <p class="muted">Grupa Boty / Auto — rule-based auto-DJ w przeglądarce, bez płatnego AI. Grok DJ i Super Sound DJ mogą grać osobno albo stanąć do Versus: tury co 16 taktów, różne style, tablica wyników, energia tłumu i ekran zwycięzcy.</p>
+    <div class="cards">
+      <div class="card">
+        <b>🤖 Grok DJ</b>
+        <div class="muted">Dobór pętli po BPM, beatmatch, crossfade, zapowiedzi.</div>
+        <div class="row">
+          <button class="big" data-act="grokDj" id="botyGrokBtn">▶ Grok DJ</button>
+          <button data-act="grokDjStop">■ Stop</button>
+        </div>
+      </div>
+      <div class="card">
+        <b>🔊 Super Sound DJ</b>
+        <div class="muted">Inny algorytm: więcej energii, hood / rave / jungle / Kraków, śmielsze FX.</div>
+        <div class="row">
+          <button class="big" data-act="ssDj" id="ssBtn">▶ Super Sound DJ</button>
+          <button data-act="ssDjStop">■ Stop</button>
+        </div>
+      </div>
+      <div class="card vs-card">
+        <b>⚔️ Versus · Grok DJ vs Super Sound DJ</b>
+        <div class="muted">Na zmianę co 16 taktów, różne style, tablica i energia tłumu, awatary, zwycięzca na końcu. ${vsRounds} tur.</div>
+        <div class="row">
+          <button class="big spm" data-act="vsStart" id="vsBtn">⚔️ Versus — start</button>
+          <button data-act="vsStop">■ Stop Versus</button>
+        </div>
+      </div>
+    </div>`;
+  const gb=$('#botyGrokBtn'); if(gb) gb.classList.toggle('on', !!(typeof grokOn!=='undefined'&&grokOn));
+  const sb=$('#ssBtn'); if(sb) sb.classList.toggle('on', ssOn);
+  const vb=$('#vsBtn'); if(vb) vb.classList.toggle('on', vsOn);
+}
+
+function vsEnsureHud(){
+  let hud=$('#vsHud');
+  if(!hud){
+    hud=document.createElement('div'); hud.id='vsHud';
+    hud.innerHTML=`
+      <div class="vs-row">
+        <div class="vs-av vs-av-grok" id="vsAvGrok" title="Grok DJ">
+          <div class="vs-head vs-head-g"><span class="vs-eye"></span><span class="vs-eye"></span></div>
+          <div class="vs-phones"></div>
+        </div>
+        <div class="vs-score">
+          <div class="vs-names"><b id="vsNameG">Grok DJ</b> <span class="muted">vs</span> <b id="vsNameS">Super Sound DJ</b></div>
+          <div class="vs-pts"><span id="vsPtsG">0</span> : <span id="vsPtsS">0</span></div>
+          <div class="vs-meta" id="vsMeta">—</div>
+          <div class="vs-meter" title="Crowd energy"><div id="vsEnergyBar"></div></div>
+        </div>
+        <div class="vs-av vs-av-ss" id="vsAvSs" title="Super Sound DJ">
+          <div class="vs-head vs-head-s"><span class="vs-star">✦</span></div>
+          <div class="vs-spk"></div>
+        </div>
+        <button class="vs-x" data-act="vsStop" title="Stop Versus">✕</button>
+      </div>`;
+    document.body.appendChild(hud);
+  }
+  let win=$('#vsWin');
+  if(!win){
+    win=document.createElement('div'); win.id='vsWin';
+    win.innerHTML=`
+      <div class="vs-win-card">
+        <div class="muted">Versus · koniec bitwy</div>
+        <h2 id="vsWinTitle">🏆 Zwycięzca</h2>
+        <div class="vs-win-avs">
+          <div class="vs-av vs-av-grok" id="vsWinAvG"><div class="vs-head vs-head-g"><span class="vs-eye"></span><span class="vs-eye"></span></div></div>
+          <div class="vs-pts"><span id="vsWinG">0</span> : <span id="vsWinS">0</span></div>
+          <div class="vs-av vs-av-ss" id="vsWinAvS"><div class="vs-head vs-head-s"><span class="vs-star">✦</span></div></div>
+        </div>
+        <p id="vsWinMsg"></p>
+        <div class="row" style="justify-content:center">
+          <button class="big spm" data-act="vsStart">⚔️ Rewanż</button>
+          <button data-act="vsWinClose">✕ Zamknij</button>
+        </div>
+      </div>`;
+    document.body.appendChild(win);
+  }
+}
+
+function vsPaint(){
+  vsEnsureHud();
+  const hud=$('#vsHud'); if(hud) hud.classList.toggle('on', vsOn && !vsWinOn);
+  const g=$('#vsPtsG'), s=$('#vsPtsS');
+  if(g) g.textContent=Math.round(vsScore.grok);
+  if(s) s.textContent=Math.round(vsScore.ss);
+  const bar=$('#vsEnergyBar'); if(bar) bar.style.width=Math.max(0,Math.min(100,vsEnergy))+'%';
+  const meta=$('#vsMeta');
+  if(meta){
+    const who=vsWho==='grok'?'Grok DJ':'Super Sound DJ';
+    const st=vsStyle[vsWho]||'—';
+    meta.textContent='Runda '+(Math.min(vsRound+1,vsRounds))+'/'+vsRounds+' · tura: '+who+' · styl '+st+' · takt '+(vsBar%vsBarsNeed)+'/'+vsBarsNeed;
+  }
+  const avG=$('#vsAvGrok'), avS=$('#vsAvSs');
+  if(avG) avG.classList.toggle('on', vsOn && vsWho==='grok');
+  if(avS) avS.classList.toggle('on', vsOn && vsWho==='ss');
+  window.__DLOOP.vs=vsOn;
+  window.__DLOOP.vsWho=vsWho;
+  window.__DLOOP.vsScore={grok:vsScore.grok,ss:vsScore.ss};
+  window.__DLOOP.vsWin=vsWinOn;
+  window.__DLOOP.vsRound=vsRound;
+}
+
+function vsEnergySample(){
+  if(!vsOn || !analyser) return;
+  try{
+    const n=analyser.frequencyBinCount||0; if(!n) return;
+    const a=vsEnergySample._ || (vsEnergySample._=new Uint8Array(n));
+    analyser.getByteFrequencyData(a);
+    const bass=(a[2]||0)/255, mid=(a[16]||0)/255, high=(a[48]||0)/255;
+    const e=Math.min(100, (bass*48+mid*36+high*16)*(vsWho==='ss'?1.08:1));
+    vsEnergy=vsEnergy*0.7+e*0.3;
+    vsEnergySum+=vsEnergy; vsEnergyN++;
+  }catch(err){}
+}
+
+function vsTick(t, step){
+  if(!vsOn || vsWinOn) return;
+  vsEnergySample();
+  if(step===0){
+    vsBar++;
+    vsPaint();
+    if(vsBar>=vsBarsNeed && !vsBusy) vsEndTurn().catch(report);
+  }
+}
+
+async function vsLoadSide(who, fade, style){
+  const loops=manifest.loops||[]; if(!loops.length) return;
+  const re=new RegExp(style.q,'i');
+  let cand=loops.filter(l=>re.test((l.name||'')+' '+(l.style||'')));
+  if(cand.length<4) cand=loops.slice();
+  cand=[...cand].sort((a,b)=>{
+    const sa=1/(1+Math.abs((a.bpm||style.bpm)-style.bpm))+Math.random()*0.3+(who==='ss' && /dark|hood|trap|jungle|krak|rave|wolf/i.test((a.name||'')+' '+(a.style||''))?0.35:0);
+    const sb=1/(1+Math.abs((b.bpm||style.bpm)-style.bpm))+Math.random()*0.3+(who==='ss' && /dark|hood|trap|jungle|krak|rave|wolf/i.test((b.name||'')+' '+(b.style||''))?0.35:0);
+    return sb-sa;
+  }).slice(0,4);
+  const start=who==='grok'?0:8;
+  const other=who==='grok'?8:0;
+  const when=nextQ(1);
+  for(let i=0;i<cand.length;i++){
+    if(!vsOn && !ssOn) return;
+    const idx=start+i; await assignLoop(idx, cand[i]);
+    const c=ch[idx]; if(!c.nodes||!c.buf) continue;
+    if(fade){ c.nodes.g.gain.setValueAtTime(0, when); c.nodes.g.gain.linearRampToValueAtTime(0.85, when+2*bar()); }
+    startCh(c, when);
+  }
+  if(fade){
+    for(let i=other;i<other+8;i++){ const c=ch[i]; if(!c.nodes||!c.on) continue;
+      c.nodes.g.gain.cancelScheduledValues(when);
+      c.nodes.g.gain.setValueAtTime(c.nodes.g.gain.value||0.8, when);
+      c.nodes.g.gain.linearRampToValueAtTime(0.0001, when+2*bar());
+    }
+    setTimeout(()=>{ for(let i=other;i<other+8;i++){ if(ch[i].on) stopSrc(ch[i]); } uiMix(); }, 2*bar()*1000+80);
+  }
+  const names=cand.map(p=>p.name).join(' · ');
+  const tag=who==='grok'?'Grok DJ':'Super Sound DJ';
+  if(typeof grokAnnounce==='function') grokAnnounce(tag+' · '+style.n+' · '+names+' · '+style.bpm+' BPM');
+  uiMix();
+}
+
+async function vsBeginTurn(){
+  if(!vsOn) return;
+  vsBusy=true;
+  const avoid=vsWho==='grok'?vsStyle.ss:vsStyle.grok;
+  const st=vsPickStyle(vsWho, avoid);
+  vsStyle[vsWho]=st.n;
+  setBpm(st.bpm);
+  vsBar=0; vsEnergy=40; vsEnergySum=0; vsEnergyN=0;
+  if(typeof gxEndless!=='undefined') gxEndless=null;
+  if(typeof gxStart==='function') gxStart(st.viz, vsWho==='ss'?1:0);
+  if(vsWho==='ss'){
+    seq.on=true;
+    if(st.bpm>=160 && typeof g77Rhythm==='function') g77Rhythm({n:'Jungle',p:{pat:'jungle'}});
+    else if(st.id==='hood' && typeof g77Rhythm==='function') g77Rhythm({n:'Trap',p:{pat:'trap'}});
+    else if(typeof g77Rhythm==='function') g77Rhythm({n:'Techno',p:{pat:'techno'}});
+    if(typeof g77Trig==='function'){ g77Trig(40+Math.floor(Math.random()*26)).catch(report); }
+  } else {
+    seq.on=true;
+    if(typeof g77Trig==='function'){ g77Trig(Math.floor(Math.random()*25)).catch(report); }
+  }
+  startSched();
+  vsPaint();
+  await vsLoadSide(vsWho, vsRound>0, st);
+  vsBusy=false;
+  vsPaint();
+}
+
+async function vsEndTurn(){
+  if(!vsOn || vsBusy) return;
+  vsBusy=true;
+  const avg=vsEnergyN?vsEnergySum/vsEnergyN:vsEnergy;
+  const pts=Math.round(40+avg*0.85+Math.random()*12);
+  vsScore[vsWho]+=pts;
+  vsRound++;
+  vsPaint();
+  if(typeof toast==='function') toast((vsWho==='grok'?'Grok DJ': 'Super Sound DJ')+' +'+pts+' · '+Math.round(vsScore.grok)+':'+Math.round(vsScore.ss));
+  if(vsRound>=vsRounds){ vsBusy=false; vsShowWinner(); return; }
+  vsWho=vsWho==='grok'?'ss':'grok';
+  vsBusy=false;
+  await vsBeginTurn();
+}
+
+function vsShowWinner(){
+  vsWinOn=true;
+  const g=Math.round(vsScore.grok), s=Math.round(vsScore.ss);
+  let title, msg, winner;
+  if(g>s){ title='🏆 Grok DJ wygrywa!'; msg='Cosmic rule-based set na szczycie.'; winner='grok'; }
+  else if(s>g){ title='🏆 Super Sound DJ wygrywa!'; msg='Więcej energii, tłumu i FX.'; winner='ss'; }
+  else { title='🤝 Remis!'; msg='Obie strony rozgrzały salę tak samo.'; winner='tie'; }
+  vsEnsureHud();
+  const hud=$('#vsHud'); if(hud) hud.classList.add('on');
+  const w=$('#vsWin'); if(w) w.classList.add('on');
+  const t=$('#vsWinTitle'); if(t) t.textContent=title;
+  const m=$('#vsWinMsg'); if(m) m.textContent=msg+'  '+g+' : '+s;
+  const wg=$('#vsWinG'), ws=$('#vsWinS'); if(wg) wg.textContent=g; if(ws) ws.textContent=s;
+  const ag=$('#vsWinAvG'), as=$('#vsWinAvS');
+  if(ag) ag.classList.toggle('on', winner==='grok'||winner==='tie');
+  if(as) as.classList.toggle('on', winner==='ss'||winner==='tie');
+  if(typeof grokAnnounce==='function') grokAnnounce('Versus · '+title+' · '+g+':'+s);
+  window.__DLOOP.vsWin=true;
+  window.__DLOOP.vsWinner=winner;
+  vsPaint();
+}
+
+function vsWinClose(){
+  const w=$('#vsWin'); if(w) w.classList.remove('on');
+  vsWinOn=false;
+  window.__DLOOP.vsWin=false;
+  if(!vsOn){ const hud=$('#vsHud'); if(hud) hud.classList.remove('on'); }
+}
+
+async function vsStart(){
+  await initAudio();
+  if(typeof grokOn!=='undefined' && grokOn && typeof grokDjStop==='function') grokDjStop();
+  if(ssOn) ssDjStop();
+  if(typeof etOn!=='undefined' && etOn && typeof etStop==='function') etStop();
+  if(typeof rastaOn!=='undefined' && rastaOn && typeof rastaStop==='function') rastaStop();
+  vsWinClose();
+  vsOn=true; vsWinOn=false; vsBusy=false;
+  vsWho='grok'; vsRound=0; vsBar=0;
+  vsScore={grok:0,ss:0}; vsStyle={grok:'',ss:''};
+  window.__DLOOP.vs=true; window.__DLOOP.vsWinner=null;
+  playing=true;
+  const pb=$('#playBtn'); if(pb){ pb.textContent='■ Stop'; pb.classList.add('on'); }
+  vsEnsureHud();
+  vsPaint();
+  if(typeof toast==='function') toast('Versus · Grok DJ vs Super Sound DJ');
+  uiBoty();
+  await vsBeginTurn();
+  uiBoty();
+}
+
+function vsStop(){
+  vsOn=false; vsBusy=false; vsWinOn=false;
+  window.__DLOOP.vs=false; window.__DLOOP.vsWin=false;
+  const hud=$('#vsHud'); if(hud) hud.classList.remove('on');
+  const w=$('#vsWin'); if(w) w.classList.remove('on');
+  if(typeof grokAnnounce==='function') grokAnnounce('Versus OFF');
+  uiBoty();
+}
+
+async function ssLoadDeck(deck, fade){
+  if(!ssOn) return;
+  const st=vsPickStyle('ss', vsStyle.ss);
+  vsStyle.ss=st.n;
+  setBpm(st.bpm);
+  if(typeof gxStart==='function'){ gxEndless=null; gxStart(st.viz,1); }
+  const loops=manifest.loops||[]; if(!loops.length) return;
+  const re=new RegExp(st.q,'i');
+  let cand=loops.filter(l=>re.test((l.name||'')+' '+(l.style||'')));
+  if(cand.length<4) cand=loops.slice();
+  cand=[...cand].sort(()=>Math.random()-0.5).slice(0,4);
+  const start=deck*8, when=nextQ(1);
+  for(let i=0;i<cand.length;i++){
+    if(!ssOn) return;
+    const idx=start+i; await assignLoop(idx, cand[i]);
+    const c=ch[idx]; if(!c.nodes||!c.buf) continue;
+    if(fade){ c.nodes.g.gain.setValueAtTime(0, when); c.nodes.g.gain.linearRampToValueAtTime(0.9, when+2*bar()); }
+    startCh(c, when);
+  }
+  if(fade){
+    const other=deck?0:8;
+    for(let i=other;i<other+8;i++){ const c=ch[i]; if(!c.nodes||!c.on) continue;
+      c.nodes.g.gain.cancelScheduledValues(when);
+      c.nodes.g.gain.setValueAtTime(c.nodes.g.gain.value||0.8, when);
+      c.nodes.g.gain.linearRampToValueAtTime(0.0001, when+2*bar());
+    }
+    setTimeout(()=>{ for(let i=other;i<other+8;i++){ if(ch[i].on) stopSrc(ch[i]); } uiMix(); }, 2*bar()*1000+80);
+  }
+  if(typeof grokAnnounce==='function') grokAnnounce('Super Sound DJ · '+st.n+' · '+st.bpm+' BPM');
+  if(typeof g77Trig==='function' && Math.random()<0.6) g77Trig(40+Math.floor(Math.random()*26)).catch(report);
+  uiMix();
+}
+
+async function ssDjStart(){
+  if(ssOn || vsOn) return;
+  await initAudio();
+  if(typeof grokOn!=='undefined' && grokOn && typeof grokDjStop==='function') grokDjStop();
+  ssOn=true; window.__DLOOP.ssdj=true;
+  const btn=$('#ssBtn'); if(btn) btn.classList.add('on');
+  seq.on=true; playing=true; startSched();
+  const pb=$('#playBtn'); if(pb){ pb.textContent='■ Stop'; pb.classList.add('on'); }
+  ssDeck=0;
+  if(typeof grokAnnounce==='function') grokAnnounce('Super Sound DJ ON');
+  await ssLoadDeck(0,false);
+  ssPlan();
+  uiBoty();
+}
+function ssPlan(){
+  if(ssTimer) clearTimeout(ssTimer);
+  const bars=8+Math.floor(Math.random()*8);
+  ssTimer=setTimeout(async()=>{
+    if(!ssOn) return;
+    const next=1-ssDeck;
+    await ssLoadDeck(next,true);
+    ssDeck=next;
+    ssPlan();
+  }, bars*bar()*1000);
+}
+function ssDjStop(){
+  ssOn=false; window.__DLOOP.ssdj=false;
+  if(ssTimer){ clearTimeout(ssTimer); ssTimer=null; }
+  const btn=$('#ssBtn'); if(btn) btn.classList.remove('on');
+  if(typeof grokAnnounce==='function') grokAnnounce('Super Sound DJ OFF');
+  uiBoty();
+}
+
+window.__DLOOP.vs=false;
+window.__DLOOP.ssdj=false;
+window.__DLOOP.vsStart=vsStart;
+window.__DLOOP.vsStop=vsStop;
+window.__DLOOP.vsForceTurn=()=>vsEndTurn();
+window.__DLOOP.vsFinish=()=>{ if(!vsOn) return; vsRound=vsRounds; vsShowWinner(); };
+window.__DLOOP.vsSetBars=(n)=>{ vsBarsNeed=Math.max(1,+n||16); };
 
 </script>
 </body>
